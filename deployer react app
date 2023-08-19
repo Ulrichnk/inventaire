@@ -1,0 +1,7 @@
+npm install gh-pages --save-dev
+"homepage":"https://ulrichnk.github.io/inventaire"
+dans le fichier config.json au niveau du script
+"deploy":"gh-pages -d build"
+
+pour lancer taper '
+npm run deploy

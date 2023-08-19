@@ -1,0 +1,17 @@
+.LinkIsActive {
+  color: red;
+
+}
+
+.LinkIsNotActive {
+  color: black;
+}
+
+.LinkIsActive :hover{
+  
+  margin-left: 10px;
+}
+.LinkIsNotActive :hover{  
+  
+  margin-left: 10px;
+}
