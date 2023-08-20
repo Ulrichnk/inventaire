@@ -35,6 +35,7 @@ const App: FunctionComponent = () => {
   const logout=()=>{
     localStorage.removeItem('user_token');
     navigate('/')
+    window.location.reload();
 
   }
 
