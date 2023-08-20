@@ -58,8 +58,8 @@ const App: FunctionComponent = () => {
         <p>Bonjour {user ? user.name : ""} </p>
       </div>
       <span id="1"></span>
-      <div onClick={(e) => navigate("/account")}>
-        <p>Mon profil</p>
+      <div onClick={(e) => navigate("/inventaire")}>
+        <p>Inventaire</p>
       </div>
       <div onClick={(e) => navigate("/enregistrement-achat")}>
         <p>Enregistrer un nouvel achat</p>

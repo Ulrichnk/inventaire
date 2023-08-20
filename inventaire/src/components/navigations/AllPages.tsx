@@ -22,9 +22,9 @@ const AllPages: FunctionComponent<Props> = ({ userIsLogged,user,setUser,setUserI
     <Routes>
       <Route path="/" element={<Accueil/>} />
       <Route path="/gestion-articles" element={<Gestion user={user} setUser={setUser} setUserIslogged={setUserIsLogged}/>} />
+      <Route path="/inventaire" element={<Inventaire user={user} setUser={setUser} setUserIslogged={setUserIsLogged}/>} />
       <Route path="/enregistrement-achat" element={<Achat/>} />
       <Route path="/ajout-article" element={<AjoutArticle/>} />
-      <Route path="/inventaire" element={<Inventaire/>} />
     </Routes>
   </>  ) : (
     <>
