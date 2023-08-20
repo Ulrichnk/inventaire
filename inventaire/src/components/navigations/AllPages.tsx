@@ -31,6 +31,8 @@ const AllPages: FunctionComponent<Props> = ({ userIsLogged,user,setUser,setUserI
       <Routes>
         <Route path="/" element={<Accueil/>} />
         <Route path="/log" element={<Log user={user} setUser={setUser} setUserIslogged={setUserIsLogged}/>} />
+        <Route path="/inventaire" element={<Inventaire user={user} setUser={setUser} setUserIslogged={setUserIsLogged}/>} />
+
       </Routes>
     </>
   );
