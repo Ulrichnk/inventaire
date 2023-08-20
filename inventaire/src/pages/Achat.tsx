@@ -2,17 +2,15 @@ import React ,{FunctionComponent} from 'react';
 
 type Props={
 //define your props here
-// outline: 1px solid red;
-
 }
 
-const Products: FunctionComponent<Props>=()=>{
+const Achat : FunctionComponent<Props>=()=>{
 
    return (
      <div> 
-
+        enregister un achat
      </div>
     );
 };
 
-export default Products;
+export default Achat;

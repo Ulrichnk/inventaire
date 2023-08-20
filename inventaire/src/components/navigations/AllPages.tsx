@@ -1,36 +1,36 @@
 import React, { FunctionComponent } from "react";
+import { Dispatch, SetStateAction } from 'react';
 import { Route, Routes } from "react-router-dom";
-import Sign from "../../pages/Sign";
 import Accueil from "../../pages/Accueil";
-import Products from "../../pages/Products";
-import Blog from "../../pages/Blog";
 import Log from "../../pages/Log";
-import Account from "../../pages/Account";
 import { User } from "../../helpers/types/Types";
+import Achat from "../../pages/Achat";
+import AjoutArticle from "../../pages/AjoutArticle";
+import Inventaire from "../../pages/Inventaire";
+import Gestion from "../../pages/Gestion";
 type Props = {
   userIsLogged: Boolean;
   user:User |null;
+  setUser: Dispatch<SetStateAction<User>>;
+  setUserIsLogged: Dispatch<SetStateAction<boolean>>;
+
 };
 
-const AllPages: FunctionComponent<Props> = ({ userIsLogged,user }) => {
+const AllPages: FunctionComponent<Props> = ({ userIsLogged,user,setUser,setUserIsLogged }) => {
   return userIsLogged ? (
     <>
     <Routes>
       <Route path="/" element={<Accueil/>} />
-      <Route path="/produits" element={<Products/>} />
-      <Route path="/blog" element={<Blog/>} />
-      <Route path="/sign" Component={Sign} />
-      <Route path="/account" element={<Account user={user} />} />
-
+      <Route path="/gestion-articles" element={<Gestion user={user} setUser={setUser} setUserIslogged={setUserIsLogged}/>} />
+      <Route path="/enregistrement-achat" element={<Achat/>} />
+      <Route path="/ajout-article" element={<AjoutArticle/>} />
+      <Route path="/inventaire" element={<Inventaire/>} />
     </Routes>
   </>  ) : (
     <>
       <Routes>
         <Route path="/" element={<Accueil/>} />
-        <Route path="/produits" element={<Products/>} />
-        <Route path="/blog" element={<Blog/>} />
-        <Route path="/sign" Component={Sign} />
-        <Route path="/log" Component={Log} />
+        <Route path="/log" element={<Log user={user} setUser={setUser} setUserIslogged={setUserIsLogged}/>} />
       </Routes>
     </>
   );

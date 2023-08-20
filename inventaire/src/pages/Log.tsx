@@ -1,11 +1,16 @@
 import React, { FunctionComponent, useState } from "react";
 import { styled } from "styled-components";
-import { Field, Form } from "../helpers/types/Types";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useLogin } from "../hooks/useLogin";
+import { Field, Form, Junior, Roger, User } from "../helpers/types/Types";
+import {useNavigate } from "react-router-dom";
+import { Dispatch, SetStateAction } from 'react';
 
 type Props = {
   //define your props here
+  user:User|null,
+  setUser: Dispatch<SetStateAction<User>>;
+  setUserIslogged: Dispatch<SetStateAction<boolean>>;
+
+
 };
 
 const LogForm = styled.form`
@@ -28,13 +33,24 @@ const LogForm = styled.form`
   & button {
   }
 `;
-const Log: FunctionComponent<Props> = () => {
-  const { user, userIsLogged, loginUser } =
-    useLogin();
+const Log: FunctionComponent<Props> = ({user, setUser, setUserIslogged}) => {
+
+
+  
 
   const [Form, setForm] = useState<Form>({
     email: { value: "", isValid: true },
     password: { value: "", isValid: true },
+  });
+  const [R ] = useState<Form>({
+    email:{value:"roger@mail.com", isValid:true},
+    password: { value: "bametcha241", isValid: true },
+
+  });
+  const [J] = useState<Form>({
+    email:{value:"junior@mail.com", isValid:true},
+    password: { value: "123456789", isValid: true },
+
   });
   const navigate = useNavigate();
 
@@ -49,17 +65,24 @@ const Log: FunctionComponent<Props> = () => {
   const HandleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     console.log(Form);
-    await loginUser(Form.email.value, Form.password.value).then((res) => {
-      if (res) {
-         navigate("/");
-         window.location.reload();
+    if(Form===R){
+      setUserIslogged(true);
+      setUser(Roger);
+      navigate('/');
 
-      }
-    });
+    }else if(Form===J){
+      setUserIslogged(true);
+      setUser(Junior);
+      navigate('/')
+
+    }else{
+      alert('information de connexion incorrecte');
+    }
+  
   };
 
 
-  return ! userIsLogged ? (
+  return  (
     <div>
       page de connexion
       <LogForm onSubmit={(e) => HandleSubmit(e)}>
@@ -84,17 +107,10 @@ const Log: FunctionComponent<Props> = () => {
         <button type="submit" className="btn">
           Submit
         </button>
-        <div>
-          <NavLink to="/sign">
-            <p> Sign in ?</p>
-          </NavLink>
-        </div>
+       
       </LogForm>
     </div>
-  ) : (
-
-     <>bonjour { user ? user.name : 'utilisateur'}</>
-  );
-};
+  ) ;
+}
 
 export default Log;

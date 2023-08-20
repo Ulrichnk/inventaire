@@ -25,11 +25,6 @@ export type Field = {
     surname: string;
     email: string;
     password: string;
-    address: string;
-    number: string;
-    journalist_state: boolean;
-    driver_state: boolean;
-    state?:boolean;
   };
 
   export type Product={
@@ -42,4 +37,36 @@ export type Field = {
     url_img:string,
     name:string
 
+}
+
+export type Article={
+  id: number,
+  nom: string,
+  prix_achat: number,
+  prix_vente: number,
+  created: Date,
+}
+
+export const Roger :User={
+  id:1,
+  name:'Kaptchuang',
+  surname:'Roger',
+  email:'roger@mail.com',
+  password:'bametcha241'
+}
+
+export const Junior :User={
+  id:2,
+  name:'Junior',
+  surname:'Junior',
+  email:'junior@mail.com',
+  password:'123456789'
+}
+
+export const Lambda:User={
+  id:3,
+  name:'Lambda',
+  surname:'Lambda',
+  email:'lambda@mail.com',
+  password:'123456789'
 }

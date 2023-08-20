@@ -71,31 +71,6 @@ type Props = {
 
 const NavBar: FunctionComponent<Props> = ({ userIsLogged, menu }) => {
   const [state, setState] = useState<boolean>(false);
-  // const click = (e: Event) => {
-  //   const target = e.target as HTMLElement;
-
-  //   if (state) {
-  //     if (target.classList.contains("profil")) {
-  //       setState(false);
-  //     } else {
-  //       setState(!state);
-  //     }
-  //   } else {
-  //   }
-  //   console.log("votre state", state);
-  // };
-
-  // useEffect(() => {
-  //   document.documentElement.addEventListener("click", (e) => {
-  //     click(e);
-  //   });
-  //   // Retirer l'écouteur d'événement lorsque le composant est démonté
-  //   return () => {
-  //     document.documentElement.removeEventListener("click", (e) => {
-  //       click(e);
-  //     });
-  //   };
-  // }, []);
 
   const style: CSSProperties = { textDecoration: "none" };
 
@@ -104,7 +79,7 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, menu }) => {
   ) : (
     <Nav>
       <NavHead>
-        <Title>TogoAgri</Title>
+        <Title>Inventaire</Title>
         <Search>
           <button type="submit" onClick={(e) => e.preventDefault()}>
             search

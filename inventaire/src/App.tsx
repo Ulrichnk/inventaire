@@ -1,10 +1,9 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useState } from "react";
 import NavBar from "./components/navigations/NavBar";
 import AllPages from "./components/navigations/AllPages";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { useLogin } from "./hooks/useLogin";
-import AuthContext from "./helpers/AuthContext";
+import { Lambda, User } from "./helpers/types/Types";
 
 const MenuItem = styled.div`
   color: black;
@@ -31,8 +30,8 @@ const MenuItem = styled.div`
 `;
 const App: FunctionComponent = () => {
   const navigate = useNavigate();
-  const { user, userIsLogged, userIsDeleted, loginUser } = useLogin();
-
+  const [user, setUser]=useState<User>(Lambda);
+  const [userIsLogged,setUserIsLogged]=useState<boolean>(false);
   const logout=()=>{
     localStorage.removeItem('user_token');
     navigate('/')
@@ -46,7 +45,7 @@ const App: FunctionComponent = () => {
       </div>
       <span id="1"></span>
       <div onClick={(e) => navigate("/log")}>
-        <p>Mes commandes</p>
+        <p>Articles</p>
       </div>
       <div onClick={(e) => navigate("/log")}>
         <p>Mes produits</p>
@@ -62,11 +61,11 @@ const App: FunctionComponent = () => {
       <div onClick={(e) => navigate("/account")}>
         <p>Mon profil</p>
       </div>
-      <div onClick={(e) => navigate("/mes-produits")}>
-        <p>Mes produits</p>
+      <div onClick={(e) => navigate("/enregistrement-achat")}>
+        <p>Enregistrer un nouvel achat</p>
       </div>
-      <div onClick={(e) => navigate("/mes-commandes")}>
-        <p>Mes commandes</p>
+      <div onClick={(e) => navigate("/ajout-article")}>
+        <p>Ajouter un article</p>
       </div>
       <span id="1"></span>
       <div onClick={() => logout()}>
@@ -75,20 +74,18 @@ const App: FunctionComponent = () => {
 
     </MenuItem>
   );
-  useEffect(() => {
-    loginUser().then((res) => {});
-  }, []);
+
 
   return userIsLogged && user !== null ? (
-    <AuthContext.Provider value={{ user }}>
+    <div>
       <NavBar userIsLogged={false} menu={menu1} />
-      <AllPages userIsLogged={true} user={user} />
-    </AuthContext.Provider>
+      <AllPages userIsLogged={true} user={user} setUser={setUser}  setUserIsLogged={setUserIsLogged} />
+    </div>
   ) : (
-    <>
+    <div>
       <NavBar userIsLogged={false} menu={menu} />
-      <AllPages userIsLogged={false} user={null} />
-    </>
+      <AllPages userIsLogged={false} user={null} setUser={setUser} setUserIsLogged={setUserIsLogged} />
+    </div>
   );
 };
 
