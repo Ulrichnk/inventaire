@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
 import { Article } from "../helpers/Types";
-import ArticleService, { add, useArticle } from "../helpers/DbArticle";
+import ArticleService from "../helpers/DbArticle";
 import { styled } from "styled-components";
+import Input from "../components/Input";
 
 type Props = {
   //define your props here
@@ -22,11 +23,32 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
+  & tr,
+  th,
+  table,
+  td,
+  .input {
+    min-width: 500px;
+    min-height: 50px;
+  }
+  & .input {
+    font-size: 1.5em;
+    border: none;
+    outline: none;
+  }
+  & table,
+  td,
+  th {
+    outline: solid 1px black;
+  }
+  & button {
+    min-width: 140px;
+    height: 40px;
+    margin: 20px;
+  }
 `;
 
 const AjoutArticle: FunctionComponent<Props> = () => {
-  const [nb, setNb] = useState<string>("");
-  const [data] = useState<Article[]>(useArticle);
   const [Form, setForm] = useState<Form>({
     nom: {
       isValid: true,
@@ -88,17 +110,6 @@ const AjoutArticle: FunctionComponent<Props> = () => {
   return (
     <Container>
       <div>
-        <input
-          value={nb}
-          onChange={(e) => {
-            setNb(e.target.value);
-          }}
-          className="input"
-          placeholder=" Entrer nombre d'articles à ajouter"
-          type="text"
-        />
-      </div>
-      <div>
         <h1>Ajouter un article</h1>
         <table>
           <thead>
@@ -107,42 +118,9 @@ const AjoutArticle: FunctionComponent<Props> = () => {
               <th>Prix d'achat</th>
               <th>Prix de vente</th>
             </tr>
-          </thead>
+          </thead>²
           <tbody>
-            {data.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <input
-                    value={Form.nom.value}
-                    name="nom"
-                    onChange={(e) => handleInputChange(e)}
-                    className="input"
-                    placeholder="nom article"
-                    type="text"
-                  />
-                </td>
-                <td>
-                  <input
-                    value={Form.prix_achat.value}
-                    name="prix_achat"
-                    onChange={(e) => handleInputChange(e)}
-                    className="input"
-                    placeholder="prix d'achat"
-                    type="text"
-                  />
-                </td>
-                <td>
-                  <input
-                    value={Form.prix_vente.value}
-                    name="prix_vente"
-                    onChange={(e) => handleInputChange(e)}
-                    className="input"
-                    placeholder="prix de vente"
-                    type="text"
-                  />
-                </td>
-              </tr>
-            ))}
+            <Input />
           </tbody>
         </table>
         <button onClick={HandleSubmit}>Valider l'ajout</button>

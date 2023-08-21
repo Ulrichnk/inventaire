@@ -1,7 +1,6 @@
-import React, { CSSProperties, FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Article } from "../helpers/Types";
-import ArticleService, { useArticle } from "../helpers/DbArticle";
-import { NavLink } from "react-router-dom";
+import ArticleService, {  } from "../helpers/DbArticle";
 import { styled } from "styled-components";
 
 type Props = {
@@ -45,7 +44,7 @@ const Search = styled.div`
 const ArticleSearch: FunctionComponent<Props> = () => {
   const [term, setTerm] = useState<string>("");
   const [articles, setArticles] = useState<Article[]>([]);
-  const style: CSSProperties = { textDecoration: "none" };
+  // const style: CSSProperties = { textDecoration: "none" };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;

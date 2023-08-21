@@ -117,7 +117,7 @@ export default class ArticleService {
 
   static searchArticle(term: string): Promise<Article[]> {
     if (this.isDev()) {
-      return fetch(`${process.env.REACT_APP_BACKEND_URL}?=${term}`)
+      return fetch(`${process.env.REACT_APP_BACKEND_URL}?q=${term}`)
         .then((response) => response.json())
         .catch((error) => this.handleError(error));
     }
