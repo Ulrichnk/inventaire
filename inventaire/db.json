@@ -1,0 +1,42 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "articles": [
+    {
+      "id": 0,
+      "nom": "cahier 250 pages",
+      "prix_achat": 100,
+      "prix_vente": 500,
+      "created_at": ""
+    },
+    {
+      "id": 1,
+      "nom": "cahier 350 pages",
+      "prix_achat": 200,
+      "prix_vente": 700,
+      "created_at": ""
+    },
+    {
+      "id": 2,
+      "nom": "cahier 500 pages",
+      "prix_achat": 300,
+      "prix_vente": 1000,
+      "created_at": ""
+    }
+  ]
+}
