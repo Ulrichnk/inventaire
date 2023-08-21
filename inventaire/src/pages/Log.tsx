@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { styled } from "styled-components";
-import { Field, Form, Junior, Roger, User } from "../helpers/types/Types";
+import { Field, Form, Junior, Roger, User } from "../helpers/Types";
 import { useNavigate } from "react-router-dom";
 import { Dispatch, SetStateAction } from "react";
 

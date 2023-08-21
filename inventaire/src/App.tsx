@@ -3,7 +3,7 @@ import NavBar from "./components/navigations/NavBar";
 import AllPages from "./components/navigations/AllPages";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { Lambda, User } from "./helpers/types/Types";
+import { Lambda, User } from "./helpers/Types";
 
 const MenuItem = styled.div`
   color: black;
@@ -30,14 +30,13 @@ const MenuItem = styled.div`
 `;
 const App: FunctionComponent = () => {
   const navigate = useNavigate();
-  const [user, setUser]=useState<User>(Lambda);
-  const [userIsLogged,setUserIsLogged]=useState<boolean>(false);
-  const logout=()=>{
-    localStorage.removeItem('user_token');
-    navigate('/')
+  const [user, setUser] = useState<User>(Lambda);
+  const [userIsLogged, setUserIsLogged] = useState<boolean>(false);
+  const logout = () => {
+    localStorage.removeItem("user_token");
+    navigate("/");
     window.location.reload();
-
-  }
+  };
 
   const menu: JSX.Element = (
     <MenuItem>
@@ -72,20 +71,28 @@ const App: FunctionComponent = () => {
       <div onClick={() => logout()}>
         <p>Se déconnecter</p>
       </div>
-
     </MenuItem>
   );
-
 
   return userIsLogged && user !== null ? (
     <div>
       <NavBar userIsLogged={false} menu={menu1} />
-      <AllPages userIsLogged={true} user={user} setUser={setUser}  setUserIsLogged={setUserIsLogged} />
+      <AllPages
+        userIsLogged={true}
+        user={user}
+        setUser={setUser}
+        setUserIsLogged={setUserIsLogged}
+      />
     </div>
   ) : (
     <div>
       <NavBar userIsLogged={false} menu={menu} />
-      <AllPages userIsLogged={false} user={null} setUser={setUser} setUserIsLogged={setUserIsLogged} />
+      <AllPages
+        userIsLogged={false}
+        user={null}
+        setUser={setUser}
+        setUserIsLogged={setUserIsLogged}
+      />
     </div>
   );
 };

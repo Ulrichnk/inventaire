@@ -1,8 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { Dispatch, SetStateAction } from 'react';
-import {  User } from "../helpers/types/Types";
-
-
+import { Dispatch, SetStateAction } from "react";
+import { User } from "../helpers/Types";
 
 type Props = {
   //define your props here
@@ -11,7 +9,11 @@ type Props = {
   setUserIslogged: Dispatch<SetStateAction<boolean>>;
 };
 
-const Gestion: FunctionComponent<Props> = ({user, setUser, setUserIslogged}) => {
+const Gestion: FunctionComponent<Props> = ({
+  user,
+  setUser,
+  setUserIslogged,
+}) => {
   return <div> vous etes sur la page des gestions</div>;
 };
 
