@@ -1,34 +1,31 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
-
+import { Article } from "../helpers/Types";
+import ArticleService, { useArticle } from "../helpers/DbArticle";
 
 type Field<T> = {
   value?: T;
   isValid?: boolean;
 };
 type Form = {
-  nom: Field<string>;
-  prix_achat: Field<number>;
-  prix_vente: Field<number>;
+  //   nom: Field<string>;
+  //   prix_achat: Field<number>;
+  //   prix_vente: Field<number>;
   id: Field<number>;
+  stock_achat: Field<number>;
+  stock_restant: Field<number>;
 };
-// type Forma={
-//   nom: Field<string>;
-//   prix_achat: Field<number>;
-//   prix_vente: Field<number>;
-//   id: Field<number>;
-//   stock_achat: Field<number>;
-//   stock_restant: Field<number>;
 
-// }
 type Props = {
   //define your props here
-  Form:Form,
-  setForm:Dispatch<SetStateAction<Form>>
-  
+  Form: Form;
+  setForm: Dispatch<SetStateAction<Form>>;
+  id: number;
 };
-const Input: FunctionComponent<Props> = ({Form,setForm}) => {
- 
+const Inv: FunctionComponent<Props> = ({ Form, setForm, id }) => {
+  const Article = useArticle;
+  const article = Article.find((a) => id === a.id);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName: string = e.target.name;
     const fieldValue: string = e.target.value;
@@ -49,7 +46,7 @@ const Input: FunctionComponent<Props> = ({Form,setForm}) => {
     }
   };
   return (
-    <tr>
+    <>
       <td>
         <input
           value={Form.nom.value}
@@ -80,8 +77,39 @@ const Input: FunctionComponent<Props> = ({Form,setForm}) => {
           type="text"
         />
       </td>
-    </tr>
+      <td>
+        <input
+          value={Form.stock_achat.value !== 0 ? Form.stock_achat.value : ""}
+          name="stock_achat"
+          onChange={(e) => handleInputChange(e)}
+          className="input"
+          placeholder="stock acheter "
+          type="text"
+        />
+      </td>
+      <td>
+        <input
+          value={Form.stock_restant.value !== 0 ? Form.stock_restant.value : ""}
+          name="stock_restant"
+          onChange={(e) => handleInputChange(e)}
+          className="input"
+          placeholder="stock restant "
+          type="text"
+        />
+      </td>
+      <td>
+        {article &&
+        article.prix_vente !== undefined &&
+        article.prix_achat !== undefined &&
+        Form.stock_achat.value !== undefined &&
+        Form.stock_restant.value !== undefined
+          ? article.prix_vente *
+              (Form.stock_restant.value - Form.stock_achat.value) -
+            article.prix_achat * Form.stock_achat.value
+          : "Bénéfice"}
+      </td>
+    </>
   );
 };
 
-export default Input;
+export default Inv;

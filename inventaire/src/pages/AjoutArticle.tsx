@@ -67,25 +67,25 @@ const AjoutArticle: FunctionComponent<Props> = () => {
       value: 0,
     },
   });
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fieldName: string = e.target.name;
-    const fieldValue: string = e.target.value;
-    if (e.target.name === "nom") {
-      const newField: Field<string> = {
-        [fieldName]: { value: fieldValue, isValid: true },
-      };
-      console.log("vous avez selectionner", fieldName);
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const fieldName: string = e.target.name;
+  //   const fieldValue: string = e.target.value;
+  //   if (e.target.name === "nom") {
+  //     const newField: Field<string> = {
+  //       [fieldName]: { value: fieldValue, isValid: true },
+  //     };
+  //     console.log("vous avez selectionner", fieldName);
 
-      setForm({ ...Form, ...newField });
-    } else {
-      const newField: Field<number> = {
-        [fieldName]: { value: fieldValue, isvalid: true },
-      };
-      console.log("vous avez selectionner", fieldName);
+  //     setForm({ ...Form, ...newField });
+  //   } else {
+  //     const newField: Field<number> = {
+  //       [fieldName]: { value: fieldValue, isvalid: true },
+  //     };
+  //     console.log("vous avez selectionner", fieldName);
 
-      setForm({ ...Form, ...newField });
-    }
-  };
+  //     setForm({ ...Form, ...newField });
+  //   }
+  // };
   const HandleSubmit = () => {
     console.log(Form);
     console.log("article enregistrer");
@@ -118,9 +118,9 @@ const AjoutArticle: FunctionComponent<Props> = () => {
               <th>Prix d'achat</th>
               <th>Prix de vente</th>
             </tr>
-          </thead>²
+          </thead>
           <tbody>
-            <Input />
+        <Input Form={Form} setForm={setForm}/>
           </tbody>
         </table>
         <button onClick={HandleSubmit}>Valider l'ajout</button>

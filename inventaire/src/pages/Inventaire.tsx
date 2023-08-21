@@ -1,7 +1,53 @@
 import React, { FunctionComponent, useState } from "react";
 import { styled } from "styled-components";
-import { User } from "../helpers/Types";
+import { Article, User } from "../helpers/Types";
 import { Dispatch, SetStateAction } from "react";
+import ArticleService from "../helpers/DbArticle";
+import Inv from "../components/Inv";
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  & tr,
+  th,
+  table,
+  td,
+  input {
+    min-width: 200px;
+    min-height: 40px;
+  }
+  & input {
+    font-size: 1.5em;
+    border: none;
+    outline: none;
+  }
+  & table,
+  td,
+  th {
+    outline: solid 1px black;
+  }
+  & button {
+    min-width: 140px;
+    height: 40px;
+    margin: 20px;
+  }
+`;
+type Field<T> = {
+  value?: T;
+  isValid?: boolean;
+};
+type Form = {
+  nom: Field<string>;
+  prix_achat: Field<number>;
+  prix_vente: Field<number>;
+  id: Field<number>;
+};
+type FormStock = {
+  stock_achat: Field<number>;
+  stock_restant: Field<number>;
+  id: Field<number>;
+};
 
 type Props = {
   //define your props here
@@ -15,7 +61,84 @@ const Inventaire: FunctionComponent<Props> = ({
   setUser,
   setUserIslogged,
 }) => {
-  return <div>fairre l'inventaire</div>;
+  const [articles, setArticles] = useState<Article[]>([]);
+  ArticleService.getArticles().then((articles) => setArticles(articles));
+  const [Form] = useState<Form>({
+    nom: {
+      isValid: true,
+      value: "",
+    },
+    prix_achat: {
+      isValid: true,
+      value: 0,
+    },
+    prix_vente: {
+      isValid: true,
+      value: 0,
+    },
+    id: {
+      isValid: true,
+      value: 0,
+    },
+  });
+  const [FormStock, setFormStock] = useState<FormStock>({
+    id: {
+      isValid: true,
+      value: 0,
+    },
+    stock_achat: {
+      isValid: true,
+      value: 0,
+    },
+    stock_restant: {
+      isValid: true,
+      value: 0,
+    },
+  });
+
+  const HandleSubmit = () => {
+    console.log(Form);
+    console.log("inventaire enregistrer");
+  };
+  return (
+    <Container>
+      <div>
+        <h1>Faire un inventaire</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Prix d'achat</th>
+              <th>Prix de vente</th>
+              <th>Stock acheter</th>
+              <th>Stock restant</th>
+              <th>Bénéfice attendu</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* <Input Form={Form} setForm={setForm} /> */}
+            {articles.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.nom}</td>
+                <td>{item.prix_achat}</td>
+                <td>{item.prix_vente}</td>
+                <Inv
+                  Form={FormStock}
+                  setForm={setFormStock}
+                  id={
+                    FormStock.id.value !== undefined ? FormStock.id.value : -1
+                  }
+                />
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button onClick={HandleSubmit}>Valider l'inventaire</button>
+      </div>
+    </Container>
+  );
 };
 
 export default Inventaire;

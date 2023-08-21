@@ -1,9 +1,8 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { styled } from "styled-components";
 import ArticleSearch from "../components/article-search";
-import { useArticle } from "../helpers/DbArticle";
-import { Article } from "../helpers/Types";
-const Acc = styled.div`
+
+export const Acc = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,8 +21,6 @@ const Acc = styled.div`
 `;
 
 const Accueil: FunctionComponent = () => {
-  const [data] = useState<Article[]>(useArticle);
-
   return (
     <div>
       <ArticleSearch />
