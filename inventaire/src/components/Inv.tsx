@@ -20,8 +20,15 @@ type Props = {
   id: number;
 };
 const Inv: FunctionComponent<Props> = ({ id }) => {
-  const Article = useArticle;
-  const article = Article.find((a) => id === a.id);
+  const [article, setArticleState] = useState<Article>();
+  ArticleService.getArticle(id).then((a) => {
+    if (a && a !== null) {
+      setArticleState(a);
+    } else {
+      console.log("erreur");
+    }
+  });
+
   const [Form, setForm] = useState<Form>({
     id: {
       isValid: true,
@@ -115,7 +122,7 @@ const Inv: FunctionComponent<Props> = ({ id }) => {
         Form.stock_achat.value !== undefined &&
         Form.stock_restant.value !== undefined
           ? article.prix_vente *
-              (Form.stock_restant.value - Form.stock_achat.value) -
+              (Form.stock_achat.value - Form.stock_restant.value) -
             article.prix_achat * Form.stock_achat.value
           : "Bénéfice"}
       </td>
