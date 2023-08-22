@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { Article } from "../helpers/Types";
-import ArticleService, { useArticle } from "../helpers/DbArticle";
+import ArticleService, {  } from "../helpers/DbArticle";
 
 type Field<T> = {
   value?: T;
