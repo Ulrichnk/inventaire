@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { Article } from "../helpers/Types";
-import ArticleService, {  } from "../helpers/DbArticle";
+import ArticleService from "../helpers/DbArticle";
 
 type Field<T> = {
   value?: T;
@@ -95,6 +95,7 @@ const Inv: FunctionComponent<Props> = ({ id }) => {
           type="text"
         />
       </td> */}
+      <td>stock de départ</td>
       <td>
         <input
           value={Form.stock_achat.value !== 0 ? Form.stock_achat.value : ""}
@@ -104,6 +105,13 @@ const Inv: FunctionComponent<Props> = ({ id }) => {
           placeholder="stock acheter "
           type="text"
         />
+      </td>
+      <td>
+        {article &&
+        article.prix_achat !== undefined &&
+        Form.stock_achat.value !== undefined
+          ? article.prix_achat * Form.stock_achat.value
+          : "valeur stock acheter"}
       </td>
       <td>
         <input

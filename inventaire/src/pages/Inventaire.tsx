@@ -44,7 +44,6 @@ type Form = {
   id: Field<number>;
 };
 
-
 type Props = {
   //define your props here
   user: User | null;
@@ -58,6 +57,8 @@ const Inventaire: FunctionComponent<Props> = ({
   setUserIslogged,
 }) => {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [nb, setNb] = useState<number>();
+  
   ArticleService.getArticles().then((articles) => setArticles(articles));
   const [Form] = useState<Form>({
     nom: {
@@ -78,7 +79,6 @@ const Inventaire: FunctionComponent<Props> = ({
     },
   });
 
-
   const HandleSubmit = () => {
     console.log(Form);
     console.log("inventaire enregistrer");
@@ -94,7 +94,9 @@ const Inventaire: FunctionComponent<Props> = ({
               <th>Nom</th>
               <th>Prix d'achat</th>
               <th>Prix de vente</th>
+              <th>Stock de départ</th>
               <th>Stock acheter</th>
+              <th>Valeur stock acheter</th>
               <th>Stock restant</th>
               <th>Bénéfice attendu</th>
             </tr>
@@ -107,9 +109,7 @@ const Inventaire: FunctionComponent<Props> = ({
                 <td>{item.nom}</td>
                 <td>{item.prix_achat}</td>
                 <td>{item.prix_vente}</td>
-                <Inv
-                  id={item.id || 0}
-                />
+                <Inv id={item.id || 0} />
               </tr>
             ))}
           </tbody>
