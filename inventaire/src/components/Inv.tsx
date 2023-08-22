@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useState } from "react";
-import { Dispatch, SetStateAction } from "react";
 import { Article } from "../helpers/Types";
 import ArticleService, { useArticle } from "../helpers/DbArticle";
 
@@ -18,13 +17,25 @@ type Form = {
 
 type Props = {
   //define your props here
-  Form: Form;
-  setForm: Dispatch<SetStateAction<Form>>;
   id: number;
 };
-const Inv: FunctionComponent<Props> = ({ Form, setForm, id }) => {
+const Inv: FunctionComponent<Props> = ({ id }) => {
   const Article = useArticle;
   const article = Article.find((a) => id === a.id);
+  const [Form, setForm] = useState<Form>({
+    id: {
+      isValid: true,
+      value: 0,
+    },
+    stock_achat: {
+      isValid: true,
+      value: 0,
+    },
+    stock_restant: {
+      isValid: true,
+      value: 0,
+    },
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName: string = e.target.name;
@@ -47,7 +58,7 @@ const Inv: FunctionComponent<Props> = ({ Form, setForm, id }) => {
   };
   return (
     <>
-      <td>
+      {/* <td>
         <input
           value={Form.nom.value}
           name="nom"
@@ -76,7 +87,7 @@ const Inv: FunctionComponent<Props> = ({ Form, setForm, id }) => {
           placeholder="prix de vente"
           type="text"
         />
-      </td>
+      </td> */}
       <td>
         <input
           value={Form.stock_achat.value !== 0 ? Form.stock_achat.value : ""}

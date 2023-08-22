@@ -43,11 +43,7 @@ type Form = {
   prix_vente: Field<number>;
   id: Field<number>;
 };
-type FormStock = {
-  stock_achat: Field<number>;
-  stock_restant: Field<number>;
-  id: Field<number>;
-};
+
 
 type Props = {
   //define your props here
@@ -81,20 +77,7 @@ const Inventaire: FunctionComponent<Props> = ({
       value: 0,
     },
   });
-  const [FormStock, setFormStock] = useState<FormStock>({
-    id: {
-      isValid: true,
-      value: 0,
-    },
-    stock_achat: {
-      isValid: true,
-      value: 0,
-    },
-    stock_restant: {
-      isValid: true,
-      value: 0,
-    },
-  });
+
 
   const HandleSubmit = () => {
     console.log(Form);
@@ -125,11 +108,7 @@ const Inventaire: FunctionComponent<Props> = ({
                 <td>{item.prix_achat}</td>
                 <td>{item.prix_vente}</td>
                 <Inv
-                  Form={FormStock}
-                  setForm={setFormStock}
-                  id={
-                    FormStock.id.value !== undefined ? FormStock.id.value : -1
-                  }
+                  id={item.id || 0}
                 />
               </tr>
             ))}
