@@ -90,6 +90,9 @@ const AjoutArticle: FunctionComponent<Props> = () => {
     console.log(Form);
     console.log("article enregistrer");
     if (
+      Form.nom.value &&
+      Form.prix_achat.value &&
+      Form.prix_vente.value &&
       Form.nom.value !== "" &&
       Form.prix_achat.value !== 0 &&
       Form.prix_vente.value !== 0
@@ -120,7 +123,7 @@ const AjoutArticle: FunctionComponent<Props> = () => {
             </tr>
           </thead>
           <tbody>
-        <Input Form={Form} setForm={setForm}/>
+            <Input Form={Form} setForm={setForm} />
           </tbody>
         </table>
         <button onClick={HandleSubmit}>Valider l'ajout</button>

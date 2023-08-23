@@ -25,7 +25,7 @@ const Inv: FunctionComponent<Props> = ({ id }) => {
     if (a && a !== null) {
       setArticleState(a);
     } else {
-      console.log("erreur");
+      console.log("vous avez une erreur");
     }
   });
 
@@ -65,37 +65,7 @@ const Inv: FunctionComponent<Props> = ({ id }) => {
   };
   return (
     <>
-      {/* <td>
-        <input
-          value={Form.nom.value}
-          name="nom"
-          onChange={(e) => handleInputChange(e)}
-          className="input"
-          placeholder="nom article"
-          type="text"
-        />
-      </td>
-      <td>
-        <input
-          value={Form.prix_achat.value !== 0 ? Form.prix_achat.value : ""}
-          name="prix_achat"
-          onChange={(e) => handleInputChange(e)}
-          className="input"
-          placeholder="prix d'achat"
-          type="text"
-        />
-      </td>
-      <td>
-        <input
-          value={Form.prix_vente.value !== 0 ? Form.prix_vente.value : ""}
-          name="prix_vente"
-          onChange={(e) => handleInputChange(e)}
-          className="input"
-          placeholder="prix de vente"
-          type="text"
-        />
-      </td> */}
-      <td>stock de départ</td>
+      <td> stock de départ </td>
       <td>
         <input
           value={Form.stock_achat.value !== 0 ? Form.stock_achat.value : ""}
@@ -106,6 +76,7 @@ const Inv: FunctionComponent<Props> = ({ id }) => {
           type="text"
         />
       </td>
+      <td>stock total</td>
       <td>
         {article &&
         article.prix_achat !== undefined &&
@@ -113,6 +84,8 @@ const Inv: FunctionComponent<Props> = ({ id }) => {
           ? article.prix_achat * Form.stock_achat.value
           : "valeur stock acheter"}
       </td>
+      <td>valeur stock de départ </td>
+      <td>valeur stock total </td>
       <td>
         <input
           value={Form.stock_restant.value !== 0 ? Form.stock_restant.value : ""}
@@ -122,6 +95,13 @@ const Inv: FunctionComponent<Props> = ({ id }) => {
           placeholder="stock restant "
           type="text"
         />
+      </td>
+      <td>
+        {article &&
+        article.prix_vente !== undefined &&
+        Form.stock_restant.value !== undefined
+          ? article.prix_vente * Form.stock_restant.value
+          : "valeur stock restant"}
       </td>
       <td>
         {article &&

@@ -38,5 +38,38 @@
       "prix_vente": 1000,
       "created_at": ""
     }
+  ],
+  "historique": [
+    {
+      "id": 0,
+      "date_debut": "2023-01-16",
+      "date_fin": "2023-02-16"
+    }
+  ],
+  "inventaire": [
+    {
+      "id": 0,
+      "id_historique": 0,
+      "id_article": 1,
+      "stock_depart": 0,
+      "stock_achat": 0,
+      "stock_restant": 0
+    },
+    {
+      "id": 1,
+      "id_historique": 0,
+      "id_article": 2,
+      "stock_depart": 0,
+      "stock_achat": 0,
+      "stock_restant": 0
+    },
+    {
+      "id": 2,
+      "id_historique": 0,
+      "id_article": 3,
+      "stock_depart": 0,
+      "stock_achat": 0,
+      "stock_restant": 0
+    }
   ]
 }

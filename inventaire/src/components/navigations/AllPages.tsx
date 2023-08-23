@@ -8,6 +8,7 @@ import Achat from "../../pages/Achat";
 import AjoutArticle from "../../pages/AjoutArticle";
 import Inventaire from "../../pages/Inventaire";
 import Gestion from "../../pages/Gestion";
+import Essai from "./Essai";
 type Props = {
   userIsLogged: Boolean;
   user: User | null;
@@ -25,6 +26,7 @@ const AllPages: FunctionComponent<Props> = ({
     <>
       <Routes>
         <Route path="/" element={<Accueil />} />
+        <Route path="/essai" element={<Essai />} />
         <Route
           path="/gestion-articles"
           element={
@@ -52,6 +54,7 @@ const AllPages: FunctionComponent<Props> = ({
   ) : (
     <>
       <Routes>
+        <Route path="/essai" element={<Essai />} />
         <Route path="/" element={<Accueil />} />
         <Route
           path="/log"

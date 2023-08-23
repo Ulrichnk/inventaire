@@ -14,11 +14,11 @@ const Container = styled.div`
   table,
   td,
   input {
-    min-width: 200px;
+    min-width: 50px;
     min-height: 40px;
   }
   & input {
-    font-size: 1.5em;
+    font-size: 1em;
     border: none;
     outline: none;
   }
@@ -57,8 +57,7 @@ const Inventaire: FunctionComponent<Props> = ({
   setUserIslogged,
 }) => {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [nb, setNb] = useState<number>();
-  
+
   ArticleService.getArticles().then((articles) => setArticles(articles));
   const [Form] = useState<Form>({
     nom: {
@@ -96,8 +95,12 @@ const Inventaire: FunctionComponent<Props> = ({
               <th>Prix de vente</th>
               <th>Stock de départ</th>
               <th>Stock acheter</th>
+              <th>Stock total</th>
               <th>Valeur stock acheter</th>
+              <th>Valeur stock départ</th>
+              <th>Valeur stock total</th>
               <th>Stock restant</th>
+              <th>Valeur stock restant</th>
               <th>Bénéfice attendu</th>
             </tr>
           </thead>
@@ -109,7 +112,7 @@ const Inventaire: FunctionComponent<Props> = ({
                 <td>{item.nom}</td>
                 <td>{item.prix_achat}</td>
                 <td>{item.prix_vente}</td>
-                <Inv id={item.id || 0} />
+                <Inv id={item.id} />
               </tr>
             ))}
           </tbody>

@@ -39,12 +39,26 @@ export type Product = {
 };
 
 export type Article = {
-  id: number|undefined;
-  id_user?: number|undefined;
-  nom: string|undefined;
-  prix_achat: number|undefined;
-  prix_vente: number|undefined;
+  id: number,
+  id_user?: number,
+  nom: string,
+  prix_achat: number,
+  prix_vente: number,
   created_at: Date;
+};
+export type Inventaire = {
+  id: number;
+  id_article: number;
+  id_historique: number;
+  stock_depart: number;
+  stock_achat: number;
+  stock_restant: number;
+};
+
+export type Historique = {
+  id: number;
+  date_debut: string;
+  date_fin: string;
 };
 
 export const Roger: User = {
