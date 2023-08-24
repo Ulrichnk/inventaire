@@ -66,8 +66,8 @@
     {
       "id": 2,
       "id_historique": 0,
-      "id_article": 0,
-      "stock_depart": 2,
+      "id_article": 3,
+      "stock_depart": 0,
       "stock_achat": 0,
       "stock_restant": 0
     }

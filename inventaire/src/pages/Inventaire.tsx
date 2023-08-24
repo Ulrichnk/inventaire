@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { Article, User } from "../helpers/Types";
 import { Dispatch, SetStateAction } from "react";
@@ -44,6 +44,11 @@ type Form = {
   id: Field<number>;
 };
 
+type Duree = {
+  date_debut: Field<string>;
+  date_fin: Field<string>;
+};
+
 type Props = {
   //define your props here
   user: User | null;
@@ -58,7 +63,9 @@ const Inventaire: FunctionComponent<Props> = ({
 }) => {
   const [articles, setArticles] = useState<Article[]>([]);
 
-  ArticleService.getArticles().then((articles) => setArticles(articles));
+  useEffect(() => {
+    ArticleService.getArticles().then((articles) => setArticles(articles));
+  }, []);
   const [Form] = useState<Form>({
     nom: {
       isValid: true,
@@ -78,14 +85,67 @@ const Inventaire: FunctionComponent<Props> = ({
     },
   });
 
+  const [duree, setDuree] = useState<Duree>({
+    date_debut: {
+      isValid: true,
+      value: "",
+    },
+    date_fin: {
+      isValid: true,
+      value: "",
+    },
+  });
+  const [change, setChange] = useState<boolean>(true);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChange(true);
+    const fieldName: string = e.target.name;
+    const fieldValue: string = e.target.value;
+    const newField: Field<string> = {
+      [fieldName]: { value: fieldValue, isValid: true },
+    };
+    console.log(
+      "vous avez selectionner",
+      fieldName,
+      " de valeur : ",
+      fieldValue,
+      "et de type",
+      typeof fieldValue
+    );
+
+    setDuree({ ...duree, ...newField });
+  };
   const HandleSubmit = () => {
     console.log(Form);
     console.log("inventaire enregistrer");
   };
+
   return (
     <Container>
       <div>
         <h1>Faire un inventaire</h1>
+        <div className="date">
+          <p>Selectionner la date de vos comptes</p>
+          <label htmlFor="date_debut">date de début:</label>
+          <input
+            value={duree.date_debut.value}
+            name="date_debut"
+            onChange={(e) => handleInputChange(e)}
+            className="-date-input "
+            placeholder="date de debut "
+            type="date"
+          />
+          <label htmlFor="date_fin">date de fin:</label>
+          <input
+            value={duree.date_fin.value}
+            name="date_fin"
+            onChange={(e) => handleInputChange(e)}
+            className="date-input"
+            placeholder="date de debut "
+            type="date"
+          />
+          <button onClick={() => setChange(false)}>Valider</button>
+        </div>
         <table>
           <thead>
             <tr>
@@ -106,15 +166,26 @@ const Inventaire: FunctionComponent<Props> = ({
           </thead>
           <tbody>
             {/* <Input Form={Form} setForm={setForm} /> */}
-            {articles.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.nom}</td>
-                <td>{item.prix_achat}</td>
-                <td>{item.prix_vente}</td>
-                <Inv id={item.id} />
-              </tr>
-            ))}
+
+            {change
+              ? articles.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.nom}</td>
+                    <td>{item.prix_achat}</td>
+                    <td>{item.prix_vente}</td>
+                    <Inv id={item.id} />
+                  </tr>
+                ))
+              : articles.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.nom}</td>
+                    <td>{item.prix_achat}</td>
+                    <td>{item.prix_vente}</td>
+                    <Inv id={item.id} duree={duree} />
+                  </tr>
+                ))}
           </tbody>
         </table>
         <button onClick={HandleSubmit}>Valider l'inventaire</button>
