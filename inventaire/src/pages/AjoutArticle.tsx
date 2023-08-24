@@ -67,25 +67,7 @@ const AjoutArticle: FunctionComponent<Props> = () => {
       value: 0,
     },
   });
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const fieldName: string = e.target.name;
-  //   const fieldValue: string = e.target.value;
-  //   if (e.target.name === "nom") {
-  //     const newField: Field<string> = {
-  //       [fieldName]: { value: fieldValue, isValid: true },
-  //     };
-  //     console.log("vous avez selectionner", fieldName);
-
-  //     setForm({ ...Form, ...newField });
-  //   } else {
-  //     const newField: Field<number> = {
-  //       [fieldName]: { value: fieldValue, isvalid: true },
-  //     };
-  //     console.log("vous avez selectionner", fieldName);
-
-  //     setForm({ ...Form, ...newField });
-  //   }
-  // };
+ 
   const HandleSubmit = () => {
     console.log(Form);
     console.log("article enregistrer");

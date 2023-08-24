@@ -17,11 +17,12 @@ export let useArticle: Article[] = [
   },
 ];
 
-export function add(a: Article) {
+export function add(a: Article): Article {
   const id: number = useArticle.length;
   a.id = id + 1;
   console.log();
   useArticle = [...useArticle, a];
+  return a;
 }
 
 export default class ArticleService {
@@ -97,22 +98,37 @@ export default class ArticleService {
     });
   }
 
-  static addArticle(article: Article): Promise<Article> {
-    article.created_at = new Date(article.created_at);
+  static async addArticle(article: Article): Promise<Article> {
+    const modifiedArticle = { ...article };
+    modifiedArticle.created_at = new Date(article.created_at);
+
     if (this.isDev()) {
-      return fetch(`${process.env.REACT_APP_BACKEND_URL}/${article.id}`, {
-        method: "POST",
-        body: JSON.stringify(article),
-        headers: { "Content-Type": "application/json" },
-      })
-        .then((response) => response.json())
-        .catch((error) => this.handleError(error));
+      try {
+        const articles = await this.getArticles();
+        modifiedArticle.id = articles.length;
+
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}`, {
+          method: "POST",
+          body: JSON.stringify(modifiedArticle),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to add article");
+        }
+
+        const addedArticle = await response.json();
+        return addedArticle;
+      } catch (error) {
+        this.handleError(error as Error);
+        throw error;
+      }
+    } else {
+      return new Promise((resolve) => {
+        this.articles.push(modifiedArticle);
+        resolve(modifiedArticle);
+      });
     }
-    add(article);
-    return new Promise((resolve) => {
-      this.articles.push(article);
-      resolve(article);
-    });
   }
 
   static searchArticle(term: string): Promise<Article[]> {
@@ -121,7 +137,6 @@ export default class ArticleService {
         .then((response) => response.json())
         .catch((error) => this.handleError(error));
     }
-    
 
     return new Promise((resolve) => {
       const results = this.articles.filter((art) => art.nom?.includes(term));
@@ -137,8 +152,7 @@ export default class ArticleService {
   }
 }
 
-
-export  class ArticlenService {
+export class ArticlenService {
   static articles: Article[] = useArticle;
 
   static isDev = () => {
@@ -236,7 +250,6 @@ export  class ArticlenService {
         .then((response) => response.json())
         .catch((error) => this.handleError(error));
     }
-    
 
     return new Promise((resolve) => {
       const results = this.articles.filter((art) => art.nom?.includes(term));
