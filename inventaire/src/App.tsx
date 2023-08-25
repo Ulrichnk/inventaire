@@ -28,6 +28,11 @@ const MenuItem = styled.div`
     height: 1px;
   }
 `;
+const Pages = styled.div`
+  display: grid;
+  grid-template-columns: 0.2fr 1fr;
+  background-color: rgb(255, 230, 221);
+`;
 const App: FunctionComponent = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User>(Lambda);
@@ -75,7 +80,7 @@ const App: FunctionComponent = () => {
   );
 
   return userIsLogged && user !== null ? (
-    <div>
+    <Pages>
       <NavBar userIsLogged={false} menu={menu1} />
       <AllPages
         userIsLogged={true}
@@ -83,9 +88,9 @@ const App: FunctionComponent = () => {
         setUser={setUser}
         setUserIsLogged={setUserIsLogged}
       />
-    </div>
+    </Pages>
   ) : (
-    <div>
+    <Pages>
       <NavBar userIsLogged={false} menu={menu} />
       <AllPages
         userIsLogged={false}
@@ -93,7 +98,7 @@ const App: FunctionComponent = () => {
         setUser={setUser}
         setUserIsLogged={setUserIsLogged}
       />
-    </div>
+    </Pages>
   );
 };
 

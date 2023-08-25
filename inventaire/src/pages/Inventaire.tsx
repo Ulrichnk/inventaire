@@ -7,8 +7,33 @@ import Inv from "../components/Inv";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   text-align: center;
+  margin-top: 150px;
+  min-height: 100vh;
+  min-width: 100vh;
+  & table,
+  td,
+  th {
+    outline: solid 1px black;
+  }
+  & table {
+    min-width: 700px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    & th,
+    & td {
+      background-color: orange;
+      color: white;
+    }
+    & td,
+    th {
+      padding: 10px 20px;
+    }
+  }
+  & h1 {
+    color: orange;
+  }
   & tr,
   th,
   table,
@@ -22,11 +47,7 @@ const Container = styled.div`
     border: none;
     outline: none;
   }
-  & table,
-  td,
-  th {
-    outline: solid 1px black;
-  }
+
   & button {
     min-width: 140px;
     height: 40px;

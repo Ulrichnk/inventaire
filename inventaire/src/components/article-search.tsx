@@ -9,8 +9,9 @@ type Props = {
 const Acc = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   text-align: center;
+  margin-top:150px;
+  min-height:100vh;
   & table,
   td,
   th {
@@ -18,27 +19,50 @@ const Acc = styled.div`
   }
   & table {
     min-width: 700px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    & th ,
+    & td {  
+      background-color: orange;
+      color: white;
+    }
+    & th {
+      padding: 12px 15px;
+    }
+    & td {
+      padding: 10px 20px;
+    } 
+    & tr:nth-child(even) {
+      background-color: #f2f2f2;
+    } 
+    & td,
+    th {
+      padding: 10px 20px;
+    }
   }
+
+
+
+  
   & h1 {
-    color: red;
+    color: orange;
   }
 `;
 
 const Search = styled.div`
-  display: flex;
-  flex-direction: row;
+
 
   & input {
-    width: 200px;
+    width: 40%;
     height: 40px;
-    outline: solid 2px red;
+    outline: solid 2px orange;
     border-radius: 15px;
+    text-align:center;
+
   }
-  & .der {
-    background-color: white;
-    border-radius: 15px;
-    text-decoration: none;
-  }
+
+  
 `;
 
 const ArticleSearch: FunctionComponent<Props> = () => {
@@ -65,28 +89,14 @@ const ArticleSearch: FunctionComponent<Props> = () => {
     <>
       <Acc>
         <Search>
-          <div>
+          
             <input
               type="text"
               placeholder="Rechercher un article"
               value={term}
               onChange={(e) => handleInputChange(e)}
             />
-            {/* <div className="der">
-              {articles.map((article) => (
-                <NavLink
-                  key={article.id}
-                  to={`/articles/${article.id}`}
-                  className={(nav) =>
-                    nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
-                  }
-                  style={style}
-                >
-                  {article.nom}
-                </NavLink>
-              ))}
-            </div> */}
-          </div>
+          
         </Search>
         <div>
           <h1>Tableau de données</h1>

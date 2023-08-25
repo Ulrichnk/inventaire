@@ -2,20 +2,20 @@ import React, { CSSProperties, FunctionComponent, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { styled } from "styled-components";
 
-const Nav = styled.div`
+
+const NavHead = styled.div`
   display: flex;
   flex-direction: column;
-`;
-const NavHead = styled.div`
+  align-items: center;
+  height: 100px;
   display: flex;
 `;
 
 const NavBody = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  height: 50px;
   gap: 25px;
-  padding: 20px;
   margin: 0 auto;
   & p {
     transition: 0.8s;
@@ -26,43 +26,37 @@ const NavBody = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bold;
   margin: auto;
 `;
-const Icon = styled.div`
-  display: flex;
-  gap: 10px;
-  margin: auto;
-  cursor: pointer;
-`;
 
-const Search = styled.form`
-  margin: 10px auto;
-  border-radius: 12px;
-  display: flex;
-  /*outline: 1px solid rgb(132, 227, 132) ;*/
+// const Search = styled.form`
+//   margin: 10px auto;
+//   border-radius: 12px;
+//   display: flex;
+//   /*outline: 1px solid rgb(132, 227, 132) ;*/
 
-  & input {
-    height: 40px;
-    border-radius: 15px 15px 15px 15px;
-    box-shadow: 0 0 0 5px rgb(132, 227, 132) inset;
-  }
-  & button {
-    border: none;
-    background-color: white;
-    text-align: center;
-    width: 60px;
-    box-shadow: 0 0 0 5px rgb(132, 227, 132) inset;
-    border-radius: 15px 15px 15px 15px;
-    transition: 0.8s;
-  }
-  & button:hover {
-    background-color: rgb(132, 227, 132);
-    color: white;
-    font-weight: bold;
-  }
-`;
+//   & input {
+//     height: 40px;
+//     border-radius: 15px 15px 15px 15px;
+//     box-shadow: 0 0 0 5px rgb(132, 227, 132) inset;
+//   }
+//   & button {
+//     border: none;
+//     background-color: white;
+//     text-align: center;
+//     width: 60px;
+//     box-shadow: 0 0 0 5px rgb(132, 227, 132) inset;
+//     border-radius: 15px 15px 15px 15px;
+//     transition: 0.8s;
+//   }
+//   & button:hover {
+//     background-color: rgb(132, 227, 132);
+//     color: white;
+//     font-weight: bold;
+//   }
+// `;
 
 type Props = {
   userIsLogged: Boolean;
@@ -77,40 +71,9 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, menu }) => {
   return userIsLogged ? (
     <div className="nav-bar">salut</div>
   ) : (
-    <Nav>
+    <div className="nav">
       <NavHead>
         <Title>Inventaire</Title>
-        <Search>
-          <button type="submit" onClick={(e) => e.preventDefault()}>
-            search
-          </button>
-          <input
-            placeholder="veuillez entrer un mot à chercher"
-            name="search"
-          ></input>
-        </Search>
-        <Icon className="nav-icon">
-          <div className="img profil">
-            {" "}
-            <img
-              alt="profil-icon"
-              src="profil.png"
-              width={"40px"}
-              onClick={(e) => {
-                setState(!state);
-              }}
-            />
-            {state && menu}
-          </div>
-          <div className="img">
-            {" "}
-            <img alt="basket-icon" src="profil.png" width={"40px"} />
-          </div>
-          <div className="img">
-            {" "}
-            <img alt="help-icon" src="help.png" width={"40px"} />
-          </div>
-        </Icon>
       </NavHead>
       <NavBody>
         <NavLink
@@ -131,8 +94,44 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, menu }) => {
         >
           <p>Inventaire</p>
         </NavLink>
+        <NavLink
+          to="/gestion-articles"
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Gestion des articles</p>
+        </NavLink>
+        <NavLink
+          to="/essai"
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Essai</p>
+        </NavLink>
+        <NavLink
+          to="/enregistrement-achat"
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Enregistrement des achats</p>
+        </NavLink>
+        <NavLink
+          to="/ajout-article"
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Ajout des articles</p>
+        </NavLink>
       </NavBody>
-    </Nav>
+    </div>
   );
 };
 export default NavBar;

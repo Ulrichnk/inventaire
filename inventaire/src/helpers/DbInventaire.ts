@@ -56,7 +56,7 @@ export default class InventaireService {
     // return (!process.env.NODE_ENV || process.env.NODE_ENV === "development");
   };
 
-  static url = process.env.REACT_APP_BACKEND_URL1;
+  static url = process.env.REACT_APP_BACKEND_URL;;
 
   static async getHistoriques(): Promise<Historique[]> {
     try {
@@ -94,7 +94,7 @@ export default class InventaireService {
     if (this.isDev()) {
       try {
         const response = await fetch(`${this.url}/inventaire`);
-        const data :Inventaire[]= await response.json();
+        const data: Inventaire[] = await response.json();
         return data.filter((art) => id_article === art.id_article);
       } catch (error) {
         this.handleError(error);
