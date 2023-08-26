@@ -5,10 +5,11 @@ import Accueil from "../../pages/Accueil";
 import Log from "../../pages/Log";
 import { User } from "../../helpers/Types";
 import Achat from "../../pages/Achat";
-import AjoutArticle from "../../pages/AjoutArticle";
 import Inventaire from "../../pages/Inventaire";
 import Gestion from "../../pages/Gestion";
 import Essai from "./Essai";
+import AjoutArticle from "../../pages/AjoutArticle";
+import Inconnu from "../../pages/inconnu";
 type Props = {
   userIsLogged: Boolean;
   user: User | null;
@@ -49,6 +50,7 @@ const AllPages: FunctionComponent<Props> = ({
         />
         <Route path="/enregistrement-achat" element={<Achat />} />
         <Route path="/ajout-article" element={<AjoutArticle />} />
+        <Route path="*" element={<Inconnu />} />
       </Routes>
     </>
   ) : (
@@ -76,6 +78,7 @@ const AllPages: FunctionComponent<Props> = ({
             />
           }
         />
+        <Route path="*" element={<Inconnu />} />
       </Routes>
     </>
   );

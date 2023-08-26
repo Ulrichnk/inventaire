@@ -1,9 +1,9 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import NavBar from "./components/navigations/NavBar";
 import AllPages from "./components/navigations/AllPages";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { Lambda, User } from "./helpers/Types";
+import { Lambda, Roger, User } from "./helpers/Types";
 
 const MenuItem = styled.div`
   color: black;
@@ -42,6 +42,12 @@ const App: FunctionComponent = () => {
     navigate("/");
     window.location.reload();
   };
+  useEffect(() => {
+    if (localStorage.getItem("user_token") === "roger") {
+      setUserIsLogged(true);
+      setUser(Roger);
+    }
+  }, []);
 
   const menu: JSX.Element = (
     <MenuItem>
@@ -81,7 +87,7 @@ const App: FunctionComponent = () => {
 
   return userIsLogged && user !== null ? (
     <Pages>
-      <NavBar userIsLogged={false} menu={menu1} />
+      <NavBar userIsLogged={true} menu={menu1} />
       <AllPages
         userIsLogged={true}
         user={user}

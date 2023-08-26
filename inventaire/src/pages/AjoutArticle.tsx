@@ -21,26 +21,53 @@ type Form = {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   text-align: center;
-  & tr,
-  th,
-  table,
-  td,
-  .input {
-    min-width: 500px;
-    min-height: 50px;
-  }
-  & .input {
-    font-size: 1.5em;
-    border: none;
-    outline: none;
-  }
+  margin-top: 150px;
+  min-height: 100vh;
+  min-width: 100vh;
   & table,
   td,
   th {
     outline: solid 1px black;
   }
+  & table {
+    min-width: 700px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    & th,
+    & td {
+      background-color: orange;
+      color: white;
+    }
+    & td,
+    th {
+      padding: 10px 20px;
+    }
+  }
+  & h1 {
+    color: orange;
+  }
+  & tr,
+  th,
+  table,
+  td,
+  input {
+    min-width: 50px;
+    min-height: 40px;
+  }
+
+  @media (max-width: 768px) {
+    & table {
+      min-width: 300px;
+    }
+  }
+  & input {
+    font-size: 1em;
+    border: none;
+    outline: none;
+  }
+
   & button {
     min-width: 140px;
     height: 40px;
@@ -67,7 +94,7 @@ const AjoutArticle: FunctionComponent<Props> = () => {
       value: 0,
     },
   });
- 
+
   const HandleSubmit = () => {
     console.log(Form);
     console.log("article enregistrer");

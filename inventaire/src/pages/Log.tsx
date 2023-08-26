@@ -18,6 +18,7 @@ const LogForm = styled.form`
   align-items: center;
   gap: 15px;
   margin: 0 auto;
+  min-height: 100vh;
 
   & input[type="checkbox"] {
     margin-top: 15px;
@@ -55,6 +56,7 @@ const Log: FunctionComponent<Props> = ({ user, setUser, setUserIslogged }) => {
     ) {
       setUserIslogged(true);
       setUser(Roger);
+      localStorage.setItem("user_token", "roger");
       navigate("/");
     } else if (
       Form.email.value === Junior.email &&

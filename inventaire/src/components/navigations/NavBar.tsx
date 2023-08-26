@@ -1,7 +1,6 @@
 import React, { CSSProperties, FunctionComponent, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-
 
 const NavHead = styled.div`
   display: flex;
@@ -65,11 +64,59 @@ type Props = {
 
 const NavBar: FunctionComponent<Props> = ({ userIsLogged, menu }) => {
   const [state, setState] = useState<boolean>(false);
+  let navigate = useNavigate();
+  const logout = () => {
+    localStorage.removeItem("user_token");
+    navigate("/");
+    window.location.reload();
+  };
 
   const style: CSSProperties = { textDecoration: "none" };
 
-  return userIsLogged ? (
-    <div className="nav-bar">salut</div>
+  return !userIsLogged ? (
+    <div className="nav">
+      <NavHead>
+        <Title>Inventaire</Title>
+      </NavHead>
+      <NavBody>
+        <NavLink
+          to="/"
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Accueil</p>
+        </NavLink>
+        <NavLink
+          to="/log"
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Inventaire</p>
+        </NavLink>
+        <NavLink
+          to="/log"
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Gestion des articles</p>
+        </NavLink>
+        <NavLink
+          to="/log"
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Connexion</p>
+        </NavLink>
+      </NavBody>
+    </div>
   ) : (
     <div className="nav">
       <NavHead>
@@ -129,6 +176,20 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, menu }) => {
           style={style}
         >
           <p>Ajout des articles</p>
+        </NavLink>
+        <NavLink
+          to="inconnu"
+          onClick={() => {
+            localStorage.removeItem("user_token");
+            navigate("/");
+            window.location.reload();
+          }}
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Déconnexion</p>
         </NavLink>
       </NavBody>
     </div>

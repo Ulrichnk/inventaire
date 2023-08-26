@@ -42,6 +42,13 @@ const Container = styled.div`
     min-width: 50px;
     min-height: 40px;
   }
+
+
+  @media (max-width: 768px) {
+    & table {
+      min-width: 300px;
+    }
+  }
   & input {
     font-size: 1em;
     border: none;
