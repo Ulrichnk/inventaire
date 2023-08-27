@@ -1,47 +1,33 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, {
+  FunctionComponent,
+  createContext,
+  useEffect,
+  useState,
+} from "react";
 import NavBar from "./components/navigations/NavBar";
 import AllPages from "./components/navigations/AllPages";
-import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { Lambda, Roger, User } from "./helpers/Types";
+import { Article, Lambda, Roger, User } from "./helpers/Types";
+import ArticleService from "./helpers/DbArticle";
 
-const MenuItem = styled.div`
-  color: black;
-  background-color: white;
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  min-width: 160px;
-  max-width: 200px;
-  border-radius: 5px;
-  border: 0.1px solid;
-  & div {
-    /*cursor: grab;*/
-    transition: 0.8s;
-    padding-left: 10px;
-  }
-  & div:hover {
-    background-color: lightgray;
-  }
-  & [id="1"] {
-    background-color: rgb(47, 47, 47);
-    height: 1px;
-  }
-`;
 const Pages = styled.div`
   display: grid;
   grid-template-columns: 0.2fr 1fr;
   background-color: rgb(255, 230, 221);
 `;
+ 
+ type AppContextValue={
+  user:User,
+  articles:Article[],
+
+}
+
+export const AppContext = createContext<AppContextValue|null>(null);
 const App: FunctionComponent = () => {
-  const navigate = useNavigate();
+  const [articles, setArticles] = useState<Article[]>([]);
   const [user, setUser] = useState<User>(Lambda);
   const [userIsLogged, setUserIsLogged] = useState<boolean>(false);
-  const logout = () => {
-    localStorage.removeItem("user_token");
-    navigate("/");
-    window.location.reload();
-  };
+
   useEffect(() => {
     if (localStorage.getItem("user_token") === "roger") {
       setUserIsLogged(true);
@@ -49,62 +35,40 @@ const App: FunctionComponent = () => {
     }
   }, []);
 
-  const menu: JSX.Element = (
-    <MenuItem>
-      <div onClick={(e) => navigate("/log")}>
-        <p>Me connecter</p>
-      </div>
-      <span id="1"></span>
-      <div onClick={(e) => navigate("/log")}>
-        <p>Articles</p>
-      </div>
-      <div onClick={(e) => navigate("/log")}>
-        <p>Mes produits</p>
-      </div>
-    </MenuItem>
-  );
-  const menu1: JSX.Element = (
-    <MenuItem>
-      <div onClick={(e) => navigate("/account")}>
-        <p>Bonjour {user ? user.name : ""} </p>
-      </div>
-      <span id="1"></span>
-      <div onClick={(e) => navigate("/inventaire")}>
-        <p>Inventaire</p>
-      </div>
-      <div onClick={(e) => navigate("/enregistrement-achat")}>
-        <p>Enregistrer un nouvel achat</p>
-      </div>
-      <div onClick={(e) => navigate("/ajout-article")}>
-        <p>Ajouter un article</p>
-      </div>
-      <span id="1"></span>
-      <div onClick={() => logout()}>
-        <p>Se déconnecter</p>
-      </div>
-    </MenuItem>
-  );
+  ArticleService.getArticles().then((articles) => {setArticles(articles)});
+
+ 
+
+  const contextValue:AppContextValue = {
+    user:user,
+    articles:articles
+  }
 
   return userIsLogged && user !== null ? (
-    <Pages>
-      <NavBar userIsLogged={true} menu={menu1} />
-      <AllPages
-        userIsLogged={true}
-        user={user}
-        setUser={setUser}
-        setUserIsLogged={setUserIsLogged}
-      />
-    </Pages>
+    <AppContext.Provider value={contextValue}>
+      {" "}
+      <Pages>
+        <NavBar userIsLogged={true}  />
+        <AllPages
+          userIsLogged={true}
+          user={user}
+          setUser={setUser}
+          setUserIsLogged={setUserIsLogged}
+        />
+      </Pages>
+    </AppContext.Provider>
   ) : (
-    <Pages>
-      <NavBar userIsLogged={false} menu={menu} />
-      <AllPages
-        userIsLogged={false}
-        user={null}
-        setUser={setUser}
-        setUserIsLogged={setUserIsLogged}
-      />
-    </Pages>
+    <AppContext.Provider value={contextValue}>
+      <Pages>
+        <NavBar userIsLogged={false} />
+        <AllPages
+          userIsLogged={false}
+          user={null}
+          setUser={setUser}
+          setUserIsLogged={setUserIsLogged}
+        />
+      </Pages>
+    </AppContext.Provider>
   );
 };
 

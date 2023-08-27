@@ -1,4 +1,4 @@
-import React, { CSSProperties, FunctionComponent, useState } from "react";
+import React, { CSSProperties, FunctionComponent } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
@@ -59,17 +59,10 @@ const Title = styled.div`
 
 type Props = {
   userIsLogged: Boolean;
-  menu: JSX.Element;
 };
 
-const NavBar: FunctionComponent<Props> = ({ userIsLogged, menu }) => {
-  const [state, setState] = useState<boolean>(false);
+const NavBar: FunctionComponent<Props> = ({ userIsLogged }) => {
   let navigate = useNavigate();
-  const logout = () => {
-    localStorage.removeItem("user_token");
-    navigate("/");
-    window.location.reload();
-  };
 
   const style: CSSProperties = { textDecoration: "none" };
 

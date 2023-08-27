@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import { Article, User } from "../helpers/Types";
 import ArticleService from "../helpers/DbArticle";

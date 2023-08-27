@@ -1,9 +1,15 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { styled } from "styled-components";
 import { Article, User } from "../helpers/Types";
 import { Dispatch, SetStateAction } from "react";
 import ArticleService from "../helpers/DbArticle";
 import Inv from "../components/Inv";
+import { AppContext } from "../App";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -42,7 +48,6 @@ const Container = styled.div`
     min-width: 50px;
     min-height: 40px;
   }
-
 
   @media (max-width: 768px) {
     & table {
@@ -90,7 +95,7 @@ const Inventaire: FunctionComponent<Props> = ({
   setUserIslogged,
 }) => {
   const [articles, setArticles] = useState<Article[]>([]);
-
+  const contextValue = useContext(AppContext);
   useEffect(() => {
     ArticleService.getArticles().then((articles) => setArticles(articles));
   }, []);
@@ -151,7 +156,10 @@ const Inventaire: FunctionComponent<Props> = ({
   return (
     <Container>
       <div>
-        <h1>Faire un inventaire</h1>
+        <h1>
+          Faire un inventaire Monsieur{" "}
+          {contextValue ? contextValue.user.name : ""}
+        </h1>
         <div className="date">
           <p>Selectionner la date de vos comptes</p>
           <label htmlFor="date_debut">date de début:</label>
@@ -196,7 +204,7 @@ const Inventaire: FunctionComponent<Props> = ({
             {/* <Input Form={Form} setForm={setForm} /> */}
 
             {change
-              ? articles.map((item) => (
+              ? contextValue?.articles.map((item) => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.nom}</td>
@@ -205,7 +213,7 @@ const Inventaire: FunctionComponent<Props> = ({
                     <Inv id={item.id} />
                   </tr>
                 ))
-              : articles.map((item) => (
+              : contextValue?.articles.map((item) => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.nom}</td>

@@ -114,6 +114,25 @@ const AjoutArticle: FunctionComponent<Props> = () => {
         created_at: new Date(),
       };
       ArticleService.addArticle(a);
+      setForm({
+        nom: {
+          isValid: true,
+          value: "",
+        },
+        prix_achat: {
+          isValid: true,
+          value: 0,
+        },
+        prix_vente: {
+          isValid: true,
+          value: 0,
+        },
+        id: {
+          isValid: true,
+          value: 0,
+        },
+      });
+      alert("article ajouté");
     } else {
       alert("veuillez remplir tous les champs !");
     }

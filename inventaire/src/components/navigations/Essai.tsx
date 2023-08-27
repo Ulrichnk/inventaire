@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect } from "react";
 import InventaireService from "../../helpers/DbInventaire";
-import AjoutArticle from "../../pages/AjoutArticle";
 
 type Props = {
   //define your props here

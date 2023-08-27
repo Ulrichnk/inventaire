@@ -4,7 +4,7 @@ type Props={
 //define your props here
 }
 
-const Inconnu: FunctionComponent<Props>=({})=>{
+const Inconnu: FunctionComponent<Props>=()=>{
 
    return (
      <div> 
