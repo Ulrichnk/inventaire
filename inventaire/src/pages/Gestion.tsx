@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Article, User } from "../helpers/Types";
 import ArticleService from "../helpers/DbArticle";
 import { styled } from "styled-components";
+import AjoutArticle from "./AjoutArticle";
 
 type Props = {
   //define your props here
@@ -121,6 +122,9 @@ const Gestion: FunctionComponent<Props> = ({
               ))}
             </tbody>
           </table>
+        </div>
+        <div>
+          <AjoutArticle />
         </div>
       </Acc>
     </>
