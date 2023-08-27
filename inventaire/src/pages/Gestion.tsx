@@ -90,6 +90,7 @@ const Gestion: FunctionComponent<Props> = ({
   return (
     <>
       <Acc>
+        <h1>Supprimer un article</h1>
         <Search>
           <input
             type="text"
@@ -99,7 +100,7 @@ const Gestion: FunctionComponent<Props> = ({
           />
         </Search>
         <div>
-          <h1>Supprimer un article</h1>
+          <br/>
           <table>
             <thead>
               <tr>

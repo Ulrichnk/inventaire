@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from "react";
 import { styled } from "styled-components";
-import ArticleSearch from "../components/article-search";
 
 export const Acc = styled.div`
   display: flex;
@@ -22,9 +21,10 @@ export const Acc = styled.div`
 
 const Accueil: FunctionComponent = () => {
   return (
-    <div>
-      <ArticleSearch />
-    </div>
+    <h1>
+      Bienveunue sur ce site dédié a effectuer un inventaire, il est encore en
+      developpement
+    </h1>
   );
 };
 
