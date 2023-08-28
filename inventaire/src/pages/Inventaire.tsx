@@ -95,6 +95,7 @@ const Inventaire: FunctionComponent<Props> = ({
   setUserIslogged,
 }) => {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [state, setState] = useState<boolean>(false);
   const contextValue = useContext(AppContext);
   useEffect(() => {
     ArticleFireService.getArticles().then((articles) => setArticles(articles));
@@ -151,6 +152,7 @@ const Inventaire: FunctionComponent<Props> = ({
   const HandleSubmit = () => {
     console.log(Form);
     console.log("inventaire enregistrer");
+    setState(true);
   };
 
   return (
@@ -210,7 +212,7 @@ const Inventaire: FunctionComponent<Props> = ({
                     <td>{item.nom}</td>
                     <td>{item.prix_achat}</td>
                     <td>{item.prix_vente}</td>
-                    <Inv id={item.id} />
+                    <Inv id={item.id} state={state} />
                   </tr>
                 ))
               : contextValue?.articles.map((item) => (
@@ -219,7 +221,7 @@ const Inventaire: FunctionComponent<Props> = ({
                     <td>{item.nom}</td>
                     <td>{item.prix_achat}</td>
                     <td>{item.prix_vente}</td>
-                    <Inv id={item.id} duree={duree} />
+                    <Inv id={item.id} duree={duree} state={state} />
                   </tr>
                 ))}
           </tbody>

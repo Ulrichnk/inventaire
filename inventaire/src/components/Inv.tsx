@@ -2,6 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Article, Historique, Inventaire } from "../helpers/Types";
 import ArticleService from "../helpers/DbArticle";
 import InventaireService from "../helpers/DbInventaire";
+import InventaireFireService from "../helpers/InventaireFire";
 
 type Field<T> = {
   value?: T;
@@ -21,13 +22,28 @@ type Props = {
   //define your props here
   id: number;
   duree?: Duree;
+  state?: boolean;
 };
-const Inv: FunctionComponent<Props> = ({ id, duree }) => {
+const Inv: FunctionComponent<Props> = ({ id, duree, state }) => {
   const [article, setArticleState] = useState<Article>();
   const [stock, setStock] = useState<Inventaire>();
   const [stock_restant, setStockRestant] = useState<number>(0);
   const [stock_depart, setStockDepart] = useState<number>(0);
+  const [stock_achat, setStockAchat] = useState<number>(0);
   const [historique, setHistorique] = useState<Historique>();
+
+  useEffect(() => {
+    if (state === true && duree?.date_debut.value && duree?.date_fin.value) {
+      InventaireFireService.addInventaire(
+        duree.date_debut.value,
+        duree.date_fin.value,
+        id,
+        stock_achat,
+        stock_restant,
+        stock_depart
+      );
+    }
+  }, [state]);
 
   const [Form, setForm] = useState<Form>({
     id: {
