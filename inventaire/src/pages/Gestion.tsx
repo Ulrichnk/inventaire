@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import { Article, User } from "../helpers/Types";
-import ArticleService from "../helpers/DbArticle";
 import { styled } from "styled-components";
 import AjoutArticle from "./AjoutArticle";
 import { AppContext } from "../App";

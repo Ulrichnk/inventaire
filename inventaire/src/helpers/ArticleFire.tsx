@@ -37,8 +37,6 @@ export function add(a: Article): Article {
   return a;
 }
 
-
-
 export default class ArticleFireService {
   static articles: Article[] = useArticle;
 
@@ -139,7 +137,7 @@ export default class ArticleFireService {
           id: newSize,
         };
 
-        const docRef = await addDoc(articlesRef, newArticleData);
+        await addDoc(articlesRef, newArticleData);
         return newArticleData;
       } else {
         this.articles.push(modifiedArticle);

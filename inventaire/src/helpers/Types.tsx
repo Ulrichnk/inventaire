@@ -39,11 +39,11 @@ export type Product = {
 };
 
 export type Article = {
-  id: number,
-  id_user?: number,
-  nom: string,
-  prix_achat: number,
-  prix_vente: number,
+  id: number;
+  id_user?: number;
+  nom: string;
+  prix_achat: number;
+  prix_vente: number;
   created_at: Date;
 };
 export type Inventaire = {
@@ -83,4 +83,11 @@ export const Lambda: User = {
   surname: "Lambda",
   email: "lambda@mail.com",
   password: "123456789",
+};
+
+export const formatDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };

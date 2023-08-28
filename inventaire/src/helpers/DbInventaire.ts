@@ -343,6 +343,8 @@ export class InventaireFireService {
     );
   }
 
+  
+
   static isEmpty(data: Object): boolean {
     return Object.keys(data).length === 0;
   }
