@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
 import { Article } from "../helpers/Types";
-import ArticleService from "../helpers/DbArticle";
 import { styled } from "styled-components";
 import Input from "../components/Input";
+import ArticleFireService from "../helpers/ArticleFire";
 
 type Props = {
   //define your props here
@@ -113,7 +113,7 @@ const AjoutArticle: FunctionComponent<Props> = () => {
         prix_vente: Form.prix_vente.value,
         created_at: new Date(),
       };
-      ArticleService.addArticle(a);
+      ArticleFireService.addArticle(a);
       setForm({
         nom: {
           isValid: true,

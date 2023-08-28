@@ -10,6 +10,7 @@ import { Dispatch, SetStateAction } from "react";
 import ArticleService from "../helpers/DbArticle";
 import Inv from "../components/Inv";
 import { AppContext } from "../App";
+import ArticleFireService from "../helpers/ArticleFire";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -97,7 +98,7 @@ const Inventaire: FunctionComponent<Props> = ({
   const [articles, setArticles] = useState<Article[]>([]);
   const contextValue = useContext(AppContext);
   useEffect(() => {
-    ArticleService.getArticles().then((articles) => setArticles(articles));
+    ArticleFireService.getArticles().then((articles) => setArticles(articles));
   }, []);
   const [Form] = useState<Form>({
     nom: {

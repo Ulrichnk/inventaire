@@ -1,4 +1,6 @@
 import { Historique, Inventaire } from "./Types";
+import { collection, query, where, getDocs } from "firebase/firestore"; // Import des fonctions Firestore nécessaires
+import { db } from "./firebase-config";
 
 export let useInventaire: Inventaire[] = [
   {
@@ -56,7 +58,7 @@ export default class InventaireService {
     // return (!process.env.NODE_ENV || process.env.NODE_ENV === "development");
   };
 
-  static url = process.env.REACT_APP_BACKEND_URL;;
+  static url = process.env.REACT_APP_BACKEND_URL;
 
   static async getHistoriques(): Promise<Historique[]> {
     try {
@@ -244,6 +246,107 @@ export default class InventaireService {
   static isEmpty(data: Object): boolean {
     return Object.keys(data).length === 0;
   }
+  static handleError(error: Error | any): void {
+    console.log(error);
+  }
+}
+
+export class InventaireFireService {
+  static inventaire: Inventaire[] = useInventaire;
+  static historique: Historique[] = useHistorique;
+  static isDev = () => {
+    if (process.env.REACT_APP_DEV === "false") {
+      return false;
+    } else {
+      return true;
+    }
+    // return (!process.env.NODE_ENV || process.env.NODE_ENV === "development");
+  };
+
+  static async getHistoriques(): Promise<Historique[]> {
+    try {
+      if (this.isDev()) {
+        const historiquesRef = collection(db, "historique");
+        const querySnapshot = await getDocs(historiquesRef);
+        const historiques = querySnapshot.docs.map(
+          (doc) => doc.data() as Historique
+        );
+        return historiques;
+      } else {
+        return this.historique;
+      }
+    } catch (error) {
+      this.handleError(error);
+      return [];
+    }
+  }
+
+  static async getHistorique(
+    date_debut: string,
+    date_fin: string
+  ): Promise<Historique | null> {
+    try {
+      const historiques = await this.getHistoriques();
+
+      const historiqueTrouve = historiques.find(
+        (art) => art.date_debut === date_debut && art.date_fin === date_fin
+      );
+
+      return historiqueTrouve || null;
+    } catch (error) {
+      this.handleError(error);
+      return null;
+    }
+  }
+
+  static async getInventaires(id_article: number): Promise<Inventaire[]> {
+    if (this.isDev()) {
+      try {
+        const inventairesRef = collection(db, "inventaire");
+        const querySnapshot = await getDocs(
+          query(inventairesRef, where("id_article", "==", id_article))
+        );
+        const inventaires = querySnapshot.docs.map(
+          (doc) => doc.data() as Inventaire
+        );
+        return inventaires;
+      } catch (error) {
+        this.handleError(error);
+        return [];
+      }
+    }
+
+    return this.inventaire.filter((art) => id_article === art.id_article);
+  }
+
+  static async getInventaire(
+    id_hist: number,
+    id_article: number
+  ): Promise<Inventaire | null> {
+    if (this.isDev()) {
+      try {
+        const inventaires = await this.getInventaires(id_article);
+        const inventaireTrouve = inventaires.find(
+          (inventaire) => id_hist === inventaire.id_historique
+        );
+        return inventaireTrouve || null;
+      } catch (error) {
+        this.handleError(error);
+        return null;
+      }
+    }
+
+    return (
+      this.inventaire.find(
+        (art) => id_article === art.id_article && id_hist === art.id_historique
+      ) || null
+    );
+  }
+
+  static isEmpty(data: Object): boolean {
+    return Object.keys(data).length === 0;
+  }
+
   static handleError(error: Error | any): void {
     console.log(error);
   }

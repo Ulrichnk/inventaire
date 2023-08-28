@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { styled } from "styled-components";
 import { Article } from "../helpers/Types";
-import ArticleService from "../helpers/DbArticle";
+import ArticleFireService from "../helpers/ArticleFire";
 
 type Props = {
   //define your props here
@@ -71,7 +71,7 @@ const Achat: FunctionComponent<Props> = () => {
       return;
     }
 
-    ArticleService.searchArticle(term).then((articles) => {
+    ArticleFireService.searchArticle(term).then((articles) => {
       setArticles(articles);
       console.log(articles);
     });
@@ -107,7 +107,14 @@ const Achat: FunctionComponent<Props> = () => {
                   <td>{item.nom}</td>
                   <td>{item.prix_achat}</td>
                   <td>{item.prix_vente}</td>
-                  <td>acha</td>
+                  <td>
+                    <input
+                      name="valeur_achat"
+                      className="input"
+                      placeholder="valeur de l'achat "
+                      type="text"
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>

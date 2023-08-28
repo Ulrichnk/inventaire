@@ -1,9 +1,11 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useContext, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import { Article, User } from "../helpers/Types";
 import ArticleService from "../helpers/DbArticle";
 import { styled } from "styled-components";
 import AjoutArticle from "./AjoutArticle";
+import { AppContext } from "../App";
+import ArticleFireService from "../helpers/ArticleFire";
 
 type Props = {
   //define your props here
@@ -11,6 +13,13 @@ type Props = {
   setUser: Dispatch<SetStateAction<User>>;
   setUserIslogged: Dispatch<SetStateAction<boolean>>;
 };
+const Cont = styled.div`
+  display: flex;
+  flex-direction: rows;
+  & .n {
+    margin-top: 150px;
+  }
+`;
 
 const Acc = styled.div`
   display: flex;
@@ -43,7 +52,7 @@ const Acc = styled.div`
       background-color: #f2f2f2;
     }
     & td,
-    th {
+    th ,button{
       padding: 10px 20px;
     }
   }
@@ -51,6 +60,8 @@ const Acc = styled.div`
   & h1 {
     color: orange;
   }
+
+  
 `;
 
 const Search = styled.div`
@@ -69,7 +80,9 @@ const Gestion: FunctionComponent<Props> = ({
   setUserIslogged,
 }) => {
   const [term, setTerm] = useState<string>("");
+  const [search, setSearch] = useState<boolean>(false);
   const [articles, setArticles] = useState<Article[]>([]);
+  const contextValue = useContext(AppContext);
   // const style: CSSProperties = { textDecoration: "none" };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -80,15 +93,15 @@ const Gestion: FunctionComponent<Props> = ({
       setArticles([]);
       return;
     }
-
-    ArticleService.searchArticle(term).then((articles) => {
+    setSearch(true);
+    ArticleFireService.searchArticle(term).then((articles) => {
       setArticles(articles);
       console.log(articles);
     });
   };
 
   return (
-    <>
+    <Cont>
       <Acc>
         <h1>Supprimer un article</h1>
         <Search>
@@ -100,7 +113,7 @@ const Gestion: FunctionComponent<Props> = ({
           />
         </Search>
         <div>
-          <br/>
+          <br />
           <table>
             <thead>
               <tr>
@@ -112,23 +125,37 @@ const Gestion: FunctionComponent<Props> = ({
               </tr>
             </thead>
             <tbody>
-              {articles.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.nom}</td>
-                  <td>{item.prix_achat}</td>
-                  <td>{item.prix_vente}</td>
-                  <td>X</td>
-                </tr>
-              ))}
+              {search
+                ? articles.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nom}</td>
+                      <td>{item.prix_achat}</td>
+                      <td>{item.prix_vente}</td>
+                      <td>
+                        <button>X</button>
+                      </td>
+                    </tr>
+                  ))
+                : contextValue?.articles.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nom}</td>
+                      <td>{item.prix_achat}</td>
+                      <td>{item.prix_vente}</td>
+                      <td>
+                        <button>X</button>
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>
-        <div>
-          <AjoutArticle />
-        </div>
       </Acc>
-    </>
+      <div className="n">
+        <AjoutArticle />
+      </div>
+    </Cont>
   );
 };
 

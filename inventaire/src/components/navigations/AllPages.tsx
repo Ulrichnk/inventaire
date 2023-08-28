@@ -7,7 +7,7 @@ import { User } from "../../helpers/Types";
 import Achat from "../../pages/Achat";
 import Inventaire from "../../pages/Inventaire";
 import Gestion from "../../pages/Gestion";
-import Essai from "./Essai";
+import Essai from "../../Essai";
 import AjoutArticle from "../../pages/AjoutArticle";
 import Inconnu from "../../pages/inconnu";
 type Props = {
