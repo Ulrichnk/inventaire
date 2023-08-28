@@ -3,18 +3,19 @@ import { Dispatch, SetStateAction } from "react";
 import { Route, Routes } from "react-router-dom";
 import Accueil from "../../pages/Accueil";
 import Log from "../../pages/Log";
-import { User } from "../../helpers/Types";
+import { Article, User } from "../../helpers/Types";
 import Achat from "../../pages/Achat";
 import Inventaire from "../../pages/Inventaire";
 import Gestion from "../../pages/Gestion";
 import Essai from "../../Essai";
-import AjoutArticle from "../../pages/AjoutArticle";
 import Inconnu from "../../pages/inconnu";
 type Props = {
   userIsLogged: Boolean;
   user: User | null;
   setUser: Dispatch<SetStateAction<User>>;
   setUserIsLogged: Dispatch<SetStateAction<boolean>>;
+  articles: Article[];
+  setArticles: Dispatch<SetStateAction<Article[]>>;
 };
 
 const AllPages: FunctionComponent<Props> = ({
@@ -22,6 +23,8 @@ const AllPages: FunctionComponent<Props> = ({
   user,
   setUser,
   setUserIsLogged,
+  articles,
+  setArticles,
 }) => {
   return userIsLogged ? (
     <>
@@ -35,6 +38,8 @@ const AllPages: FunctionComponent<Props> = ({
               user={user}
               setUser={setUser}
               setUserIslogged={setUserIsLogged}
+              articles={articles}
+              setArticles={setArticles}
             />
           }
         />
@@ -48,8 +53,7 @@ const AllPages: FunctionComponent<Props> = ({
             />
           }
         />
-        <Route path="/enregistrement-achat" element={<Achat />} />
-        <Route path="/ajout-article" element={<AjoutArticle />} />
+        <Route path="/enregistrement-vente" element={<Achat />} />
         <Route path="*" element={<Inconnu />} />
       </Routes>
     </>

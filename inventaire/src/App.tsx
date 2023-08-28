@@ -8,7 +8,6 @@ import NavBar from "./components/navigations/NavBar";
 import AllPages from "./components/navigations/AllPages";
 import { styled } from "styled-components";
 import { Article, Lambda, Roger, User } from "./helpers/Types";
-import ArticleService from "./helpers/DbArticle";
 import ArticleFireService from "./helpers/ArticleFire";
 
 const Pages = styled.div`
@@ -20,7 +19,7 @@ const Pages = styled.div`
 type AppContextValue = {
   user: User;
   articles: Article[];
-  setArticles: React.Dispatch<React.SetStateAction<Article[]>>
+  setArticles: React.Dispatch<React.SetStateAction<Article[]>>;
 };
 
 export const AppContext = createContext<AppContextValue | null>(null);
@@ -58,6 +57,8 @@ const App: FunctionComponent = () => {
           user={user}
           setUser={setUser}
           setUserIsLogged={setUserIsLogged}
+          articles={articles}
+          setArticles={setArticles}
         />
       </Pages>
     </AppContext.Provider>
@@ -70,6 +71,8 @@ const App: FunctionComponent = () => {
           user={null}
           setUser={setUser}
           setUserIsLogged={setUserIsLogged}
+          articles={articles}
+          setArticles={setArticles}
         />
       </Pages>
     </AppContext.Provider>
