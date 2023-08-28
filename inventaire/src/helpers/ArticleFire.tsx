@@ -103,12 +103,16 @@ export default class ArticleFireService {
       return article;
     }
   }
-
-  static async deleteArticle(article: Article): Promise<{}> {
+  static async deleteArticle(id: number): Promise<{}> {
     if (this.isDev()) {
       try {
-        const docRef = doc(db, "articles", article.id.toString());
-        await deleteDoc(docRef);
+        const querySnapshot = await getDocs(collection(db, "articles"));
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.id === id) {
+            deleteDoc(doc.ref);
+          }
+        });
 
         return {};
       } catch (error) {
@@ -116,7 +120,6 @@ export default class ArticleFireService {
         return {};
       }
     } else {
-      const { id } = article;
       this.articles = this.articles.filter((art) => art.id !== id);
       return {};
     }

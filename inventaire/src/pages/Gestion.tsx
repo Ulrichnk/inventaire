@@ -51,7 +51,8 @@ const Acc = styled.div`
       background-color: #f2f2f2;
     }
     & td,
-    th ,button{
+    th,
+    button {
       padding: 10px 20px;
     }
   }
@@ -59,8 +60,6 @@ const Acc = styled.div`
   & h1 {
     color: orange;
   }
-
-  
 `;
 
 const Search = styled.div`
@@ -98,7 +97,15 @@ const Gestion: FunctionComponent<Props> = ({
       console.log(articles);
     });
   };
-
+  const handle = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: number
+  ): void => {
+    ArticleFireService.deleteArticle(id);
+    const tab: Article[] = articles.filter((article) => article.id !== id);
+    contextValue?.setArticles(tab);
+    console.log(e);
+  };
   return (
     <Cont>
       <Acc>
@@ -132,7 +139,13 @@ const Gestion: FunctionComponent<Props> = ({
                       <td>{item.prix_achat}</td>
                       <td>{item.prix_vente}</td>
                       <td>
-                        <button>X</button>
+                        <button
+                          onClick={(e) => {
+                            handle(e, item.id);
+                          }}
+                        >
+                          X
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -143,7 +156,13 @@ const Gestion: FunctionComponent<Props> = ({
                       <td>{item.prix_achat}</td>
                       <td>{item.prix_vente}</td>
                       <td>
-                        <button>X</button>
+                        <button
+                          onClick={(e) => {
+                            handle(e, item.id);
+                          }}
+                        >
+                          X
+                        </button>{" "}
                       </td>
                     </tr>
                   ))}

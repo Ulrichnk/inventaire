@@ -20,6 +20,7 @@ const Pages = styled.div`
 type AppContextValue = {
   user: User;
   articles: Article[];
+  setArticles: React.Dispatch<React.SetStateAction<Article[]>>
 };
 
 export const AppContext = createContext<AppContextValue | null>(null);
@@ -44,6 +45,7 @@ const App: FunctionComponent = () => {
   const contextValue: AppContextValue = {
     user: user,
     articles: articles,
+    setArticles: setArticles,
   };
 
   return userIsLogged && user !== null ? (

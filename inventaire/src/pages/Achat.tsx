@@ -89,7 +89,7 @@ const Achat: FunctionComponent<Props> = () => {
           />
         </Search>
         <div>
-          <h1>Vous Pouvez ajouter de nouveaux achats</h1>
+          <h1>Vous Pouvez enregistrer de nouvelles ventes </h1>
           <table>
             <thead>
               <tr>
