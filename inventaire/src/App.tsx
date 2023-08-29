@@ -14,6 +14,7 @@ const Pages = styled.div`
   display: grid;
   grid-template-columns: 0.2fr 1fr;
   background-color: rgb(255, 230, 221);
+  min-height: 100vh;
 `;
 
 type AppContextValue = {

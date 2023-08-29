@@ -113,6 +113,45 @@ export default class InventaireFireService {
       return null;
     }
   }
+//----------------------------------------------------------------
+  static async getHistorique1(date_debut: string): Promise<Historique | null> {
+    try {
+      const historiques = await this.getHistoriques();
+      const historiqueTrouve = historiques.find(
+        (art) => art.date_debut === art.date_fin
+      );
+
+      return historiqueTrouve || null;
+    } catch (error) {
+      this.handleError(error);
+      return null;
+    }
+  }
+  // static async getInventaire1(
+  //   id_hist: number,
+  //   id_article: number
+  // ): Promise<Inventaire | null> {
+  //   if (this.isDev()) {
+  //     try {
+  //       const inventaires = await this.getInventaires(id_article);
+  //       const inventaireTrouve = inventaires.find(
+  //         (inventaire) => id_hist === inventaire.id_historique
+  //       );
+  //       return inventaireTrouve || null;
+  //     } catch (error) {
+  //       this.handleError(error);
+  //       return null;
+  //     }
+  //   }
+
+  //   return (
+  //     this.inventaire.find(
+  //       (art) => id_article === art.id_article && id_hist === art.id_historique
+  //     ) || null
+  //   );
+  // }
+//----------------------------------------------------------------
+
 
   static async getInventaires(id_article: number): Promise<Inventaire[]> {
     if (this.isDev()) {

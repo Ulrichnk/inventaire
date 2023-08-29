@@ -1,9 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import InventaireService from "./helpers/DbInventaire";
-import { Article, Historique, formatDate } from "./helpers/Types";
+import { Article} from "./helpers/Types";
 import { db } from "./helpers/firebase-config";
-import { collection, getDocs, Timestamp } from "firebase/firestore";
-import InventaireFireService from "./helpers/InventaireFire";
+import { collection} from "firebase/firestore";
 type Props = {
   //define your props here
 };

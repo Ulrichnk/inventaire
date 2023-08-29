@@ -16,17 +16,17 @@ const Container = styled.div`
   text-align: center;
   margin-top: 150px;
   min-height: 100vh;
-  min-width: 100vh;
+  min-width: 100vw;
+
   & table,
   td,
   th {
     outline: solid 1px black;
   }
+
   & table {
     min-width: 700px;
     margin: 0 auto;
-    border-collapse: collapse;
-    border-spacing: 0;
     & th,
     & td {
       background-color: orange;
@@ -45,7 +45,7 @@ const Container = styled.div`
   table,
   td,
   input {
-    min-width: 50px;
+    min-width: 40px;
     min-height: 40px;
   }
 
@@ -87,14 +87,17 @@ type Props = {
   user: User | null;
   setUser: Dispatch<SetStateAction<User>>;
   setUserIslogged: Dispatch<SetStateAction<boolean>>;
+  articles: Article[];
+  setArticles: Dispatch<SetStateAction<Article[]>>;
 };
 
 const Inventaire: FunctionComponent<Props> = ({
   user,
   setUser,
   setUserIslogged,
+  articles,
+  setArticles,
 }) => {
-  const [articles, setArticles] = useState<Article[]>([]);
   const [state, setState] = useState<boolean>(false);
   const contextValue = useContext(AppContext);
   useEffect(() => {
@@ -169,7 +172,7 @@ const Inventaire: FunctionComponent<Props> = ({
             value={duree.date_debut.value}
             name="date_debut"
             onChange={(e) => handleInputChange(e)}
-            className="-date-input "
+            className="date-input "
             placeholder="date de debut "
             type="date"
           />
@@ -206,7 +209,7 @@ const Inventaire: FunctionComponent<Props> = ({
             {/* <Input Form={Form} setForm={setForm} /> */}
 
             {change
-              ? contextValue?.articles.map((item) => (
+              ? articles.map((item) => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.nom}</td>
@@ -215,7 +218,7 @@ const Inventaire: FunctionComponent<Props> = ({
                     <Inv id={item.id} state={state} />
                   </tr>
                 ))
-              : contextValue?.articles.map((item) => (
+              : articles.map((item) => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.nom}</td>

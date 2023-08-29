@@ -1,8 +1,7 @@
-import React, { FunctionComponent, useContext, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import { Article, User } from "../helpers/Types";
 import { styled } from "styled-components";
-import { AppContext } from "../App";
 import ArticleFireService from "../helpers/ArticleFire";
 import Input from "../components/Input";
 
@@ -29,7 +28,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-top: 150px;
+  margin-top: 90px;
   & table,
   td,
   th {
@@ -88,7 +87,6 @@ const Acc = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-top: 150px;
   min-height: 100vh;
   & table,
   td,
@@ -145,7 +143,6 @@ const Gestion: FunctionComponent<Props> = ({
 }) => {
   const [term, setTerm] = useState<string>("");
   const [search, setSearch] = useState<boolean>(false);
-  const contextValue = useContext(AppContext);
   // const style: CSSProperties = { textDecoration: "none" };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -235,7 +232,7 @@ const Gestion: FunctionComponent<Props> = ({
         },
       });
 
-      alert("article ajouté");
+     // alert("article ajouté");
     } else {
       alert("veuillez remplir tous les champs !");
     }

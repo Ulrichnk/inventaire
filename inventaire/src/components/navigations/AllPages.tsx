@@ -50,6 +50,8 @@ const AllPages: FunctionComponent<Props> = ({
               user={user}
               setUser={setUser}
               setUserIslogged={setUserIsLogged}
+              articles={articles}
+              setArticles={setArticles}
             />
           }
         />
@@ -79,6 +81,8 @@ const AllPages: FunctionComponent<Props> = ({
               user={user}
               setUser={setUser}
               setUserIslogged={setUserIsLogged}
+              articles={articles}
+              setArticles={setArticles}
             />
           }
         />
