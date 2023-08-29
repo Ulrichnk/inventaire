@@ -10,6 +10,7 @@ import { Dispatch, SetStateAction } from "react";
 import Inv from "../components/Inv";
 import { AppContext } from "../App";
 import ArticleFireService from "../helpers/ArticleFire";
+import InventaireFireService from "../helpers/InventaireFire";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -71,7 +72,6 @@ type Field<T> = {
   isValid?: boolean;
 };
 
-
 type Duree = {
   date_debut: Field<string>;
   date_fin: Field<string>;
@@ -84,7 +84,7 @@ type Props = {
   setUserIslogged: Dispatch<SetStateAction<boolean>>;
   articles: Article[];
   setArticles: Dispatch<SetStateAction<Article[]>>;
-  id_hist?:number,
+  id_hist?: number;
 };
 
 const Inventaire: FunctionComponent<Props> = ({
@@ -97,6 +97,8 @@ const Inventaire: FunctionComponent<Props> = ({
 }) => {
   const [state, setState] = useState<boolean>(false);
   const contextValue = useContext(AppContext);
+  const [id_historique, setId_historique] = useState<number>(0);
+
   useEffect(() => {
     ArticleFireService.getArticles().then((articles) => setArticles(articles));
   }, [setArticles]);
@@ -131,9 +133,19 @@ const Inventaire: FunctionComponent<Props> = ({
 
     setDuree({ ...duree, ...newField });
   };
-  
+
   const HandleSubmit = () => {
     setState(true);
+  };
+
+  const addHist = () => {
+    if (duree.date_debut.value && duree.date_fin.value) {
+      setChange(false);
+      InventaireFireService.addHistorique(
+        duree.date_debut.value,
+        duree.date_fin.value
+      ).then((res) => (res ? setId_historique(res.id) : "erreur"));
+    }
   };
 
   return (
@@ -163,7 +175,13 @@ const Inventaire: FunctionComponent<Props> = ({
             placeholder="date de debut "
             type="date"
           />
-          <button onClick={() => setChange(false)}>Valider</button>
+          <button
+            onClick={() => {
+              addHist();
+            }}
+          >
+            Valider
+          </button>
         </div>
         <table>
           <thead>
@@ -193,7 +211,11 @@ const Inventaire: FunctionComponent<Props> = ({
                     <td>{item.nom}</td>
                     <td>{item.prix_achat}</td>
                     <td>{item.prix_vente}</td>
-                    <Inv id={item.id} state={state} />
+                    <Inv
+                      id={item.id}
+                      state={state}
+                      id_historique={id_historique}
+                    />
                   </tr>
                 ))
               : articles.map((item) => (
@@ -202,7 +224,12 @@ const Inventaire: FunctionComponent<Props> = ({
                     <td>{item.nom}</td>
                     <td>{item.prix_achat}</td>
                     <td>{item.prix_vente}</td>
-                    <Inv id={item.id} duree={duree} state={state} />
+                    <Inv
+                      id={item.id}
+                      duree={duree}
+                      state={state}
+                      id_historique={id_historique}
+                    />
                   </tr>
                 ))}
           </tbody>

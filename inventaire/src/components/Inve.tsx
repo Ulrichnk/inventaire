@@ -3,9 +3,6 @@ import { Article, Inventaire } from "../helpers/Types";
 import InventaireFireService from "../helpers/InventaireFire";
 import ArticleFireService from "../helpers/ArticleFire";
 
-
-
-
 type Props = {
   //define your props here
   id: number;
@@ -64,7 +61,7 @@ const Inve: FunctionComponent<Props> = ({ id, id_hist }) => {
       <td>{stock ? stock.stock_restant : "stock restant"}</td>
       <td>
         {article && stock && article.prix_vente !== undefined
-          ? article.prix_vente * stock.stock_restant
+          ? article.prix_achat * stock.stock_restant
           : "valeur stock restant"}
       </td>
       <td>

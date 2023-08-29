@@ -234,8 +234,7 @@ export default class InventaireFireService {
   }
 
   static async addInventaire(
-    date_debut: string,
-    date_fin: string,
+    id_historique:number,
     id_article: number,
     stock_achat: number,
     stock_restant: number,
@@ -244,7 +243,6 @@ export default class InventaireFireService {
     try {
       if (this.isDev()) {
         const inventairesRef = collection(db, "inventaires");
-        const addedHistorique = await this.addHistorique(date_debut, date_fin); // Remplacez les dates par celles que vous souhaitez
 
         // Obtenir la taille actuelle de la collection inventaire
         const inventairesQuerySnapshot = await getDocs(inventairesRef);
@@ -256,7 +254,7 @@ export default class InventaireFireService {
         // Créer un nouvel inventaire
         const newInventaire: Inventaire = {
           id: newInventaireId,
-          id_historique: addedHistorique ? addedHistorique.id : 0,
+          id_historique: id_historique,
           id_article: id_article,
           stock_achat: stock_achat,
           stock_restant: stock_restant,

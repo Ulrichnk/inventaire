@@ -22,8 +22,9 @@ type Props = {
   id: number;
   duree?: Duree;
   state?: boolean;
+  id_historique: number;
 };
-const Inv: FunctionComponent<Props> = ({ id, duree, state }) => {
+const Inv: FunctionComponent<Props> = ({ id, duree, state,id_historique }) => {
   const [article, setArticle] = useState<Article>();
   const [stock_depart, setStockDepart] = useState<number>(0);
 
@@ -100,8 +101,7 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state }) => {
       
     ) {
       InventaireFireService.addInventaire(
-        duree.date_debut.value,
-        duree.date_fin.value,
+        id_historique,
         id,
         Form.stock_achat.value as number,
         Form.stock_restant.value,
