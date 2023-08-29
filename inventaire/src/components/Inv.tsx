@@ -191,7 +191,7 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state }) => {
         {article &&
         article.prix_vente !== undefined &&
         Form.stock_restant.value !== undefined
-          ? article.prix_vente * Form.stock_restant.value
+          ? article.prix_achat * Form.stock_restant.value
           : "valeur stock restant"}
       </td>
       <td>
@@ -201,9 +201,9 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state }) => {
         Form.stock_achat.value !== undefined &&
         Form.stock_restant.value !== undefined
           ? article.prix_vente *
-              (Form.stock_achat.value - Form.stock_restant.value) -
-            article.prix_achat * Form.stock_achat.value
-          : "Bénéfice"}
+              (Form.stock_achat.value+stock_depart - Form.stock_restant.value) -
+            article.prix_achat *( Form.stock_achat.value+stock_depart)
+          : "Bénéfice atttendu"}
       </td>
     </>
   );
