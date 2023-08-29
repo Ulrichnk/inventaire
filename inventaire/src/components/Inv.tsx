@@ -129,7 +129,7 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state, id_historique }) => {
     };
 
     fetch();
-  }, []);
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName: string = e.target.name;
