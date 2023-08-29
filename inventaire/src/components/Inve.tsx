@@ -71,6 +71,11 @@ const Inve: FunctionComponent<Props> = ({ id, id_hist }) => {
         article.prix_achat !== undefined
           ? article.prix_vente * (stock.stock_achat - stock.stock_restant) -
             article.prix_achat * stock.stock_achat
+
++
+
+
+
           : "Bénéfice"}
       </td>
     </>
