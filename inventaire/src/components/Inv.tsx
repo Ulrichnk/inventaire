@@ -92,36 +92,41 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state }) => {
     console.log("votre state ", state);
 
     if (
-      state === true &&
+      state &&
       duree?.date_debut.value &&
       duree?.date_fin.value &&
       Form.stock_achat.value &&
-      Form.stock_restant.value &&
-      stock_depart
+      Form.stock_restant.value 
+      
     ) {
       InventaireFireService.addInventaire(
         duree.date_debut.value,
         duree.date_fin.value,
         id,
-        Form.stock_achat.value,
+        Form.stock_achat.value as number,
         Form.stock_restant.value,
-        stock_depart
-      );
-      console.log("inventaire enregistrer");
-      setForm({
-        id: {
-          isValid: true,
-          value: 0,
-        },
-        stock_achat: {
-          isValid: true,
-          value: 0,
-        },
-        stock_restant: {
-          isValid: true,
-          value: 0,
-        },
+        stock_depart as number
+      ).then((inve) => {
+        console.log("inventaire enregistrer");
+        console.log(inve);
+        setForm({
+          id: {
+            isValid: true,
+            value: 0,
+          },
+          stock_achat: {
+            isValid: true,
+            value: 0,
+          },
+          stock_restant: {
+            isValid: true,
+            value: 0,
+          },
+        });
       });
+    }else{
+      console.log('erreur lors de l envoi');
+      
     }
   }, [state]);
 
@@ -200,9 +205,8 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state }) => {
         article.prix_achat !== undefined &&
         Form.stock_achat.value !== undefined &&
         Form.stock_restant.value !== undefined
-          ? article.prix_vente *
-              (Form.stock_achat.value+stock_depart - Form.stock_restant.value) -
-            article.prix_achat *( Form.stock_achat.value+stock_depart)
+          ? (-stock_depart - Form.stock_achat.value) * -1 * article.prix_achat -
+            article.prix_achat * Form.stock_restant.value
           : "Bénéfice atttendu"}
       </td>
     </>

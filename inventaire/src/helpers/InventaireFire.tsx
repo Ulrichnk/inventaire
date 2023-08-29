@@ -177,10 +177,7 @@ export default class InventaireFireService {
     if (this.isDev()) {
       try {
         const inventaires = await this.getInventaires(id_article);
-        console.log(inventaires);
-        console.log('votre id article',id_article);
-        
-        
+
         const inventaireTrouve = inventaires.find(
           (inventaire) => id_hist === inventaire.id_historique
         );
@@ -246,12 +243,12 @@ export default class InventaireFireService {
   ): Promise<Inventaire | null> {
     try {
       if (this.isDev()) {
-        const inventairesRef = collection(db, "inventaire");
+        const inventairesRef = collection(db, "inventaires");
         const addedHistorique = await this.addHistorique(date_debut, date_fin); // Remplacez les dates par celles que vous souhaitez
 
         // Obtenir la taille actuelle de la collection inventaire
         const inventairesQuerySnapshot = await getDocs(
-          query(inventairesRef, where("id_article", "==", id_article))
+          query(inventairesRef, where("id", "==", id_article))
         );
         const inventaireSize = inventairesQuerySnapshot.size + 1;
 

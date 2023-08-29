@@ -131,6 +131,7 @@ const Inventaire: FunctionComponent<Props> = ({
 
     setDuree({ ...duree, ...newField });
   };
+  
   const HandleSubmit = () => {
     setState(true);
   };
