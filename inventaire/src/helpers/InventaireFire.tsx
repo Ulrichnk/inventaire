@@ -247,10 +247,8 @@ export default class InventaireFireService {
         const addedHistorique = await this.addHistorique(date_debut, date_fin); // Remplacez les dates par celles que vous souhaitez
 
         // Obtenir la taille actuelle de la collection inventaire
-        const inventairesQuerySnapshot = await getDocs(
-          query(inventairesRef, where("id", "==", id_article))
-        );
-        const inventaireSize = inventairesQuerySnapshot.size + 1;
+        const inventairesQuerySnapshot = await getDocs(inventairesRef);
+        const inventaireSize = inventairesQuerySnapshot.size;
 
         // Générer un nouvel ID pour l'inventaire
         const newInventaireId = inventaireSize + 1;
