@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Article, Inventaire } from "../helpers/Types";
+import { Article } from "../helpers/Types";
 import InventaireFireService from "../helpers/InventaireFire";
 import ArticleFireService from "../helpers/ArticleFire";
 
@@ -24,7 +24,7 @@ type Props = {
   state?: boolean;
   id_historique: number;
 };
-const Inv: FunctionComponent<Props> = ({ id, duree, state,id_historique }) => {
+const Inv: FunctionComponent<Props> = ({ id, duree, state, id_historique }) => {
   const [article, setArticle] = useState<Article>();
   const [stock_depart, setStockDepart] = useState<number>(0);
 
@@ -91,44 +91,45 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state,id_historique }) => {
 
   useEffect(() => {
     console.log("votre state ", state);
-
-    if (
-      state &&
-      duree?.date_debut.value &&
-      duree?.date_fin.value &&
-      Form.stock_achat.value &&
-      Form.stock_restant.value 
-      
-    ) {
-      InventaireFireService.addInventaire(
-        id_historique,
-        id,
-        Form.stock_achat.value as number,
-        Form.stock_restant.value,
-        stock_depart as number
-      ).then((inve) => {
-        console.log("inventaire enregistrer");
-        console.log(inve);
-        setForm({
-          id: {
-            isValid: true,
-            value: 0,
-          },
-          stock_achat: {
-            isValid: true,
-            value: 0,
-          },
-          stock_restant: {
-            isValid: true,
-            value: 0,
-          },
+    const fetch = () => {
+      if (
+        state &&
+        duree?.date_debut.value &&
+        duree?.date_fin.value &&
+        Form.stock_achat.value &&
+        Form.stock_restant.value
+      ) {
+        InventaireFireService.addInventaire(
+          id_historique,
+          id,
+          Form.stock_achat.value as number,
+          Form.stock_restant.value,
+          stock_depart as number
+        ).then((inve) => {
+          console.log("inventaire enregistrer");
+          console.log(inve);
+          setForm({
+            id: {
+              isValid: true,
+              value: 0,
+            },
+            stock_achat: {
+              isValid: true,
+              value: 0,
+            },
+            stock_restant: {
+              isValid: true,
+              value: 0,
+            },
+          });
         });
-      });
-    }else{
-      console.log('erreur lors de l envoi');
-      
-    }
-  }, [state]);
+      } else {
+        console.log("erreur lors de l envoi");
+      }
+    };
+
+    fetch();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName: string = e.target.name;

@@ -1,8 +1,8 @@
 import { Historique, Inventaire, formatDate } from "./Types";
 import {
   collection,
-  query,
-  where,
+  
+  
   getDocs,
   Timestamp,
   addDoc,
