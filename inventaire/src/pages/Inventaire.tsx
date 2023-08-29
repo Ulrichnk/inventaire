@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction } from "react";
 import Inv from "../components/Inv";
 import { AppContext } from "../App";
 import ArticleFireService from "../helpers/ArticleFire";
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -70,12 +70,7 @@ type Field<T> = {
   value?: T;
   isValid?: boolean;
 };
-type Form = {
-  nom: Field<string>;
-  prix_achat: Field<number>;
-  prix_vente: Field<number>;
-  id: Field<number>;
-};
+
 
 type Duree = {
   date_debut: Field<string>;
@@ -89,6 +84,7 @@ type Props = {
   setUserIslogged: Dispatch<SetStateAction<boolean>>;
   articles: Article[];
   setArticles: Dispatch<SetStateAction<Article[]>>;
+  id_hist?:number,
 };
 
 const Inventaire: FunctionComponent<Props> = ({
@@ -97,30 +93,13 @@ const Inventaire: FunctionComponent<Props> = ({
   setUserIslogged,
   articles,
   setArticles,
+  id_hist,
 }) => {
   const [state, setState] = useState<boolean>(false);
   const contextValue = useContext(AppContext);
   useEffect(() => {
     ArticleFireService.getArticles().then((articles) => setArticles(articles));
-  }, []);
-  const [Form] = useState<Form>({
-    nom: {
-      isValid: true,
-      value: "",
-    },
-    prix_achat: {
-      isValid: true,
-      value: 0,
-    },
-    prix_vente: {
-      isValid: true,
-      value: 0,
-    },
-    id: {
-      isValid: true,
-      value: 0,
-    },
-  });
+  }, [setArticles]);
 
   const [duree, setDuree] = useState<Duree>({
     date_debut: {
@@ -153,8 +132,6 @@ const Inventaire: FunctionComponent<Props> = ({
     setDuree({ ...duree, ...newField });
   };
   const HandleSubmit = () => {
-    console.log(Form);
-    console.log("inventaire enregistrer");
     setState(true);
   };
 

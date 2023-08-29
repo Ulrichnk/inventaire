@@ -144,6 +144,15 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged }) => {
           <p>Gestion des articles</p>
         </NavLink>
         <NavLink
+          to="/historiques"
+          className={(nav) =>
+            nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
+          }
+          style={style}
+        >
+          <p>Historiques</p>
+        </NavLink>
+        <NavLink
           to="/essai"
           className={(nav) =>
             nav.isActive ? "LinkIsActive" : "LinkIsNotActive"
@@ -161,7 +170,7 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged }) => {
         >
           <p>Enregistrement des achats</p>
         </NavLink>
-   
+
         <NavLink
           to="inconnu"
           onClick={() => {

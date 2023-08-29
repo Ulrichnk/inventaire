@@ -9,6 +9,8 @@ import Inventaire from "../../pages/Inventaire";
 import Gestion from "../../pages/Gestion";
 import Essai from "../../Essai";
 import Inconnu from "../../pages/inconnu";
+import Historiques from "../../pages/Historiques";
+import HistoriqueDetail from "../../pages/HistoriqueDetail";
 type Props = {
   userIsLogged: Boolean;
   user: User | null;
@@ -56,6 +58,8 @@ const AllPages: FunctionComponent<Props> = ({
           }
         />
         <Route path="/enregistrement-vente" element={<Achat />} />
+        <Route path="/historiques" element={<Historiques />} />
+        <Route path="/historiques/:id" element={<HistoriqueDetail />} />
         <Route path="*" element={<Inconnu />} />
       </Routes>
     </>

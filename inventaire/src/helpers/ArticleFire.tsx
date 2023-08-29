@@ -1,7 +1,6 @@
 import { Article } from "./Types";
 import {
   doc,
-  getDoc,
   setDoc,
   deleteDoc,
   addDoc,
@@ -67,23 +66,24 @@ export default class ArticleFireService {
   }
   static async getArticle(id: number): Promise<Article | null | undefined> {
     if (this.isDev()) {
-      try {
-        const docRef = doc(db, "articles", id.toString());
-        const docSnap = await getDoc(docRef);
+        try {
+            const querySnapshot = await getDocs(collection(db, "articles"));
+            const article = querySnapshot.docs.find(doc => doc.data().id === id);
 
-        if (docSnap.exists()) {
-          return docSnap.data() as Article;
-        } else {
-          return null;
+            if (article) {
+                return article.data() as Article;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            this.handleError(error);
+            return null;
         }
-      } catch (error) {
-        this.handleError(error);
-        return null;
-      }
     } else {
-      return this.articles.find((art) => id === art.id);
+        return this.articles.find(art => art.id === id);
     }
-  }
+}
+
 
   static async updateArticle(article: Article): Promise<Article> {
     if (this.isDev()) {

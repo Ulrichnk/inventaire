@@ -113,12 +113,12 @@ export default class InventaireFireService {
       return null;
     }
   }
-//----------------------------------------------------------------
+  //----------------------------------------------------------------
   static async getHistorique1(date_debut: string): Promise<Historique | null> {
     try {
       const historiques = await this.getHistoriques();
       const historiqueTrouve = historiques.find(
-        (art) => art.date_debut === art.date_fin
+        (art) => date_debut === art.date_fin
       );
 
       return historiqueTrouve || null;
@@ -150,16 +150,13 @@ export default class InventaireFireService {
   //     ) || null
   //   );
   // }
-//----------------------------------------------------------------
-
+  //----------------------------------------------------------------
 
   static async getInventaires(id_article: number): Promise<Inventaire[]> {
     if (this.isDev()) {
       try {
-        const inventairesRef = collection(db, "inventaire");
-        const querySnapshot = await getDocs(
-          query(inventairesRef, where("id_article", "==", id_article))
-        );
+        const inventairesRef = collection(db, "inventaires");
+        const querySnapshot = await getDocs(inventairesRef);
         const inventaires = querySnapshot.docs.map(
           (doc) => doc.data() as Inventaire
         );
@@ -180,6 +177,10 @@ export default class InventaireFireService {
     if (this.isDev()) {
       try {
         const inventaires = await this.getInventaires(id_article);
+        console.log(inventaires);
+        console.log('votre id article',id_article);
+        
+        
         const inventaireTrouve = inventaires.find(
           (inventaire) => id_hist === inventaire.id_historique
         );
