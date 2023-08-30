@@ -1,12 +1,5 @@
 import { Historique, Inventaire, formatDate } from "./Types";
-import {
-  collection,
-  
-  
-  getDocs,
-  Timestamp,
-  addDoc,
-} from "firebase/firestore"; // Import des fonctions Firestore nécessaires
+import { collection, getDocs, Timestamp, addDoc } from "firebase/firestore"; // Import des fonctions Firestore nécessaires
 import { db } from "./firebase-config";
 
 export let useInventaire: Inventaire[] = [
@@ -47,6 +40,7 @@ export let useHistorique: Historique[] = [
 ];
 
 export function add(a: Inventaire) {
+
   const id: number = useInventaire.length;
   a.id = id + 1;
   console.log();
@@ -56,6 +50,7 @@ export function add(a: Inventaire) {
 export default class InventaireFireService {
   static inventaire: Inventaire[] = useInventaire;
   static historique: Historique[] = useHistorique;
+
   static isDev = () => {
     if (process.env.REACT_APP_DEV === "false") {
       return false;
@@ -152,7 +147,7 @@ export default class InventaireFireService {
   // }
   //----------------------------------------------------------------
 
-  static async getInventaires(id_article: number): Promise<Inventaire[]> {
+  static async getInventaires(): Promise<Inventaire[]> {
     if (this.isDev()) {
       try {
         const inventairesRef = collection(db, "inventaires");
@@ -167,7 +162,7 @@ export default class InventaireFireService {
       }
     }
 
-    return this.inventaire.filter((art) => id_article === art.id_article);
+    return this.inventaire;
   }
 
   static async getInventaire(
@@ -176,7 +171,7 @@ export default class InventaireFireService {
   ): Promise<Inventaire | null> {
     if (this.isDev()) {
       try {
-        const inventaires = await this.getInventaires(id_article);
+        const inventaires = await this.getInventaires();
 
         const inventaireTrouve = inventaires.find(
           (inventaire) => id_hist === inventaire.id_historique
@@ -234,7 +229,7 @@ export default class InventaireFireService {
   }
 
   static async addInventaire(
-    id_historique:number,
+    id_historique: number,
     id_article: number,
     stock_achat: number,
     stock_restant: number,

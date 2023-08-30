@@ -1,7 +1,7 @@
 import React, {
   FunctionComponent,
   useContext,
-  useEffect,
+  
   useState,
 } from "react";
 import { styled } from "styled-components";
@@ -9,7 +9,6 @@ import { Article, User } from "../helpers/Types";
 import { Dispatch, SetStateAction } from "react";
 import Inv from "../components/Inv";
 import { AppContext } from "../App";
-import ArticleFireService from "../helpers/ArticleFire";
 import InventaireFireService from "../helpers/InventaireFire";
 export const Container = styled.div`
   display: flex;
@@ -83,9 +82,7 @@ const Inventaire: FunctionComponent<Props> = ({
   const contextValue = useContext(AppContext);
   const [id_historique, setId_historique] = useState<number>(0);
 
-  useEffect(() => {
-    ArticleFireService.getArticles().then((articles) => setArticles(articles));
-  }, [setArticles]);
+ 
 
   const [duree, setDuree] = useState<Duree>({
     date_debut: {

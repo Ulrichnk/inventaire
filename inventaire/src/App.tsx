@@ -9,6 +9,7 @@ import AllPages from "./components/navigations/AllPages";
 import { styled } from "styled-components";
 import { Article, Lambda, Roger, User } from "./helpers/Types";
 import ArticleFireService from "./helpers/ArticleFire";
+import useDonnee from "./helpers/useDonnee";
 
 const Pages = styled.div`
   display: grid;
@@ -18,7 +19,6 @@ const Pages = styled.div`
   & .nav {
     width: 300px;
   }
-
   & table {
     width: 100px;
   }
@@ -54,6 +54,7 @@ const App: FunctionComponent = () => {
   const [user, setUser] = useState<User>(Lambda);
   const [userIsLogged, setUserIsLogged] = useState<boolean>(false);
   const [state, setState] = useState<boolean>(false);
+  const { inventaires, historiques } = useDonnee(state);
 
   const handle = () => {
     setState(!state);
@@ -95,7 +96,6 @@ const App: FunctionComponent = () => {
             user={user}
             setUser={setUser}
             setUserIsLogged={setUserIsLogged}
-            
             articles={articles}
             setArticles={setArticles}
           />
