@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 import { Article } from "../helpers/Types";
 import Inve from "../components/Inve";
 
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;

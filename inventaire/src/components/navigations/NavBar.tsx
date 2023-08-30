@@ -15,7 +15,7 @@ const NavBody = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 25px;
-  margin: 0 auto;
+  margin: 40px auto;
   & p {
     transition: 0.8s;
   }
@@ -27,47 +27,23 @@ const NavBody = styled.div`
 const Title = styled.div`
   font-size: 30px;
   font-weight: bold;
-  margin: auto;
+  margin: 80px auto;
 `;
-
-// const Search = styled.form`
-//   margin: 10px auto;
-//   border-radius: 12px;
-//   display: flex;
-//   /*outline: 1px solid rgb(132, 227, 132) ;*/
-
-//   & input {
-//     height: 40px;
-//     border-radius: 15px 15px 15px 15px;
-//     box-shadow: 0 0 0 5px rgb(132, 227, 132) inset;
-//   }
-//   & button {
-//     border: none;
-//     background-color: white;
-//     text-align: center;
-//     width: 60px;
-//     box-shadow: 0 0 0 5px rgb(132, 227, 132) inset;
-//     border-radius: 15px 15px 15px 15px;
-//     transition: 0.8s;
-//   }
-//   & button:hover {
-//     background-color: rgb(132, 227, 132);
-//     color: white;
-//     font-weight: bold;
-//   }
-// `;
 
 type Props = {
   userIsLogged: Boolean;
+  state: boolean;
 };
 
-const NavBar: FunctionComponent<Props> = ({ userIsLogged }) => {
+const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
   let navigate = useNavigate();
+  const styl: CSSProperties = { display: "none" };
+  const styl1: CSSProperties = { display: "block" };
 
   const style: CSSProperties = { textDecoration: "none" };
 
   return !userIsLogged ? (
-    <div className="nav">
+    <div className="nav" style={state ? styl : styl1}>
       <NavHead>
         <Title>Inventaire</Title>
       </NavHead>
@@ -111,7 +87,7 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged }) => {
       </NavBody>
     </div>
   ) : (
-    <div className="nav">
+    <div className="nav" style={state ? styl : styl1}>
       <NavHead>
         <Title>Inventaire</Title>
       </NavHead>

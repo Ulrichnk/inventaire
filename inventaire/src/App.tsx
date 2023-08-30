@@ -15,6 +15,31 @@ const Pages = styled.div`
   grid-template-columns: 0.2fr 1fr;
   background-color: rgb(255, 230, 221);
   min-height: 100vh;
+  & .nav {
+    width: 300px;
+  }
+
+  & table {
+    width: 100px;
+  }
+`;
+
+const M = styled.div`
+  background-color: azure;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  cursor: pointer;
+  & div {
+    background-color: grey;
+    height: 5px;
+    border-radius: 12px;
+    width: 80%;
+    margin: 5px auto;
+  }
 `;
 
 type AppContextValue = {
@@ -28,6 +53,12 @@ const App: FunctionComponent = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [user, setUser] = useState<User>(Lambda);
   const [userIsLogged, setUserIsLogged] = useState<boolean>(false);
+  const [state, setState] = useState<boolean>(false);
+
+  const handle = () => {
+    setState(!state);
+    console.log(state);
+  };
 
   useEffect(() => {
     if (localStorage.getItem("user_token") === "roger") {
@@ -51,31 +82,46 @@ const App: FunctionComponent = () => {
   return userIsLogged && user !== null ? (
     <AppContext.Provider value={contextValue}>
       {" "}
-      <Pages>
-        <NavBar userIsLogged={true} />
-        <AllPages
-          userIsLogged={true}
-          user={user}
-          setUser={setUser}
-          setUserIsLogged={setUserIsLogged}
-          articles={articles}
-          setArticles={setArticles}
-        />
-      </Pages>
+      <div>
+        <M onClick={() => handle()}>
+          <div></div>
+          <div></div>
+          <div></div>
+        </M>
+        <Pages>
+          <NavBar userIsLogged={true} state={state} />
+          <AllPages
+            userIsLogged={true}
+            user={user}
+            setUser={setUser}
+            setUserIsLogged={setUserIsLogged}
+            
+            articles={articles}
+            setArticles={setArticles}
+          />
+        </Pages>
+      </div>
     </AppContext.Provider>
   ) : (
     <AppContext.Provider value={contextValue}>
-      <Pages>
-        <NavBar userIsLogged={false} />
-        <AllPages
-          userIsLogged={false}
-          user={null}
-          setUser={setUser}
-          setUserIsLogged={setUserIsLogged}
-          articles={articles}
-          setArticles={setArticles}
-        />
-      </Pages>
+      <div>
+        <M onClick={() => handle()}>
+          <div></div>
+          <div></div>
+          <div></div>
+        </M>
+        <Pages>
+          <NavBar userIsLogged={false} state={state} />
+          <AllPages
+            userIsLogged={false}
+            user={null}
+            setUser={setUser}
+            setUserIsLogged={setUserIsLogged}
+            articles={articles}
+            setArticles={setArticles}
+          />
+        </Pages>
+      </div>
     </AppContext.Provider>
   );
 };

@@ -20,4 +20,5 @@
 .nav{
   /* background-color:rgb(235, 231, 231); */
   background-color: rgb(242, 242, 242);
+  min-width: none;
 }

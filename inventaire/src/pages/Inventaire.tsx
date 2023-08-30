@@ -15,38 +15,22 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-top: 150px;
-  min-height: 100vh;
-  min-width: 100vw;
-
+  margin:120px auto;
   & table,
   td,
   th {
     outline: solid 1px black;
   }
-
-  & table {
-    min-width: 700px;
-    margin: 0 auto;
-    & th,
-    & td {
-      background-color: orange;
-      color: white;
-    }
-    & td,
-    th {
-      padding: 10px 20px;
-    }
+  & th,
+  & td {
+    background-color: orange;
+    color: white;
+    padding: 10px 20px;
   }
   & h1 {
     color: orange;
   }
-  & tr,
-  th,
-  table,
-  td,
-  input {
-    min-width: 40px;
+  & input {
     min-height: 40px;
   }
 

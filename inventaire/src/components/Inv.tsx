@@ -89,6 +89,7 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state, id_historique }) => {
     // eslint-disable-next-line
   }, [duree]);
 
+  
   useEffect(() => {
     console.log("votre state ", state);
     const fetch = () => {
@@ -129,7 +130,7 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state, id_historique }) => {
     };
 
     fetch();
-  });
+  }, [state]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName: string = e.target.name;
