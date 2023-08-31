@@ -59,6 +59,8 @@ const App: FunctionComponent = () => {
     historiques,
     articles,
     setArticles,
+    achats,
+    setAchats,
   } = useDonnee(state);
 
   const handle = () => {
@@ -95,6 +97,8 @@ const App: FunctionComponent = () => {
             setInventaires={setInventaires}
             historiques={historiques}
             setHistoriques={setHistoriques}
+            achats={achats}
+            setAchats={setAchats}
           />
         </Pages>
       </div>
@@ -120,6 +124,8 @@ const App: FunctionComponent = () => {
             setInventaires={setInventaires}
             historiques={historiques}
             setHistoriques={setHistoriques}
+            achats={achats}
+            setAchats={setAchats}
           />
         </Pages>
       </div>

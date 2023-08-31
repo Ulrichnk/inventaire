@@ -1,7 +1,12 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { Article } from "../helpers/Types";
-import InventaireFireService from "../helpers/InventaireFire";
-import ArticleFireService from "../helpers/ArticleFire";
+import React, {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import { Article, Historique, Inventaire } from "../helpers/Types";
+import localServices from "../helpers/LocalService";
 
 type Field<T> = {
   value?: T;
@@ -23,8 +28,25 @@ type Props = {
   duree?: Duree;
   state?: boolean;
   id_historique: number;
+  articles: Article[];
+  setArticles: Dispatch<SetStateAction<Article[]>>;
+  inventaires: Inventaire[];
+  setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
+  historiques: Historique[];
+  setHistoriques: Dispatch<SetStateAction<Historique[]>>;
 };
-const Inv: FunctionComponent<Props> = ({ id, duree, state, id_historique }) => {
+const Inv: FunctionComponent<Props> = ({
+  id,
+  duree,
+  state,
+  id_historique,
+  articles,
+  setArticles,
+  setInventaires,
+  inventaires,
+  historiques,
+  setHistoriques,
+}) => {
   const [article, setArticle] = useState<Article>();
   const [stock_depart, setStockDepart] = useState<number>(0);
 
@@ -44,43 +66,41 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state, id_historique }) => {
   });
 
   useEffect(() => {
-    ArticleFireService.getArticle(id).then((a) => {
-      if (a && a !== null) {
-        setArticle(a);
-        console.log(
-          "vous avez reussi la recuperation de l'article dont l'id est",
-          id
-        );
-      } else {
-        console.log(
-          "vous avez une erreur pour la recuperation de l'article dont l'id est",
-          id
-        );
-      }
-    });
-  }, [id]);
+    const a: Article | undefined = localServices.getArticle(id, articles);
+    if (a && a !== null) {
+      setArticle(a);
+      console.log(
+        "vous avez reussi la recuperation de l'article dont l'id est",
+        id
+      );
+    } else {
+      console.log(
+        "vous avez une erreur pour la recuperation de l'article dont l'id est",
+        id
+      );
+    }
+  }, [id, articles]);
 
   useEffect(() => {
     const fetch = async (duree: Duree) => {
-      InventaireFireService.getHistorique1(
-        duree.date_debut.value ? duree.date_debut.value : ""
-      ).then((a) => {
-        if (a && a !== null) {
-          console.log(a);
-
-          InventaireFireService.getInventaire(a.id, id).then((a) => {
-            if (a && a !== null) {
-              setStockDepart(a.stock_restant);
-            } else {
-              console.log(
-                "vous avez une erreur pour la recuperation de l'inventaire"
-              );
-            }
-          });
-        } else {
-          console.log("vous avez une erreur pour l'historique");
-        }
-      });
+      const a = localServices.getHistorique1(
+        duree.date_debut.value ? duree.date_debut.value : "",
+        historiques
+      );
+      if (a && a !== null) {
+        console.log(a);
+        localServices.getInventaire(a.id, id, inventaires).then((a) => {
+          if (a && a !== null) {
+            setStockDepart(a.stock_restant);
+          } else {
+            console.log(
+              "vous avez une erreur pour la recuperation de l'inventaire"
+            );
+          }
+        });
+      } else {
+        console.log("vous avez une erreur pour l'historique");
+      }
     };
     if (duree) {
       fetch(duree);
@@ -89,7 +109,6 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state, id_historique }) => {
     // eslint-disable-next-line
   }, [duree]);
 
-  
   useEffect(() => {
     console.log("votre state ", state);
     const fetch = () => {
@@ -100,30 +119,33 @@ const Inv: FunctionComponent<Props> = ({ id, duree, state, id_historique }) => {
         Form.stock_achat.value &&
         Form.stock_restant.value
       ) {
-        InventaireFireService.addInventaire(
-          id_historique,
-          id,
-          Form.stock_achat.value as number,
-          Form.stock_restant.value,
-          stock_depart as number
-        ).then((inve) => {
-          console.log("inventaire enregistrer");
-          console.log(inve);
-          setForm({
-            id: {
-              isValid: true,
-              value: 0,
-            },
-            stock_achat: {
-              isValid: true,
-              value: 0,
-            },
-            stock_restant: {
-              isValid: true,
-              value: 0,
-            },
+        localServices
+          .addInventaire(
+            id_historique,
+            id,
+            Form.stock_achat.value as number,
+            Form.stock_restant.value,
+            stock_depart as number,
+            setInventaires
+          )
+          .then((inve) => {
+            console.log("inventaire enregistrer");
+            console.log(inve);
+            setForm({
+              id: {
+                isValid: true,
+                value: 0,
+              },
+              stock_achat: {
+                isValid: true,
+                value: 0,
+              },
+              stock_restant: {
+                isValid: true,
+                value: 0,
+              },
+            });
           });
-        });
       } else {
         console.log("erreur lors de l envoi");
       }

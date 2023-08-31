@@ -1,20 +1,25 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  
-  useState,
-} from "react";
+import React, { FunctionComponent, useContext, useState } from "react";
 import { styled } from "styled-components";
 import { Article, Historique, Inventaire, User } from "../helpers/Types";
 import { Dispatch, SetStateAction } from "react";
 import Inv from "../components/Inv";
 import { AppContext } from "../App";
-import InventaireFireService from "../helpers/InventaireFire";
+import localServices from "../helpers/LocalService";
+
+const Search = styled.div`
+  & input {
+    width: 40%;
+    height: 40px;
+    outline: solid 2px orange;
+    border-radius: 15px;
+    text-align: center;
+  }
+`;
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin:120px auto;
+  margin: 120px auto;
   & table,
   td,
   th {
@@ -68,10 +73,10 @@ type Props = {
   articles: Article[];
   setArticles: Dispatch<SetStateAction<Article[]>>;
   id_hist?: number;
-  inventaires:Inventaire[];
-  setInventaires:Dispatch<SetStateAction<Inventaire[]>>;
-  historiques:Historique[];
-  setHistoriques:Dispatch<SetStateAction<Historique[]>>;
+  inventaires: Inventaire[];
+  setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
+  historiques: Historique[];
+  setHistoriques: Dispatch<SetStateAction<Historique[]>>;
 };
 
 const InventairePages: FunctionComponent<Props> = ({
@@ -89,8 +94,26 @@ const InventairePages: FunctionComponent<Props> = ({
   const [state, setState] = useState<boolean>(false);
   const contextValue = useContext(AppContext);
   const [id_historique, setId_historique] = useState<number>(0);
+  const [term, setTerm] = useState<string>("");
+  const [search, setSearch] = useState<boolean>(false);
+  const [a, setA] = useState<Article[]>([]);
+  // const style: CSSProperties = { textDecoration: "none" };
 
- 
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const term = e.target.value;
+    setTerm(term);
+    articles.sort((a, b) => a.nom.localeCompare(b.nom));
+    a.sort((a, b) => a.nom.localeCompare(b.nom));
+
+    if (term.length <= 1) {
+      setA([]);
+      setSearch(false);
+      return;
+    }
+    setSearch(true);
+    setA(localServices.searchArticle(term, articles));
+    console.log(a);
+  };
 
   const [duree, setDuree] = useState<Duree>({
     date_debut: {
@@ -130,15 +153,30 @@ const InventairePages: FunctionComponent<Props> = ({
   const addHist = () => {
     if (duree.date_debut.value && duree.date_fin.value) {
       setChange(false);
-      InventaireFireService.addHistorique(
-        duree.date_debut.value,
-        duree.date_fin.value
-      ).then((res) => (res ? setId_historique(res.id) : "erreur"));
+      localServices
+        .addHistorique(
+          duree.date_debut.value,
+          duree.date_fin.value,
+          setHistoriques
+        )
+        .then((res) => (res ? setId_historique(res.id) : "erreur"));
+      //   InventaireFireService.addHistorique(
+      //     duree.date_debut.value,
+      //     duree.date_fin.value
+      //   ).then((res) => (res ? setId_historique(res.id) : "erreur"));
     }
   };
 
   return (
     <Container>
+      <Search>
+        <input
+          type="text"
+          placeholder="Rechercher un article"
+          value={term}
+          onChange={(e) => handleInput(e)}
+        />
+      </Search>
       <div>
         <h1>
           Faire un inventaire Monsieur{" "}
@@ -192,9 +230,48 @@ const InventairePages: FunctionComponent<Props> = ({
           </thead>
           <tbody>
             {/* <Input Form={Form} setForm={setForm} /> */}
-
             {change
-              ? articles.map((item) => (
+              ? search
+                ? a.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nom}</td>
+                      <td>{item.prix_achat}</td>
+                      <td>{item.prix_vente}</td>
+                      <Inv
+                        id={item.id}
+                        state={state}
+                        id_historique={id_historique}
+                        historiques={historiques}
+                        setInventaires={setInventaires}
+                        inventaires={inventaires}
+                        setHistoriques={setHistoriques}
+                        articles={articles}
+                        setArticles={setArticles}
+                      />
+                    </tr>
+                  ))
+                : articles.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nom}</td>
+                      <td>{item.prix_achat}</td>
+                      <td>{item.prix_vente}</td>
+                      <Inv
+                        id={item.id}
+                        state={state}
+                        id_historique={id_historique}
+                        historiques={historiques}
+                        setInventaires={setInventaires}
+                        inventaires={inventaires}
+                        setHistoriques={setHistoriques}
+                        articles={articles}
+                        setArticles={setArticles}
+                      />
+                    </tr>
+                  ))
+              : search
+              ? a.map((item) => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.nom}</td>
@@ -202,8 +279,15 @@ const InventairePages: FunctionComponent<Props> = ({
                     <td>{item.prix_vente}</td>
                     <Inv
                       id={item.id}
+                      duree={duree}
                       state={state}
                       id_historique={id_historique}
+                      historiques={historiques}
+                      setInventaires={setInventaires}
+                      inventaires={inventaires}
+                      setHistoriques={setHistoriques}
+                      articles={articles}
+                      setArticles={setArticles}
                     />
                   </tr>
                 ))
@@ -218,6 +302,12 @@ const InventairePages: FunctionComponent<Props> = ({
                       duree={duree}
                       state={state}
                       id_historique={id_historique}
+                      historiques={historiques}
+                      setInventaires={setInventaires}
+                      inventaires={inventaires}
+                      setHistoriques={setHistoriques}
+                      articles={articles}
+                      setArticles={setArticles}
                     />
                   </tr>
                 ))}

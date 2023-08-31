@@ -1,7 +1,12 @@
-import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { Article, Historique, Inventaire } from "../helpers/Types";
-import InventaireFireService from "../helpers/InventaireFire";
-import ArticleFireService from "../helpers/ArticleFire";
+import localServices from "../helpers/LocalService";
 
 type Props = {
   //define your props here
@@ -14,21 +19,30 @@ type Props = {
   historiques: Historique[];
   setHistoriques: Dispatch<SetStateAction<Historique[]>>;
 };
-const Inve: FunctionComponent<Props> = ({ id, id_hist }) => {
+const Inve: FunctionComponent<Props> = ({
+  id,
+  id_hist,
+  articles,
+  setArticles,
+  setInventaires,
+  inventaires,
+  historiques,
+  setHistoriques,
+}) => {
   const [article, setArticleState] = useState<Article>();
   const [stock, setStock] = useState<Inventaire>();
 
   useEffect(() => {
-    ArticleFireService.getArticle(id).then((a) => {
+    const a=localServices.getArticle(id,articles)
       if (a && a !== null) {
         setArticleState(a);
       } else {
         console.log("vous avez une erreur pour la recuperation d el'article");
       }
-    });
+    
 
     const fetch = async (id_hist: number) => {
-      InventaireFireService.getInventaire(id_hist, id).then((a) => {
+      localServices.getInventaire(id_hist, id,inventaires).then((a) => {
         if (a && a !== null) {
           setStock(a);
         } else {

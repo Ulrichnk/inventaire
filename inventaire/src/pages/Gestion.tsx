@@ -2,8 +2,8 @@ import React, { FunctionComponent, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import { Article, User } from "../helpers/Types";
 import { styled } from "styled-components";
-import ArticleFireService from "../helpers/ArticleFire";
 import Input from "../components/Input";
+import localServices from "../helpers/LocalService";
 
 type Props = {
   //define your props here
@@ -143,28 +143,30 @@ const Gestion: FunctionComponent<Props> = ({
 }) => {
   const [term, setTerm] = useState<string>("");
   const [search, setSearch] = useState<boolean>(false);
+  const [a, setA] = useState<Article[]>([]);
   // const style: CSSProperties = { textDecoration: "none" };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);
+    articles.sort((a, b) => a.nom.localeCompare(b.nom));
+    a.sort((a, b) => a.nom.localeCompare(b.nom));
 
     if (term.length <= 1) {
-      setArticles([]);
+      setA([]);
+      setSearch(false);
       return;
     }
     setSearch(true);
-    ArticleFireService.searchArticle(term).then((articles) => {
-      setArticles(articles);
-      console.log(articles);
-    });
+    setA(localServices.searchArticle(term, articles));
+    console.log(a);
   };
   const handle = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: number
   ): void => {
-    ArticleFireService.deleteArticle(id).then((res) => {
-      ArticleFireService.getArticles().then((articles) => {
+    localServices.deleteArticle(id, articles, setArticles).then((res) => {
+      localServices.getArticles().then((articles) => {
         setArticles(articles);
       });
     });
@@ -208,10 +210,12 @@ const Gestion: FunctionComponent<Props> = ({
         prix_vente: Form.prix_vente.value,
         created_at: new Date(),
       };
-      ArticleFireService.addArticle(a).then((res) => {
-        ArticleFireService.getArticles().then((articles) => {
-          setArticles(articles);
-        });
+      localServices.addArticle(a, setArticles).then((res) => {
+        if (res) {
+          localServices.getArticles().then((articles) => {
+            setArticles(articles);
+          });
+        }
       });
       setForm({
         nom: {
@@ -232,7 +236,7 @@ const Gestion: FunctionComponent<Props> = ({
         },
       });
 
-     // alert("article ajouté");
+      // alert("article ajouté");
     } else {
       alert("veuillez remplir tous les champs !");
     }
@@ -284,7 +288,7 @@ const Gestion: FunctionComponent<Props> = ({
             </thead>
             <tbody>
               {search
-                ? articles.map((item) => (
+                ? a.map((item) => (
                     <tr key={item.id}>
                       <td>{item.id}</td>
                       <td>{item.nom}</td>

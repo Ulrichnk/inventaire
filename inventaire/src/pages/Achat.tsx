@@ -1,10 +1,20 @@
-import React, { FunctionComponent, useState } from "react";
+import React, {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useState,
+} from "react";
 import { styled } from "styled-components";
-import { Article } from "../helpers/Types";
-import ArticleFireService from "../helpers/ArticleFire";
+import { Achat, Article } from "../helpers/Types";
+import localServices from "../helpers/LocalService";
 
 type Props = {
+  achats: Achat[];
+  setAchats: Dispatch<SetStateAction<Achat[]>>;
+
   //define your props here
+  articles: Article[];
+  setArticles: Dispatch<SetStateAction<Article[]>>;
 };
 const Acc = styled.div`
   display: flex;
@@ -57,24 +67,30 @@ const Search = styled.div`
   }
 `;
 
-const Achat: FunctionComponent<Props> = () => {
+const Achatpages: FunctionComponent<Props> = ({ articles, setArticles }) => {
   const [term, setTerm] = useState<string>("");
-  const [articles, setArticles] = useState<Article[]>([]);
-  // const style: CSSProperties = { textDecoration: "none" };
+  const [a, setA] = useState<Article[]>([]);
+  const [search, setSearch] = useState<boolean>(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);
+    articles.sort((a, b) => a.nom.localeCompare(b.nom));
+    a.sort((a, b) => a.nom.localeCompare(b.nom));
 
     if (term.length <= 1) {
-      setArticles([]);
+      setA([]);
+      setSearch(false);
       return;
     }
+    setSearch(true);
+    setA(localServices.searchArticle(term, articles));
+    console.log(articles);
+    
+  };
 
-    ArticleFireService.searchArticle(term).then((articles) => {
-      setArticles(articles);
-      console.log(articles);
-    });
+  const handle = () => {
+    console.log("achat enreistrer");
   };
 
   return (
@@ -101,28 +117,46 @@ const Achat: FunctionComponent<Props> = () => {
               </tr>
             </thead>
             <tbody>
-              {articles.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.nom}</td>
-                  <td>{item.prix_achat}</td>
-                  <td>{item.prix_vente}</td>
-                  <td>
-                    <input
-                      name="valeur_achat"
-                      className="input"
-                      placeholder="valeur de l'achat "
-                      type="text"
-                    />
-                  </td>
-                </tr>
-              ))}
+              {search
+                ? a.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nom}</td>
+                      <td>{item.prix_achat}</td>
+                      <td>{item.prix_vente}</td>
+                      <td>
+                        <input
+                          name="valeur_achat"
+                          className="input"
+                          placeholder="valeur de l'achat "
+                          type="text"
+                        />
+                      </td>
+                    </tr>
+                  ))
+                : articles.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nom}</td>
+                      <td>{item.prix_achat}</td>
+                      <td>{item.prix_vente}</td>
+                      <td>
+                        <input
+                          name="valeur_achat"
+                          className="input"
+                          placeholder="valeur de l'achat "
+                          type="text"
+                        />
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>
+        <button onClick={() => handle()}>Valider les ventes</button>
       </Acc>
     </>
   );
 };
 
-export default Achat;
+export default Achatpages;

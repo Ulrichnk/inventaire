@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useState } from "react";
-import InventaireFireService from "../helpers/InventaireFire";
+import React, { FunctionComponent } from "react";
 import { Historique } from "../helpers/Types";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
   //define your props herec
+  historiques: Historique[];
 };
 const Container = styled.div`
   display: flex;
@@ -64,13 +64,9 @@ const Container = styled.div`
   }
 `;
 
-const Historiques: FunctionComponent<Props> = () => {
-  const [historiques, setHistoriques] = useState<Historique[]>([]);
+const Historiques: FunctionComponent<Props> = ({ historiques }) => {
   let navigate = useNavigate();
 
-  InventaireFireService.getHistoriques().then((res) => {
-    setHistoriques(res);
-  });
   const handle = (id: number) => {
     navigate(`/historiques/${id}`);
   };

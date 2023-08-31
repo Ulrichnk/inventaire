@@ -91,3 +91,10 @@ export const formatDate = (date: Date) => {
   const day = date.getDate().toString().padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+export type Achat={
+  id:number,
+  id_article:number,
+  valeur_achat:number,
+  date_ajout:string
+}

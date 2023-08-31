@@ -3,8 +3,14 @@ import { Dispatch, SetStateAction } from "react";
 import { Route, Routes } from "react-router-dom";
 import Accueil from "../../pages/Accueil";
 import Log from "../../pages/Log";
-import { Article, Historique, Inventaire, User } from "../../helpers/Types";
-import Achat from "../../pages/Achat";
+import {
+  Achat,
+  Article,
+  Historique,
+  Inventaire,
+  User,
+} from "../../helpers/Types";
+import Achatpages from "../../pages/Achat";
 import InventairePages from "../../pages/Inventaire";
 import Gestion from "../../pages/Gestion";
 import Essai from "../../Essai";
@@ -22,6 +28,8 @@ type Props = {
   setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
   historiques: Historique[];
   setHistoriques: Dispatch<SetStateAction<Historique[]>>;
+  achats: Achat[];
+  setAchats: Dispatch<SetStateAction<Achat[]>>;
 };
 
 const AllPages: FunctionComponent<Props> = ({
@@ -35,6 +43,8 @@ const AllPages: FunctionComponent<Props> = ({
   historiques,
   setInventaires,
   setHistoriques,
+  achats,
+  setAchats,
 }) => {
   return userIsLogged ? (
     <>
@@ -69,8 +79,21 @@ const AllPages: FunctionComponent<Props> = ({
             />
           }
         />
-        <Route path="/enregistrement-vente" element={<Achat />} />
-        <Route path="/historiques" element={<Historiques />} />
+        <Route
+          path="/enregistrement-vente"
+          element={
+            <Achatpages
+              articles={articles}
+              setArticles={setArticles}
+              achats={achats}
+              setAchats={setAchats}
+            />
+          }
+        />
+        <Route
+          path="/historiques"
+          element={<Historiques historiques={historiques} />}
+        />
         <Route
           path="/historiques/:id"
           element={

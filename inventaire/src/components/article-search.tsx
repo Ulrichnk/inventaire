@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { Article } from "../helpers/Types";
-import ArticleService, {  } from "../helpers/DbArticle";
 import { styled } from "styled-components";
+import localServices from "../helpers/LocalService";
 
 type Props = {
   //define your props here
@@ -10,8 +10,8 @@ const Acc = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-top:150px;
-  min-height:100vh;
+  margin-top: 150px;
+  min-height: 100vh;
   & table,
   td,
   th {
@@ -22,8 +22,8 @@ const Acc = styled.div`
     margin: 0 auto;
     border-collapse: collapse;
     border-spacing: 0;
-    & th ,
-    & td {  
+    & th,
+    & td {
       background-color: orange;
       color: white;
     }
@@ -32,37 +32,29 @@ const Acc = styled.div`
     }
     & td {
       padding: 10px 20px;
-    } 
+    }
     & tr:nth-child(even) {
       background-color: #f2f2f2;
-    } 
+    }
     & td,
     th {
       padding: 10px 20px;
     }
   }
 
-
-
-  
   & h1 {
     color: orange;
   }
 `;
 
 const Search = styled.div`
-
-
   & input {
     width: 40%;
     height: 40px;
     outline: solid 2px orange;
     border-radius: 15px;
-    text-align:center;
-
+    text-align: center;
   }
-
-  
 `;
 
 const ArticleSearch: FunctionComponent<Props> = () => {
@@ -78,25 +70,20 @@ const ArticleSearch: FunctionComponent<Props> = () => {
       setArticles([]);
       return;
     }
-
-    ArticleService.searchArticle(term).then((articles) => {
-      setArticles(articles);
-      console.log(articles);
-    });
+    setArticles(localServices.searchArticle(term, articles));
+    console.log(articles);
   };
 
   return (
     <>
       <Acc>
         <Search>
-          
-            <input
-              type="text"
-              placeholder="Rechercher un article"
-              value={term}
-              onChange={(e) => handleInputChange(e)}
-            />
-          
+          <input
+            type="text"
+            placeholder="Rechercher un article"
+            value={term}
+            onChange={(e) => handleInputChange(e)}
+          />
         </Search>
         <div>
           <h1>Tableau de données</h1>

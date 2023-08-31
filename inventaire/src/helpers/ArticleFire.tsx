@@ -8,6 +8,7 @@ import {
   query,
   where,
   getDocs,
+  
 } from "firebase/firestore"; // Import des fonctions Firestore nécessaires
 import { db } from "./firebase-config";
 
@@ -55,6 +56,7 @@ export default class ArticleFireService {
       try {
         const querySnapshot = await getDocs(collection(db, "articles"));
         const articles = querySnapshot.docs.map((doc) => doc.data() as Article);
+        articles.sort((a, b) => a.nom.localeCompare(b.nom));
         return articles;
       } catch (error) {
         this.handleError(error);
@@ -66,24 +68,23 @@ export default class ArticleFireService {
   }
   static async getArticle(id: number): Promise<Article | null | undefined> {
     if (this.isDev()) {
-        try {
-            const querySnapshot = await getDocs(collection(db, "articles"));
-            const article = querySnapshot.docs.find(doc => doc.data().id === id);
+      try {
+        const querySnapshot = await getDocs(collection(db, "articles"));
+        const article = querySnapshot.docs.find((doc) => doc.data().id === id);
 
-            if (article) {
-                return article.data() as Article;
-            } else {
-                return null;
-            }
-        } catch (error) {
-            this.handleError(error);
-            return null;
+        if (article) {
+          return article.data() as Article;
+        } else {
+          return null;
         }
+      } catch (error) {
+        this.handleError(error);
+        return null;
+      }
     } else {
-        return this.articles.find(art => art.id === id);
+      return this.articles.find((art) => art.id === id);
     }
-}
-
+  }
 
   static async updateArticle(article: Article): Promise<Article> {
     if (this.isDev()) {

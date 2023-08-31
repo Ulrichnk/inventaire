@@ -1,21 +1,27 @@
 import { Dispatch, SetStateAction } from "react";
-import { Article, Historique, Inventaire } from "./Types";
+import { Achat, Article, Historique, Inventaire } from "./Types";
 import {
   doc,
   setDoc,
   deleteDoc,
   addDoc,
   collection,
-  query,
-  where,
   getDocs,
 } from "firebase/firestore"; // Import des fonctions Firestore nécessaires
 import { db } from "./firebase-config";
 
 export default class localServices {
-  static getArticles(articles: Article[]): Article[] {
-    return articles;
+  static async getArticles(): Promise<Article[]> {
+    try {
+      const querySnapshot = await getDocs(collection(db, "articles"));
+      const articles = querySnapshot.docs.map((doc) => doc.data() as Article);
+      return articles;
+    } catch (error) {
+      this.handleError(error as Error);
+      return [];
+    }
   }
+
   static getArticle(id: number, articles: Article[]): Article | undefined {
     return articles.find((art) => id === art.id);
   }
@@ -65,7 +71,6 @@ export default class localServices {
 
   static async addArticle(
     article: Article,
-    articles: Article[],
     setArticles: Dispatch<SetStateAction<Article[]>>
   ): Promise<boolean> {
     const modifiedArticle = { ...article };
@@ -98,6 +103,7 @@ export default class localServices {
     const results = articles.filter(
       (art) => art.nom?.toLowerCase().includes(lowerCaseTerm) // Convertir le nom en minuscules
     );
+    
     return results;
   }
 
@@ -230,6 +236,65 @@ export default class localServices {
     }
   }
 
+  static async addAchat(
+    id_article: number,
+    valeur_achat: number,
+    date_ajout: string,
+    setAchats: Dispatch<SetStateAction<Achat[]>>
+  ): Promise<Achat | null> {
+    try {
+      const achatsRef = collection(db, "achats");
+
+      // Obtenir la taille actuelle de la collection achats
+      const achatsQuerySnapshot = await getDocs(achatsRef);
+      const achatSize = achatsQuerySnapshot.size;
+
+      // Générer un nouvel ID pour l'achat
+      const newAchatId = achatSize + 1;
+
+      // Créer un nouvel achat
+      const newAchat: Achat = {
+        id_article: id_article,
+        id: newAchatId,
+        valeur_achat: valeur_achat,
+        date_ajout: date_ajout,
+      };
+
+      // Mettre à jour localement les achats
+      setAchats((prevAchats) => [...prevAchats, newAchat]);
+
+      // Ajouter le nouvel achat à la collection avec le nouvel ID dans Firestore
+      await addDoc(achatsRef, newAchat);
+
+      return newAchat;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  static async getAchats(): Promise<Achat[]> {
+    try {
+      const achatsRef = collection(db, 'achats');
+      const querySnapshot = await getDocs(achatsRef);
+  
+      const achats: Achat[] = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id_article: data.id_article,
+          id: data.id,
+          valeur_achat: data.valeur_achat,
+          date_ajout: data.date_ajout,
+        };
+      });
+  
+      return achats;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  
+  
   static isEmpty(data: Object): boolean {
     return Object.keys(data).length === 0;
   }

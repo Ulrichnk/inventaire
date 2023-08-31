@@ -1,5 +1,11 @@
 @import "sign.css";
 @import "navbar.css";
 
+*, ::before, ::after{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
   
 
