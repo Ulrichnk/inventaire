@@ -8,7 +8,6 @@ import NavBar from "./components/navigations/NavBar";
 import AllPages from "./components/navigations/AllPages";
 import { styled } from "styled-components";
 import { Article, Lambda, Roger, User } from "./helpers/Types";
-import ArticleFireService from "./helpers/ArticleFire";
 import useDonnee from "./helpers/useDonnee";
 
 const Pages = styled.div`
@@ -50,11 +49,17 @@ type AppContextValue = {
 
 export const AppContext = createContext<AppContextValue | null>(null);
 const App: FunctionComponent = () => {
-  const [articles, setArticles] = useState<Article[]>([]);
   const [user, setUser] = useState<User>(Lambda);
   const [userIsLogged, setUserIsLogged] = useState<boolean>(false);
   const [state, setState] = useState<boolean>(false);
-  const { inventaires, historiques } = useDonnee(state);
+  const {
+    inventaires,
+    setInventaires,
+    setHistoriques,
+    historiques,
+    articles,
+    setArticles,
+  } = useDonnee(state);
 
   const handle = () => {
     setState(!state);
@@ -68,20 +73,8 @@ const App: FunctionComponent = () => {
     }
   }, []);
 
-  useEffect(() => {
-    ArticleFireService.getArticles().then((articles) => {
-      setArticles(articles);
-    });
-  }, []);
-
-  const contextValue: AppContextValue = {
-    user: user,
-    articles: articles,
-    setArticles: setArticles,
-  };
-
   return userIsLogged && user !== null ? (
-    <AppContext.Provider value={contextValue}>
+    <div>
       {" "}
       <div>
         <M onClick={() => handle()}>
@@ -98,12 +91,16 @@ const App: FunctionComponent = () => {
             setUserIsLogged={setUserIsLogged}
             articles={articles}
             setArticles={setArticles}
+            inventaires={inventaires}
+            setInventaires={setInventaires}
+            historiques={historiques}
+            setHistoriques={setHistoriques}
           />
         </Pages>
       </div>
-    </AppContext.Provider>
+    </div>
   ) : (
-    <AppContext.Provider value={contextValue}>
+    <div>
       <div>
         <M onClick={() => handle()}>
           <div></div>
@@ -119,10 +116,14 @@ const App: FunctionComponent = () => {
             setUserIsLogged={setUserIsLogged}
             articles={articles}
             setArticles={setArticles}
+            inventaires={inventaires}
+            setInventaires={setInventaires}
+            historiques={historiques}
+            setHistoriques={setHistoriques}
           />
         </Pages>
       </div>
-    </AppContext.Provider>
+    </div>
   );
 };
 

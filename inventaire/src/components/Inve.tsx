@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { Article, Inventaire } from "../helpers/Types";
+import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from "react";
+import { Article, Historique, Inventaire } from "../helpers/Types";
 import InventaireFireService from "../helpers/InventaireFire";
 import ArticleFireService from "../helpers/ArticleFire";
 
@@ -7,6 +7,12 @@ type Props = {
   //define your props here
   id: number;
   id_hist: number;
+  articles: Article[];
+  setArticles: Dispatch<SetStateAction<Article[]>>;
+  inventaires: Inventaire[];
+  setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
+  historiques: Historique[];
+  setHistoriques: Dispatch<SetStateAction<Historique[]>>;
 };
 const Inve: FunctionComponent<Props> = ({ id, id_hist }) => {
   const [article, setArticleState] = useState<Article>();
@@ -69,8 +75,10 @@ const Inve: FunctionComponent<Props> = ({ id, id_hist }) => {
         stock &&
         article.prix_vente !== undefined &&
         article.prix_achat !== undefined
-          ? (-stock.stock_depart - stock.stock_achat) * -1 * article.prix_achat -
-          article.prix_achat * stock.stock_restant
+          ? (-stock.stock_depart - stock.stock_achat) *
+              -1 *
+              article.prix_achat -
+            article.prix_achat * stock.stock_restant
           : "Bénéfice"}
       </td>
     </>

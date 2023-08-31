@@ -1,7 +1,10 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import ArticleFireService from "../helpers/ArticleFire";
+import React, {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+} from "react";
 import { styled } from "styled-components";
-import { Article } from "../helpers/Types";
+import { Article, Historique, Inventaire } from "../helpers/Types";
 import Inve from "../components/Inve";
 
 const Container = styled.div`
@@ -65,14 +68,23 @@ type Props = {
   //define your props here
 
   id_hist: number;
+  articles: Article[];
+  setArticles: Dispatch<SetStateAction<Article[]>>;
+  inventaires: Inventaire[];
+  setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
+  historiques: Historique[];
+  setHistoriques: Dispatch<SetStateAction<Historique[]>>;
 };
 
-const Doc: FunctionComponent<Props> = ({ id_hist }) => {
-  const [articles, setArticles] = useState<Article[]>([]);
-  useEffect(() => {
-    ArticleFireService.getArticles().then((articles) => setArticles(articles));
-  }, []);
-
+const Doc: FunctionComponent<Props> = ({
+  id_hist,
+  articles,
+  setArticles,
+  setInventaires,
+  inventaires,
+  historiques,
+  setHistoriques,
+}) => {
   return (
     <Container>
       <div>
@@ -102,7 +114,16 @@ const Doc: FunctionComponent<Props> = ({ id_hist }) => {
                 <td>{item.nom}</td>
                 <td>{item.prix_achat}</td>
                 <td>{item.prix_vente}</td>
-                <Inve id={item.id} id_hist={id_hist} />
+                <Inve
+                  id={item.id}
+                  id_hist={id_hist}
+                  articles={articles}
+                  setArticles={setArticles}
+                  inventaires={inventaires}
+                  setInventaires={setInventaires}
+                  historiques={historiques}
+                  setHistoriques={setHistoriques}
+                />
               </tr>
             ))}
           </tbody>

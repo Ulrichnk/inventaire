@@ -5,7 +5,7 @@ import React, {
   useState,
 } from "react";
 import { styled } from "styled-components";
-import { Article, User } from "../helpers/Types";
+import { Article, Historique, Inventaire, User } from "../helpers/Types";
 import { Dispatch, SetStateAction } from "react";
 import Inv from "../components/Inv";
 import { AppContext } from "../App";
@@ -68,14 +68,22 @@ type Props = {
   articles: Article[];
   setArticles: Dispatch<SetStateAction<Article[]>>;
   id_hist?: number;
+  inventaires:Inventaire[];
+  setInventaires:Dispatch<SetStateAction<Inventaire[]>>;
+  historiques:Historique[];
+  setHistoriques:Dispatch<SetStateAction<Historique[]>>;
 };
 
-const Inventaire: FunctionComponent<Props> = ({
+const InventairePages: FunctionComponent<Props> = ({
   user,
   setUser,
   setUserIslogged,
   articles,
   setArticles,
+  setInventaires,
+  inventaires,
+  historiques,
+  setHistoriques,
   id_hist,
 }) => {
   const [state, setState] = useState<boolean>(false);
@@ -221,4 +229,4 @@ const Inventaire: FunctionComponent<Props> = ({
   );
 };
 
-export default Inventaire;
+export default InventairePages;

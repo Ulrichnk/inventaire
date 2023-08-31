@@ -3,9 +3,9 @@ import { Dispatch, SetStateAction } from "react";
 import { Route, Routes } from "react-router-dom";
 import Accueil from "../../pages/Accueil";
 import Log from "../../pages/Log";
-import { Article, User } from "../../helpers/Types";
+import { Article, Historique, Inventaire, User } from "../../helpers/Types";
 import Achat from "../../pages/Achat";
-import Inventaire from "../../pages/Inventaire";
+import InventairePages from "../../pages/Inventaire";
 import Gestion from "../../pages/Gestion";
 import Essai from "../../Essai";
 import Inconnu from "../../pages/inconnu";
@@ -18,6 +18,10 @@ type Props = {
   setUserIsLogged: Dispatch<SetStateAction<boolean>>;
   articles: Article[];
   setArticles: Dispatch<SetStateAction<Article[]>>;
+  inventaires: Inventaire[];
+  setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
+  historiques: Historique[];
+  setHistoriques: Dispatch<SetStateAction<Historique[]>>;
 };
 
 const AllPages: FunctionComponent<Props> = ({
@@ -27,6 +31,10 @@ const AllPages: FunctionComponent<Props> = ({
   setUserIsLogged,
   articles,
   setArticles,
+  inventaires,
+  historiques,
+  setInventaires,
+  setHistoriques,
 }) => {
   return userIsLogged ? (
     <>
@@ -48,18 +56,34 @@ const AllPages: FunctionComponent<Props> = ({
         <Route
           path="/inventaire"
           element={
-            <Inventaire
+            <InventairePages
               user={user}
               setUser={setUser}
               setUserIslogged={setUserIsLogged}
               articles={articles}
               setArticles={setArticles}
+              inventaires={inventaires}
+              setInventaires={setInventaires}
+              historiques={historiques}
+              setHistoriques={setHistoriques}
             />
           }
         />
         <Route path="/enregistrement-vente" element={<Achat />} />
         <Route path="/historiques" element={<Historiques />} />
-        <Route path="/historiques/:id" element={<HistoriqueDetail />} />
+        <Route
+          path="/historiques/:id"
+          element={
+            <HistoriqueDetail
+              articles={articles}
+              setArticles={setArticles}
+              inventaires={inventaires}
+              setInventaires={setInventaires}
+              historiques={historiques}
+              setHistoriques={setHistoriques}
+            />
+          }
+        />
         <Route path="*" element={<Inconnu />} />
       </Routes>
     </>
@@ -81,12 +105,16 @@ const AllPages: FunctionComponent<Props> = ({
         <Route
           path="/inventaire"
           element={
-            <Inventaire
+            <InventairePages
               user={user}
               setUser={setUser}
               setUserIslogged={setUserIsLogged}
               articles={articles}
               setArticles={setArticles}
+              inventaires={inventaires}
+              setInventaires={setInventaires}
+              historiques={historiques}
+              setHistoriques={setHistoriques}
             />
           }
         />

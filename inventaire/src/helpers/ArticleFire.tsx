@@ -88,7 +88,7 @@ export default class ArticleFireService {
   static async updateArticle(article: Article): Promise<Article> {
     if (this.isDev()) {
       try {
-        const docRef = doc(db, "articles", article.id.toString());
+        const docRef = doc(db, "articles");
         await setDoc(docRef, article);
 
         return article;
