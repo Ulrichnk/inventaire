@@ -5,12 +5,12 @@ import React, {
   useState,
 } from "react";
 import { styled } from "styled-components";
-import { Achat, Article, formatDate } from "../helpers/Types";
+import { Vente, Article, formatDate } from "../helpers/Types";
 import localServices from "../helpers/LocalService";
 
 type Props = {
-  achats: Achat[];
-  setAchats: Dispatch<SetStateAction<Achat[]>>;
+  ventes: Vente[];
+  setVentes: Dispatch<SetStateAction<Vente[]>>;
 
   //define your props here
   articles: Article[];
@@ -79,16 +79,16 @@ const Search = styled.div`
   }
 `;
 
-const Achatpages: FunctionComponent<Props> = ({
+const Ventepages: FunctionComponent<Props> = ({
   articles,
   setArticles,
-  achats,
-  setAchats,
+  ventes,
+  setVentes,
 }) => {
   const [term, setTerm] = useState<string>("");
   const [a, setA] = useState<Article[]>([]);
   const [search, setSearch] = useState<boolean>(false);
-  const [achat, setAchat] = useState<number[]>(Array(articles.length).fill(0));
+  const [vente, setVente] = useState<number[]>(Array(articles.length).fill(0));
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
@@ -110,9 +110,9 @@ const Achatpages: FunctionComponent<Props> = ({
   };
 
   const handle = (id: number) => {
-    console.log("achat enregistrer");
+    console.log("vente enregistrer");
     localServices
-      .addAchat(id, achat[id], formatDate(new Date()), setAchats)
+      .addVente(id, vente[id], formatDate(new Date()), setVentes)
       .then((res) => {
         if (res) {
           console.log("vous avez reussi a enregistrer", res);
@@ -126,7 +126,7 @@ const Achatpages: FunctionComponent<Props> = ({
     <Cont>
       <Acc>
         <div>
-          <h1>Vous Pouvez enregistrer de nouveaux achats </h1>
+          <h1>Vous Pouvez enregistrer de nouvelles ventes </h1>
           <Search>
             <input
               type="text"
@@ -140,9 +140,9 @@ const Achatpages: FunctionComponent<Props> = ({
                   <tr>
                     <th>ID</th>
                     <th>Nom</th>
-                    <th>Prix d'achat</th>
+                    <th>Prix d'vente</th>
                     <th>Prix de vente</th>
-                    <th>Valeur de l'achat</th>
+                    <th>Valeur de l'vente</th>
                     <th>Valider</th>
                   </tr>
                 </thead>
@@ -151,21 +151,21 @@ const Achatpages: FunctionComponent<Props> = ({
                     <tr key={item.id}>
                       <td>{item.id}</td>
                       <td>{item.nom}</td>
-                      <td>{item.prix_achat}</td>
+                      <td>{item.prix_vente}</td>
                       <td>{item.prix_vente}</td>
                       <td>
                         <input
-                          value={achat[item.id]}
-                          name="valeur_achat"
+                          value={vente[item.id]}
+                          name="valeur_vente"
                           className="input"
-                          placeholder="valeur de l'achat "
+                          placeholder="valeur de l'vente "
                           type="text"
                           style={{ width: "100px" }}
                           onChange={(e) => {
                             const newValue = parseFloat(e.target.value);
-                            // Mettre à jour le tableau achat avec la nouvelle valeur
-                            setAchat((prevAchat) => ({
-                              ...prevAchat,
+                            // Mettre à jour le tableau vente avec la nouvelle valeur
+                            setVente((prevVente) => ({
+                              ...prevVente,
                               [item.id]: isNaN(newValue) ? 0 : newValue, // Assurez-vous que c'est un nombre ou 0 par défaut
                             }));
                           }}
@@ -190,9 +190,9 @@ const Achatpages: FunctionComponent<Props> = ({
               <tr>
                 <th>ID</th>
                 <th>Nom</th>
-                <th>Prix d'achat</th>
+                <th>Prix d'vente</th>
                 <th>Prix de vente</th>
-                <th>Valeur de l'achat</th>
+                <th>Valeur de l'vente</th>
                 <th>Valider</th>
               </tr>
             </thead>
@@ -201,20 +201,20 @@ const Achatpages: FunctionComponent<Props> = ({
                 <tr key={item.id}>
                   <td>{item.id}</td>
                   <td>{item.nom}</td>
-                  <td>{item.prix_achat}</td>
+                  <td>{item.prix_vente}</td>
                   <td>{item.prix_vente}</td>
                   <td>
                     <input
-                      value={achat[item.id]}
-                      name="valeur_achat"
+                      value={vente[item.id]}
+                      name="valeur_vente"
                       className="input"
-                      placeholder="valeur de l'achat "
+                      placeholder="valeur de l'vente "
                       type="text"
                       onChange={(e) => {
                         const newValue = parseFloat(e.target.value);
-                        // Mettre à jour le tableau achat avec la nouvelle valeur
-                        setAchat((prevAchat) => ({
-                          ...prevAchat,
+                        // Mettre à jour le tableau vente avec la nouvelle valeur
+                        setVente((prevVente) => ({
+                          ...prevVente,
                           [item.id]: isNaN(newValue) ? 0 : newValue, // Assurez-vous que c'est un nombre ou 0 par défaut
                         }));
                       }}
@@ -235,4 +235,4 @@ const Achatpages: FunctionComponent<Props> = ({
   );
 };
 
-export default Achatpages;
+export default Ventepages;

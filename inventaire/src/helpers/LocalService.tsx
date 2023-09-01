@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Achat, Article, Historique, Inventaire } from "./Types";
+import { Achat, Article, Historique, Inventaire, Vente } from "./Types";
 import {
   deleteDoc,
   addDoc,
@@ -256,14 +256,11 @@ export default class localServices {
   ): Promise<Achat | null> {
     try {
       const achatsRef = collection(db, "achats");
-
       // Obtenir la taille actuelle de la collection achats
       const achatsQuerySnapshot = await getDocs(achatsRef);
       const achatSize = achatsQuerySnapshot.size;
-
       // Générer un nouvel ID pour l'achat
       const newAchatId = achatSize + 1;
-
       // Créer un nouvel achat
       const newAchat: Achat = {
         id_article: id_article,
@@ -271,19 +268,38 @@ export default class localServices {
         valeur_achat: valeur_achat,
         date_ajout: date_ajout,
       };
-
       // Mettre à jour localement les achats
       setAchats((prevAchats) => [...prevAchats, newAchat]);
-
       // Ajouter le nouvel achat à la collection avec le nouvel ID dans Firestore
       await addDoc(achatsRef, newAchat);
-
       return newAchat;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
+
+  static async getAchatByIdBydate(
+    id_article: number,
+    date: string,
+    achats: Achat[]
+  ): Promise<Achat[] | null> {
+    try {
+      const lowerCaseDateDebut = date.toLowerCase(); // Convertir la date de début en minuscules
+
+      const achatsTrouve: Achat[] = achats.filter(
+        (art) =>
+          art.date_ajout.toLowerCase() === lowerCaseDateDebut &&
+          art.id_article === id_article
+      );
+
+      return achatsTrouve;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   static async getAchats(): Promise<Achat[]> {
     try {
       const achatsRef = collection(db, "achats");
@@ -300,6 +316,80 @@ export default class localServices {
       });
 
       return achats;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  static async addVente(
+    id_article: number,
+    valeur_vente: number,
+    date_vente: string,
+    setVentes: Dispatch<SetStateAction<Vente[]>>
+  ): Promise<Vente | null> {
+    try {
+      const ventesRef = collection(db, "ventes");
+      // Obtenir la taille actuelle de la collection ventes
+      const ventesQuerySnapshot = await getDocs(ventesRef);
+      const venteSize = ventesQuerySnapshot.size;
+      // Générer un nouvel ID pour la vente
+      const newVenteId = venteSize + 1;
+      // Créer une nouvelle vente
+      const newVente: Vente = {
+        id_article: id_article,
+        id: newVenteId,
+        valeur_vente: valeur_vente,
+        date_vente: date_vente,
+      };
+      // Mettre à jour localement les ventes
+      setVentes((prevVentes) => [...prevVentes, newVente]);
+      // Ajouter la nouvelle vente à la collection avec le nouvel ID dans Firestore
+      await addDoc(ventesRef, newVente);
+      return newVente;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  static async getVenteByIdByDate(
+    id_article: number,
+    date: string,
+    ventes: Vente[]
+  ): Promise<Vente[] | null> {
+    try {
+      const lowerCaseDate = date.toLowerCase(); // Convertir la date en minuscules
+
+      const ventesTrouvees: Vente[] = ventes.filter(
+        (vente) =>
+          vente.date_vente.toLowerCase() === lowerCaseDate &&
+          vente.id_article === id_article
+      );
+
+      return ventesTrouvees;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  static async getVentes(): Promise<Vente[]> {
+    try {
+      const ventesRef = collection(db, "ventes");
+      const querySnapshot = await getDocs(ventesRef);
+
+      const ventes: Vente[] = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id_article: data.id_article,
+          id: data.id,
+          valeur_vente: data.valeur_vente,
+          date_vente: data.date_vente,
+        };
+      });
+
+      return ventes;
     } catch (error) {
       console.error(error);
       throw error;

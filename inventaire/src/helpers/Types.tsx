@@ -98,3 +98,9 @@ export type Achat={
   valeur_achat:number,
   date_ajout:string
 }
+export type Vente={
+  id:number,
+  id_article:number,
+  valeur_vente:number,
+  date_vente:string
+}

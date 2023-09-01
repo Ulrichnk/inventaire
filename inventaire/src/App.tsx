@@ -11,10 +11,9 @@ import { Article, Lambda, Roger, User } from "./helpers/Types";
 import useDonnee from "./helpers/useDonnee";
 
 const Pages = styled.div`
-  
   background-color: rgb(255, 230, 221);
   min-height: 100vh;
-  
+
   & table {
     width: 100px;
   }
@@ -58,6 +57,8 @@ const App: FunctionComponent = () => {
     setArticles,
     achats,
     setAchats,
+    ventes,
+    setVentes,
   } = useDonnee(state);
 
   const handle = () => {
@@ -96,6 +97,8 @@ const App: FunctionComponent = () => {
             setHistoriques={setHistoriques}
             achats={achats}
             setAchats={setAchats}
+            ventes={ventes}
+            setVentes={setVentes}
           />
         </Pages>
       </div>
@@ -123,6 +126,8 @@ const App: FunctionComponent = () => {
             setHistoriques={setHistoriques}
             achats={achats}
             setAchats={setAchats}
+            ventes={ventes}
+            setVentes={setVentes}
           />
         </Pages>
       </div>

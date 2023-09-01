@@ -9,6 +9,7 @@ import {
   Historique,
   Inventaire,
   User,
+  Vente,
 } from "../../helpers/Types";
 import Achatpages from "../../pages/Achat";
 import InventairePages from "../../pages/Inventaire";
@@ -18,6 +19,7 @@ import Inconnu from "../../pages/inconnu";
 import Historiques from "../../pages/Historiques";
 import HistoriqueDetail from "../../pages/HistoriqueDetail";
 import UpdateArticle from "../../pages/UpdateArticle";
+import Ventepages from "../../pages/Ventepages";
 type Props = {
   userIsLogged: Boolean;
   user: User | null;
@@ -31,6 +33,8 @@ type Props = {
   setHistoriques: Dispatch<SetStateAction<Historique[]>>;
   achats: Achat[];
   setAchats: Dispatch<SetStateAction<Achat[]>>;
+  ventes: Vente[]; // Remplacez "achats" par "ventes"
+  setVentes: React.Dispatch<React.SetStateAction<Vente[]>>; // Remplacez "achats" par "ventes"
 };
 
 const AllPages: FunctionComponent<Props> = ({
@@ -46,12 +50,14 @@ const AllPages: FunctionComponent<Props> = ({
   setHistoriques,
   achats,
   setAchats,
+  ventes,
+  setVentes,
 }) => {
   return userIsLogged ? (
     <>
       <Routes>
         <Route path="/" element={<Accueil />} />
-        <Route path="/essai" element={<Essai />} />
+        <Route path="/essai" element={<Essai articles={articles} />} />
         <Route
           path="/gestion-articles"
           element={
@@ -81,7 +87,19 @@ const AllPages: FunctionComponent<Props> = ({
           }
         />
         <Route
-          path="/enregistrement-vente"
+          path="/enregistrement-ventes" // Remplacez le chemin pour refléter "ventes" au lieu d'"achats"
+          element={
+            <Ventepages
+              articles={articles}
+              setArticles={setArticles}
+              ventes={ventes} // Remplacez "achats" par "ventes"
+              setVentes={setVentes} // Remplacez "achats" par "ventes"
+            />
+          }
+        />
+
+        <Route
+          path="/enregistrement-achats"
           element={
             <Achatpages
               articles={articles}
@@ -120,7 +138,7 @@ const AllPages: FunctionComponent<Props> = ({
   ) : (
     <>
       <Routes>
-        <Route path="/essai" element={<Essai />} />
+        <Route path="/essai" element={<Essai articles={articles} />} />
         <Route path="/" element={<Accueil />} />
         <Route
           path="/log"

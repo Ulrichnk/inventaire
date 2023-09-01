@@ -12,15 +12,7 @@ type Form = {
   prix_vente: Field<number>;
   id: Field<number>;
 };
-// type Forma={
-//   nom: Field<string>;
-//   prix_achat: Field<number>;
-//   prix_vente: Field<number>;
-//   id: Field<number>;
-//   stock_achat: Field<number>;
-//   stock_restant: Field<number>;
 
-// }
 type Props = {
   //define your props here
   Form:Form,

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Achat, Article, Historique, Inventaire } from "./Types";
+import { Achat, Article, Historique, Inventaire, Vente } from "./Types";
 import ArticleFireService from "./ArticleFire";
 import InventaireFireService from "./InventaireFire";
 import localServices from "./LocalService";
@@ -14,6 +14,8 @@ type retour = {
   setInventaires: React.Dispatch<React.SetStateAction<Inventaire[]>>;
   achats: Achat[];
   setAchats: React.Dispatch<React.SetStateAction<Achat[]>>;
+  ventes: Vente[]; // Remplacez "achats" par "ventes"
+  setVentes: React.Dispatch<React.SetStateAction<Vente[]>>; // Remplacez "achats" par "ventes"
 };
 
 const useDonnee = (state: boolean): retour => {
@@ -21,6 +23,7 @@ const useDonnee = (state: boolean): retour => {
   const [historiques, setHistoriques] = useState<Historique[]>([]);
   const [inventaires, setInventaires] = useState<Inventaire[]>([]);
   const [achats, setAchats] = useState<Achat[]>([]);
+  const [ventes, setVentes] = useState<Vente[]>([]);
 
   useEffect(() => {
     ArticleFireService.getArticles().then((articles) => {
@@ -38,6 +41,10 @@ const useDonnee = (state: boolean): retour => {
     localServices.getAchats().then((res) => {
       setAchats(res);
     });
+
+    localServices.getVentes().then((res) => {
+      setVentes(res);
+    });
   }, [state]);
 
   return {
@@ -49,6 +56,8 @@ const useDonnee = (state: boolean): retour => {
     setInventaires,
     achats,
     setAchats,
+    ventes,
+    setVentes,
   };
 };
 
