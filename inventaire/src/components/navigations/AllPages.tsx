@@ -17,6 +17,7 @@ import Essai from "../../Essai";
 import Inconnu from "../../pages/inconnu";
 import Historiques from "../../pages/Historiques";
 import HistoriqueDetail from "../../pages/HistoriqueDetail";
+import UpdateArticle from "../../pages/UpdateArticle";
 type Props = {
   userIsLogged: Boolean;
   user: User | null;
@@ -105,6 +106,12 @@ const AllPages: FunctionComponent<Props> = ({
               historiques={historiques}
               setHistoriques={setHistoriques}
             />
+          }
+        />
+        <Route
+          path="/modifier/article/:id"
+          element={
+            <UpdateArticle articles={articles} setArticles={setArticles} />
           }
         />
         <Route path="*" element={<Inconnu />} />

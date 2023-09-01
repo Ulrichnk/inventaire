@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
 import { Achat, Article, Historique, Inventaire } from "./Types";
 import {
-  doc,
-  setDoc,
   deleteDoc,
   addDoc,
   collection,
   getDocs,
+  query,
+  where,
 } from "firebase/firestore"; // Import des fonctions Firestore nécessaires
 import { db } from "./firebase-config";
 
@@ -28,22 +28,30 @@ export default class localServices {
 
   static async updateArticle(
     article: Article,
+    articles: Article[],
     setArticles: Dispatch<SetStateAction<Article[]>>
   ): Promise<boolean> {
     try {
-      const docRef = doc(db, "articles");
-      await setDoc(docRef, article);
-      setArticles((prevArticles) => {
-        const updatedArticles = prevArticles.map((art) =>
-          art.id === article.id ? article : art
-        );
-        return updatedArticles;
-      });
-
-      return true;
+      //on supprime l'article
+      const id = article.id;
+      const modifiedArticle = { ...article };
+      modifiedArticle.created_at = new Date(article.created_at);
+      const a = await this.deleteArticle(article.id, articles, setArticles);
+      const articlesRef = collection(db, "articles");
+      const newArticleData = {
+        ...modifiedArticle,
+        id: id,
+      };
+      await addDoc(articlesRef, newArticleData);
+      // Mettre à jour localement les articles
+      if (typeof a !== "boolean") {
+        setArticles((prevArticles) => [...prevArticles, modifiedArticle]); // Met à jour l'état local des articles en remplaçant l'article mis à jour
+        return true; // Indique que la mise à jour a réussi
+      }
+      return false;
     } catch (error) {
       this.handleError(error as Error);
-      return false;
+      return false; // Indique que la mise à jour a échoué
     }
   }
 
@@ -51,22 +59,26 @@ export default class localServices {
     id: number,
     articles: Article[],
     setArticles: Dispatch<SetStateAction<Article[]>>
-  ): Promise<boolean> {
+  ): Promise<Article[] | boolean> {
     try {
-      const querySnapshot = await getDocs(collection(db, "articles"));
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.id === id) {
-          deleteDoc(doc.ref);
-        }
+      // Recherche l'article dans Firestore
+      const q = query(collection(db, "articles"), where("id", "==", id));
+      const querySnapshot = await getDocs(q);
+
+      // Supprime l'article s'il existe
+      querySnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
       });
+
+      // Met à jour l'état local en supprimant l'article
+      const updatedArticles = articles.filter((art) => art.id !== id);
+      setArticles(updatedArticles);
+
+      return updatedArticles; // Renvoie la nouvelle liste d'articles après la suppression
     } catch (error) {
-      this.handleError(error as Error);
-      return false;
+      console.error("Erreur lors de la suppression de l'article :", error);
+      return false; // Indique que la suppression a échoué
     }
-    const copy = { ...articles };
-    setArticles(copy.filter((art) => art.id !== id));
-    return true;
   }
 
   static async addArticle(
@@ -103,7 +115,7 @@ export default class localServices {
     const results = articles.filter(
       (art) => art.nom?.toLowerCase().includes(lowerCaseTerm) // Convertir le nom en minuscules
     );
-    
+
     return results;
   }
 
@@ -274,9 +286,9 @@ export default class localServices {
   }
   static async getAchats(): Promise<Achat[]> {
     try {
-      const achatsRef = collection(db, 'achats');
+      const achatsRef = collection(db, "achats");
       const querySnapshot = await getDocs(achatsRef);
-  
+
       const achats: Achat[] = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         return {
@@ -286,15 +298,14 @@ export default class localServices {
           date_ajout: data.date_ajout,
         };
       });
-  
+
       return achats;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
-  
-  
+
   static isEmpty(data: Object): boolean {
     return Object.keys(data).length === 0;
   }

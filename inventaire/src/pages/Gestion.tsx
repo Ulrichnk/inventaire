@@ -4,6 +4,7 @@ import { Article, User } from "../helpers/Types";
 import { styled } from "styled-components";
 import Input from "../components/Input";
 import localServices from "../helpers/LocalService";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   //define your props here
@@ -78,7 +79,7 @@ const Container = styled.div`
     margin: 20px;
   }
 `;
-const Cont = styled.div`
+export const Cont = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -118,6 +119,9 @@ const Acc = styled.div`
       padding: 10px 20px;
     }
   }
+  & table {
+    margin-top: 30px;
+  }
 
   & h1 {
     color: orange;
@@ -126,7 +130,7 @@ const Acc = styled.div`
 
 const Search = styled.div`
   & input {
-    width: 40%;
+   min-width: 40%;
     height: 40px;
     outline: solid 2px orange;
     border-radius: 15px;
@@ -149,8 +153,7 @@ const Gestion: FunctionComponent<Props> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);
-    articles.sort((a, b) => a.nom.localeCompare(b.nom));
-    a.sort((a, b) => a.nom.localeCompare(b.nom));
+    setSearch(true);
 
     if (term.length <= 1) {
       setA([]);
@@ -158,17 +161,27 @@ const Gestion: FunctionComponent<Props> = ({
       return;
     }
     setSearch(true);
-    setA(localServices.searchArticle(term, articles));
-    console.log(a);
+    setA(
+      localServices
+        .searchArticle(term, articles)
+        .sort((a, b) => a.nom.localeCompare(b.nom))
+    );
+    console.log(localServices.searchArticle(term, articles));
   };
   const handle = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: number
   ): void => {
-    localServices.deleteArticle(id, articles, setArticles).then((res) => {
-      localServices.getArticles().then((articles) => {
-        setArticles(articles);
-      });
+    localServices.deleteArticle(id, articles, setArticles).then((articles) => {
+      if (typeof articles !== "boolean") {
+        // La suppression a réussi, donc result est la nouvelle liste d'articles
+        const up = [...articles];
+        up.sort((a, b) => a.nom.localeCompare(b.nom));
+        setArticles(up);
+      } else {
+        // La suppression a échoué, vous pouvez gérer l'erreur ici si nécessaire
+        console.error("La suppression de l'article a échoué.");
+      }
     });
     console.log(e);
   };
@@ -213,7 +226,9 @@ const Gestion: FunctionComponent<Props> = ({
       localServices.addArticle(a, setArticles).then((res) => {
         if (res) {
           localServices.getArticles().then((articles) => {
-            setArticles(articles);
+            const up = [...articles];
+            up.sort((a, b) => a.nom.localeCompare(b.nom));
+            setArticles(up);
           });
         }
       });
@@ -240,6 +255,11 @@ const Gestion: FunctionComponent<Props> = ({
     } else {
       alert("veuillez remplir tous les champs !");
     }
+  };
+  const navigate = useNavigate();
+  const update = (id: number): void => {
+    console.log("modifier");
+    navigate(`/modifier/article/${id}`);
   };
 
   return (
@@ -273,10 +293,49 @@ const Gestion: FunctionComponent<Props> = ({
             value={term}
             onChange={(e) => handleInputChange(e)}
           />
+          {search ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nom</th>
+                  <th>Prix d'achat</th>
+                  <th>Prix de vente</th>
+                  <th>Suppression</th>
+                  <th>Modifier</th>
+                </tr>
+              </thead>
+              <tbody>
+                {a.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.nom}</td>
+                    <td>{item.prix_achat}</td>
+                    <td>{item.prix_vente}</td>
+                    <td>
+                      <button
+                        onClick={(e) => {
+                          handle(e, item.id);
+                        }}
+                      >
+                        X
+                      </button>
+                    </td>
+                    <td>
+                      <button onClick={(e) => update(item.id)}>Modifier</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <></>
+          )}
         </Search>
+
         <div>
           <br />
-          <table>
+          <table className="real">
             <thead>
               <tr>
                 <th>ID</th>
@@ -284,44 +343,30 @@ const Gestion: FunctionComponent<Props> = ({
                 <th>Prix d'achat</th>
                 <th>Prix de vente</th>
                 <th>Suppression</th>
+                <th>Modifier</th>
               </tr>
             </thead>
             <tbody>
-              {search
-                ? a.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nom}</td>
-                      <td>{item.prix_achat}</td>
-                      <td>{item.prix_vente}</td>
-                      <td>
-                        <button
-                          onClick={(e) => {
-                            handle(e, item.id);
-                          }}
-                        >
-                          X
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                : articles.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nom}</td>
-                      <td>{item.prix_achat}</td>
-                      <td>{item.prix_vente}</td>
-                      <td>
-                        <button
-                          onClick={(e) => {
-                            handle(e, item.id);
-                          }}
-                        >
-                          X
-                        </button>{" "}
-                      </td>
-                    </tr>
-                  ))}
+              {articles.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.id}</td>
+                  <td>{item.nom}</td>
+                  <td>{item.prix_achat}</td>
+                  <td>{item.prix_vente}</td>
+                  <td>
+                    <button
+                      onClick={(e) => {
+                        handle(e, item.id);
+                      }}
+                    >
+                      X
+                    </button>
+                  </td>
+                  <td>
+                    <button onClick={(e) => update(item.id)}>Modifier</button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

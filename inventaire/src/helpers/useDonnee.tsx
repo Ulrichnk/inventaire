@@ -24,7 +24,7 @@ const useDonnee = (state: boolean): retour => {
 
   useEffect(() => {
     ArticleFireService.getArticles().then((articles) => {
-      setArticles(articles);
+      setArticles(articles.sort((a, b) => a.nom.localeCompare(b.nom)));
     });
 
     InventaireFireService.getHistoriques().then((res) => {

@@ -8,7 +8,7 @@ import localServices from "../helpers/LocalService";
 
 const Search = styled.div`
   & input {
-    width: 40%;
+    min-width: 40%;
     height: 40px;
     outline: solid 2px orange;
     border-radius: 15px;
@@ -47,6 +47,9 @@ export const Container = styled.div`
     font-size: 1em;
     border: none;
     outline: none;
+  }
+  & table {
+    margin-top: 30px;
   }
 
   & button {
@@ -169,14 +172,6 @@ const InventairePages: FunctionComponent<Props> = ({
 
   return (
     <Container>
-      <Search>
-        <input
-          type="text"
-          placeholder="Rechercher un article"
-          value={term}
-          onChange={(e) => handleInput(e)}
-        />
-      </Search>
       <div>
         <h1>
           Faire un inventaire Monsieur{" "}
@@ -209,6 +204,79 @@ const InventairePages: FunctionComponent<Props> = ({
           >
             Valider
           </button>
+          <Search>
+            <input
+              type="text"
+              placeholder="Rechercher un article"
+              value={term}
+              onChange={(e) => handleInput(e)}
+            />
+            {search ? (
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prix d'achat</th>
+                    <th>Prix de vente</th>
+                    <th>Stock de départ</th>
+                    <th>Stock acheter</th>
+                    <th>Stock total</th>
+                    <th>Valeur stock acheter</th>
+                    <th>Valeur stock départ</th>
+                    <th>Valeur stock total</th>
+                    <th>Stock restant</th>
+                    <th>Valeur stock restant</th>
+                    <th>Bénéfice attendu</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {change
+                    ? a.map((item) => (
+                        <tr key={item.id}>
+                          <td>{item.id}</td>
+                          <td>{item.nom}</td>
+                          <td>{item.prix_achat}</td>
+                          <td>{item.prix_vente}</td>
+                          <Inv
+                            id={item.id}
+                            state={state}
+                            id_historique={id_historique}
+                            historiques={historiques}
+                            setInventaires={setInventaires}
+                            inventaires={inventaires}
+                            setHistoriques={setHistoriques}
+                            articles={articles}
+                            setArticles={setArticles}
+                          />
+                        </tr>
+                      ))
+                    : a.map((item) => (
+                        <tr key={item.id}>
+                          <td>{item.id}</td>
+                          <td>{item.nom}</td>
+                          <td>{item.prix_achat}</td>
+                          <td>{item.prix_vente}</td>
+                          <Inv
+                            id={item.id}
+                            duree={duree}
+                            state={state}
+                            id_historique={id_historique}
+                            historiques={historiques}
+                            setInventaires={setInventaires}
+                            inventaires={inventaires}
+                            setHistoriques={setHistoriques}
+                            articles={articles}
+                            setArticles={setArticles}
+                          />
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            ) : (
+              <></>
+            )}
+          </Search>
         </div>
         <table>
           <thead>
@@ -231,47 +299,7 @@ const InventairePages: FunctionComponent<Props> = ({
           <tbody>
             {/* <Input Form={Form} setForm={setForm} /> */}
             {change
-              ? search
-                ? a.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nom}</td>
-                      <td>{item.prix_achat}</td>
-                      <td>{item.prix_vente}</td>
-                      <Inv
-                        id={item.id}
-                        state={state}
-                        id_historique={id_historique}
-                        historiques={historiques}
-                        setInventaires={setInventaires}
-                        inventaires={inventaires}
-                        setHistoriques={setHistoriques}
-                        articles={articles}
-                        setArticles={setArticles}
-                      />
-                    </tr>
-                  ))
-                : articles.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nom}</td>
-                      <td>{item.prix_achat}</td>
-                      <td>{item.prix_vente}</td>
-                      <Inv
-                        id={item.id}
-                        state={state}
-                        id_historique={id_historique}
-                        historiques={historiques}
-                        setInventaires={setInventaires}
-                        inventaires={inventaires}
-                        setHistoriques={setHistoriques}
-                        articles={articles}
-                        setArticles={setArticles}
-                      />
-                    </tr>
-                  ))
-              : search
-              ? a.map((item) => (
+              ? articles.map((item) => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.nom}</td>
@@ -279,7 +307,6 @@ const InventairePages: FunctionComponent<Props> = ({
                     <td>{item.prix_vente}</td>
                     <Inv
                       id={item.id}
-                      duree={duree}
                       state={state}
                       id_historique={id_historique}
                       historiques={historiques}
