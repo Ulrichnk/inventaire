@@ -11,13 +11,10 @@ import { Article, Lambda, Roger, User } from "./helpers/Types";
 import useDonnee from "./helpers/useDonnee";
 
 const Pages = styled.div`
-  display: grid;
-  grid-template-columns: 0.2fr 1fr;
+  
   background-color: rgb(255, 230, 221);
   min-height: 100vh;
-  & .nav {
-    width: 300px;
-  }
+  
   & table {
     width: 100px;
   }

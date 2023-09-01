@@ -5,7 +5,10 @@ import { Dispatch, SetStateAction } from "react";
 import Inv from "../components/Inv";
 import { AppContext } from "../App";
 import localServices from "../helpers/LocalService";
-
+export const Cont = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 const Search = styled.div`
   & input {
     min-width: 40%;
@@ -171,178 +174,180 @@ const InventairePages: FunctionComponent<Props> = ({
   };
 
   return (
-    <Container>
-      <div>
-        <h1>
-          Faire un inventaire Monsieur{" "}
-          {contextValue ? contextValue.user.name : ""}
-        </h1>
-        <div className="date">
-          <p>Selectionner la date de vos comptes</p>
-          <label htmlFor="date_debut">date de début:</label>
-          <input
-            value={duree.date_debut.value}
-            name="date_debut"
-            onChange={(e) => handleInputChange(e)}
-            className="date-input "
-            placeholder="date de debut "
-            type="date"
-          />
-          <label htmlFor="date_fin">date de fin:</label>
-          <input
-            value={duree.date_fin.value}
-            name="date_fin"
-            onChange={(e) => handleInputChange(e)}
-            className="date-input"
-            placeholder="date de debut "
-            type="date"
-          />
-          <button
-            onClick={() => {
-              addHist();
-            }}
-          >
-            Valider
-          </button>
-          <Search>
+    <Cont>
+      <Container>
+        <div>
+          <h1>
+            Faire un inventaire Monsieur{" "}
+            {contextValue ? contextValue.user.name : ""}
+          </h1>
+          <div className="date">
+            <p>Selectionner la date de vos comptes</p>
+            <label htmlFor="date_debut">date de début:</label>
             <input
-              type="text"
-              placeholder="Rechercher un article"
-              value={term}
-              onChange={(e) => handleInput(e)}
+              value={duree.date_debut.value}
+              name="date_debut"
+              onChange={(e) => handleInputChange(e)}
+              className="date-input "
+              placeholder="date de debut "
+              type="date"
             />
-            {search ? (
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Prix d'achat</th>
-                    <th>Prix de vente</th>
-                    <th>Stock de départ</th>
-                    <th>Stock acheter</th>
-                    <th>Stock total</th>
-                    <th>Valeur stock acheter</th>
-                    <th>Valeur stock départ</th>
-                    <th>Valeur stock total</th>
-                    <th>Stock restant</th>
-                    <th>Valeur stock restant</th>
-                    <th>Bénéfice attendu</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {change
-                    ? a.map((item) => (
-                        <tr key={item.id}>
-                          <td>{item.id}</td>
-                          <td>{item.nom}</td>
-                          <td>{item.prix_achat}</td>
-                          <td>{item.prix_vente}</td>
-                          <Inv
-                            id={item.id}
-                            state={state}
-                            id_historique={id_historique}
-                            historiques={historiques}
-                            setInventaires={setInventaires}
-                            inventaires={inventaires}
-                            setHistoriques={setHistoriques}
-                            articles={articles}
-                            setArticles={setArticles}
-                          />
-                        </tr>
-                      ))
-                    : a.map((item) => (
-                        <tr key={item.id}>
-                          <td>{item.id}</td>
-                          <td>{item.nom}</td>
-                          <td>{item.prix_achat}</td>
-                          <td>{item.prix_vente}</td>
-                          <Inv
-                            id={item.id}
-                            duree={duree}
-                            state={state}
-                            id_historique={id_historique}
-                            historiques={historiques}
-                            setInventaires={setInventaires}
-                            inventaires={inventaires}
-                            setHistoriques={setHistoriques}
-                            articles={articles}
-                            setArticles={setArticles}
-                          />
-                        </tr>
-                      ))}
-                </tbody>
-              </table>
-            ) : (
-              <></>
-            )}
-          </Search>
+            <label htmlFor="date_fin">date de fin:</label>
+            <input
+              value={duree.date_fin.value}
+              name="date_fin"
+              onChange={(e) => handleInputChange(e)}
+              className="date-input"
+              placeholder="date de debut "
+              type="date"
+            />
+            <button
+              onClick={() => {
+                addHist();
+              }}
+            >
+              Valider
+            </button>
+            <Search>
+              <input
+                type="text"
+                placeholder="Rechercher un article"
+                value={term}
+                onChange={(e) => handleInput(e)}
+              />
+              {search ? (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nom</th>
+                      <th>Prix d'achat</th>
+                      <th>Prix de vente</th>
+                      <th>Stock de départ</th>
+                      <th>Stock acheter</th>
+                      <th>Stock total</th>
+                      <th>Valeur stock acheter</th>
+                      <th>Valeur stock départ</th>
+                      <th>Valeur stock total</th>
+                      <th>Stock restant</th>
+                      <th>Valeur stock restant</th>
+                      <th>Bénéfice attendu</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {change
+                      ? a.map((item) => (
+                          <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td>{item.nom}</td>
+                            <td>{item.prix_achat}</td>
+                            <td>{item.prix_vente}</td>
+                            <Inv
+                              id={item.id}
+                              state={state}
+                              id_historique={id_historique}
+                              historiques={historiques}
+                              setInventaires={setInventaires}
+                              inventaires={inventaires}
+                              setHistoriques={setHistoriques}
+                              articles={articles}
+                              setArticles={setArticles}
+                            />
+                          </tr>
+                        ))
+                      : a.map((item) => (
+                          <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td>{item.nom}</td>
+                            <td>{item.prix_achat}</td>
+                            <td>{item.prix_vente}</td>
+                            <Inv
+                              id={item.id}
+                              duree={duree}
+                              state={state}
+                              id_historique={id_historique}
+                              historiques={historiques}
+                              setInventaires={setInventaires}
+                              inventaires={inventaires}
+                              setHistoriques={setHistoriques}
+                              articles={articles}
+                              setArticles={setArticles}
+                            />
+                          </tr>
+                        ))}
+                  </tbody>
+                </table>
+              ) : (
+                <></>
+              )}
+            </Search>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prix d'achat</th>
+                <th>Prix de vente</th>
+                <th>Stock de départ</th>
+                <th>Stock acheter</th>
+                <th>Stock total</th>
+                <th>Valeur stock acheter</th>
+                <th>Valeur stock départ</th>
+                <th>Valeur stock total</th>
+                <th>Stock restant</th>
+                <th>Valeur stock restant</th>
+                <th>Bénéfice attendu</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* <Input Form={Form} setForm={setForm} /> */}
+              {change
+                ? articles.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nom}</td>
+                      <td>{item.prix_achat}</td>
+                      <td>{item.prix_vente}</td>
+                      <Inv
+                        id={item.id}
+                        state={state}
+                        id_historique={id_historique}
+                        historiques={historiques}
+                        setInventaires={setInventaires}
+                        inventaires={inventaires}
+                        setHistoriques={setHistoriques}
+                        articles={articles}
+                        setArticles={setArticles}
+                      />
+                    </tr>
+                  ))
+                : articles.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nom}</td>
+                      <td>{item.prix_achat}</td>
+                      <td>{item.prix_vente}</td>
+                      <Inv
+                        id={item.id}
+                        duree={duree}
+                        state={state}
+                        id_historique={id_historique}
+                        historiques={historiques}
+                        setInventaires={setInventaires}
+                        inventaires={inventaires}
+                        setHistoriques={setHistoriques}
+                        articles={articles}
+                        setArticles={setArticles}
+                      />
+                    </tr>
+                  ))}
+            </tbody>
+          </table>
+          <button onClick={HandleSubmit}>Valider l'inventaire</button>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nom</th>
-              <th>Prix d'achat</th>
-              <th>Prix de vente</th>
-              <th>Stock de départ</th>
-              <th>Stock acheter</th>
-              <th>Stock total</th>
-              <th>Valeur stock acheter</th>
-              <th>Valeur stock départ</th>
-              <th>Valeur stock total</th>
-              <th>Stock restant</th>
-              <th>Valeur stock restant</th>
-              <th>Bénéfice attendu</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* <Input Form={Form} setForm={setForm} /> */}
-            {change
-              ? articles.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.nom}</td>
-                    <td>{item.prix_achat}</td>
-                    <td>{item.prix_vente}</td>
-                    <Inv
-                      id={item.id}
-                      state={state}
-                      id_historique={id_historique}
-                      historiques={historiques}
-                      setInventaires={setInventaires}
-                      inventaires={inventaires}
-                      setHistoriques={setHistoriques}
-                      articles={articles}
-                      setArticles={setArticles}
-                    />
-                  </tr>
-                ))
-              : articles.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.nom}</td>
-                    <td>{item.prix_achat}</td>
-                    <td>{item.prix_vente}</td>
-                    <Inv
-                      id={item.id}
-                      duree={duree}
-                      state={state}
-                      id_historique={id_historique}
-                      historiques={historiques}
-                      setInventaires={setInventaires}
-                      inventaires={inventaires}
-                      setHistoriques={setHistoriques}
-                      articles={articles}
-                      setArticles={setArticles}
-                    />
-                  </tr>
-                ))}
-          </tbody>
-        </table>
-        <button onClick={HandleSubmit}>Valider l'inventaire</button>
-      </div>
-    </Container>
+      </Container>
+    </Cont>
   );
 };
 
