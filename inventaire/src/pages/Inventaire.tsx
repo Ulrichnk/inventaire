@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from "react";
 import { styled } from "styled-components";
-import { Article, Historique, Inventaire, User } from "../helpers/Types";
+import { Achat, Article, Historique, Inventaire, User, Vente } from "../helpers/Types";
 import { Dispatch, SetStateAction } from "react";
 import Inv from "../components/Inv";
 import { AppContext } from "../App";
@@ -83,6 +83,8 @@ type Props = {
   setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
   historiques: Historique[];
   setHistoriques: Dispatch<SetStateAction<Historique[]>>;
+  ventes:Vente[];
+  achats:Achat[];
 };
 
 const InventairePages: FunctionComponent<Props> = ({
@@ -96,6 +98,8 @@ const InventairePages: FunctionComponent<Props> = ({
   historiques,
   setHistoriques,
   id_hist,
+  ventes,
+  achats
 }) => {
   const [state, setState] = useState<boolean>(false);
   const contextValue = useContext(AppContext);
@@ -252,6 +256,8 @@ const InventairePages: FunctionComponent<Props> = ({
                               setHistoriques={setHistoriques}
                               articles={articles}
                               setArticles={setArticles}
+                              ventes={ventes}
+                              achats={achats}
                             />
                           </tr>
                         ))
@@ -272,6 +278,8 @@ const InventairePages: FunctionComponent<Props> = ({
                               setHistoriques={setHistoriques}
                               articles={articles}
                               setArticles={setArticles}
+                              ventes={ventes}
+                              achats={achats}
                             />
                           </tr>
                         ))}
@@ -319,6 +327,8 @@ const InventairePages: FunctionComponent<Props> = ({
                         setHistoriques={setHistoriques}
                         articles={articles}
                         setArticles={setArticles}
+                        ventes={ventes}
+                        achats={achats}
                       />
                     </tr>
                   ))
@@ -339,6 +349,8 @@ const InventairePages: FunctionComponent<Props> = ({
                         setHistoriques={setHistoriques}
                         articles={articles}
                         setArticles={setArticles}
+                        ventes={ventes}
+                        achats={achats}
                       />
                     </tr>
                   ))}

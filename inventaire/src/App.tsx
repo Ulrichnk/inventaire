@@ -67,6 +67,8 @@ const App: FunctionComponent = () => {
   };
 
   useEffect(() => {
+    console.log('vos ventes',ventes);
+    
     if (localStorage.getItem("user_token") === "roger") {
       setUserIsLogged(true);
       setUser(Roger);

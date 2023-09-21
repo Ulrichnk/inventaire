@@ -38,11 +38,13 @@ const useDonnee = (state: boolean): retour => {
       setInventaires(res);
     });
 
-    localServices.getAchats().then((res) => {
+    ArticleFireService.getAchats().then((res) => {
+      
       setAchats(res);
+      
     });
 
-    localServices.getVentes().then((res) => {
+    ArticleFireService.getVentes().then((res) => {
       setVentes(res);
     });
   }, [state]);

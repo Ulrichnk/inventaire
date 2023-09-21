@@ -89,7 +89,8 @@ const Achatpages: FunctionComponent<Props> = ({
   const [a, setA] = useState<Article[]>([]);
   const [search, setSearch] = useState<boolean>(false);
   const [achat, setAchat] = useState<number[]>(Array(articles.length).fill(0));
-
+  console.log('vos achats',achats);
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);

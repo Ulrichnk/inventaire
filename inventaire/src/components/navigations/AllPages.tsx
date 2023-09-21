@@ -83,6 +83,8 @@ const AllPages: FunctionComponent<Props> = ({
               setInventaires={setInventaires}
               historiques={historiques}
               setHistoriques={setHistoriques}
+              ventes={ventes}
+              achats={achats}
             />
           }
         />
@@ -163,6 +165,8 @@ const AllPages: FunctionComponent<Props> = ({
               setInventaires={setInventaires}
               historiques={historiques}
               setHistoriques={setHistoriques}
+              ventes={ventes}
+              achats={achats}
             />
           }
         />

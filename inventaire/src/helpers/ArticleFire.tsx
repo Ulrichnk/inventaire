@@ -1,4 +1,4 @@
-import { Article } from "./Types";
+import { Achat, Article, Vente } from "./Types";
 import {
   doc,
   setDoc,
@@ -27,6 +27,8 @@ export let useArticle: Article[] = [
     created_at: new Date(),
   },
 ];
+export let ventes:Vente[]=[];
+export let achats:Achat[]=[];
 
 export function add(a: Article): Article {
   const id: number = useArticle.length;
@@ -38,6 +40,8 @@ export function add(a: Article): Article {
 
 export default class ArticleFireService {
   static articles: Article[] = useArticle;
+  static ventes:Vente[]=[];
+  static achats:Achat[]=[];
 
   static isDev = () => {
     if (process.env.REACT_APP_DEV === "false") {
@@ -169,6 +173,35 @@ export default class ArticleFireService {
       return results;
     }
   }
+  static async getVentes(): Promise<Vente[]> {
+    if (this.isDev()) {
+      try {
+        const querySnapshot = await getDocs(collection(db, "ventes"));
+        const articles = querySnapshot.docs.map((doc) => doc.data() as Vente);
+        return articles;
+      } catch (error) {
+        this.handleError(error);
+        return [];
+      }
+    } else {
+      return this.ventes;
+    }
+  }
+  static async getAchats(): Promise<Achat[]> {
+    if (this.isDev()) {
+      try {
+        const querySnapshot = await getDocs(collection(db, "achats"));
+        const articles = querySnapshot.docs.map((doc) => doc.data() as Achat);
+        return articles;
+      } catch (error) {
+        this.handleError(error);
+        return [];
+      }
+    } else {
+      return this.achats;
+    }
+  }
+
 
   static isEmpty(data: Object): boolean {
     return Object.keys(data).length === 0;

@@ -92,15 +92,81 @@ export const formatDate = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-export type Achat={
-  id:number,
-  id_article:number,
-  valeur_achat:number,
-  date_ajout:string
-}
-export type Vente={
-  id:number,
-  id_article:number,
-  valeur_vente:number,
-  date_vente:string
-}
+export type Achat = {
+  id: number;
+  id_article: number;
+  valeur_achat: number;
+  date_ajout: string;
+};
+export type Vente = {
+  id: number;
+  id_article: number;
+  valeur_vente: number;
+  date_vente: string;
+};
+
+export const fusionVente = (
+  ventes: Vente[],
+  idArticle: number,
+  dateDebut: string,
+  dateFin: string
+): number => {
+  const h = (
+    ventes: Vente[],
+    idArticle: number,
+    dateDebut: string,
+    dateFin: string
+  ): Vente[] => {
+    const debut = new Date(dateDebut);
+    const fin = new Date(dateFin);
+
+    return ventes.filter((vente) => {
+      const venteDate = new Date(vente.date_vente);
+      return (
+        vente.id_article === idArticle && venteDate >= debut && venteDate <= fin
+      );
+    });
+  };
+  const calculerSommeValeursVente = (ventes: Vente[]): number => {
+    return ventes.reduce((somme, vente) => somme + vente.valeur_vente, 0);
+  };
+
+  // Exemple d'utilisation
+  return calculerSommeValeursVente(h(ventes, idArticle, dateDebut, dateFin));
+};
+
+const getAchatsByArticleIdAndDates = (
+  achats: Achat[],
+  idArticle: number,
+  dateDebut: string,
+  dateFin: string
+): Achat[] => {
+  const debut = new Date(dateDebut);
+  const fin = new Date(dateFin);
+
+  return achats.filter((achat) => {
+    const achatDate = new Date(achat.date_ajout);
+    return (
+      achat.id_article === idArticle && achatDate >= debut && achatDate <= fin
+    );
+  });
+};
+
+const calculerSommeValeursAchat = (achats: Achat[]): number => {
+  return achats.reduce((somme, achat) => somme + achat.valeur_achat, 0);
+};
+
+export const fusionAchat = (
+  achats: Achat[],
+  idArticle: number,
+  dateDebut: string,
+  dateFin: string
+): number => {
+  const achatsFiltres = getAchatsByArticleIdAndDates(
+    achats,
+    idArticle,
+    dateDebut,
+    dateFin
+  );
+  return calculerSommeValeursAchat(achatsFiltres);
+};

@@ -5,7 +5,15 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Article, Historique, Inventaire } from "../helpers/Types";
+import {
+  Achat,
+  Article,
+  Historique,
+  Inventaire,
+  Vente,
+  fusionAchat,
+  fusionVente,
+} from "../helpers/Types";
 import localServices from "../helpers/LocalService";
 
 type Field<T> = {
@@ -34,6 +42,8 @@ type Props = {
   setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
   historiques: Historique[];
   setHistoriques: Dispatch<SetStateAction<Historique[]>>;
+  ventes: Vente[];
+  achats: Achat[];
 };
 const Inv: FunctionComponent<Props> = ({
   id,
@@ -46,10 +56,21 @@ const Inv: FunctionComponent<Props> = ({
   inventaires,
   historiques,
   setHistoriques,
+  ventes,
+  achats,
 }) => {
   const [article, setArticle] = useState<Article>();
   const [stock_depart, setStockDepart] = useState<number>(0);
-
+  const [vente, setVente] = useState<number>(0);
+  const [achat, setAchat] = useState<number>(0);
+  if (duree) {
+    setVente(
+      fusionVente(ventes, id, duree.date_debut.value as string, duree.date_fin.value as string)
+    );
+    setAchat(
+      fusionAchat(achats, id, duree.date_debut.value as string, duree.date_fin.value as string)
+    );
+  }
   const [Form, setForm] = useState<Form>({
     id: {
       isValid: true,
@@ -124,7 +145,7 @@ const Inv: FunctionComponent<Props> = ({
             id_historique,
             id,
             Form.stock_achat.value as number,
-            Form.stock_restant.value,
+            Form.stock_restant.value as number,
             stock_depart as number,
             setInventaires
           )

@@ -89,7 +89,66 @@ const Ventepages: FunctionComponent<Props> = ({
   const [a, setA] = useState<Article[]>([]);
   const [search, setSearch] = useState<boolean>(false);
   const [vente, setVente] = useState<number[]>(Array(articles.length).fill(0));
+  console.log("vos ventes", ventes);
+  const h = (
+    ventes: Vente[],
+    idArticle: number,
+    dateDebut: string,
+    dateFin: string
+  ): Vente[] => {
+    const debut = new Date(dateDebut);
+    const fin = new Date(dateFin);
 
+    return ventes.filter((vente) => {
+      const venteDate = new Date(vente.date_vente);
+      return (
+        vente.id_article === idArticle && venteDate >= debut && venteDate <= fin
+      );
+    });
+  };
+  const calculerSommeValeursVente = (ventes: Vente[]): number => {
+    return ventes.reduce((somme, vente) => somme + vente.valeur_vente, 0);
+  };
+
+  // Exemple d'utilisation
+  // const sommeValeursVente = calculerSommeValeursVente(
+  //   h(ventes, 4, "2023-09-05", "2023-09-05")
+  // );
+  const fusion = (
+    ventes: Vente[],
+    idArticle: number,
+    dateDebut: string,
+    dateFin: string
+  ): number => {
+    const h = (
+      ventes: Vente[],
+      idArticle: number,
+      dateDebut: string,
+      dateFin: string
+    ): Vente[] => {
+      const debut = new Date(dateDebut);
+      const fin = new Date(dateFin);
+
+      return ventes.filter((vente) => {
+        const venteDate = new Date(vente.date_vente);
+        return (
+          vente.id_article === idArticle &&
+          venteDate >= debut &&
+          venteDate <= fin
+        );
+      });
+    };
+    const calculerSommeValeursVente = (ventes: Vente[]): number => {
+      return ventes.reduce((somme, vente) => somme + vente.valeur_vente, 0);
+    };
+
+    // Exemple d'utilisation
+    return calculerSommeValeursVente(h(ventes, idArticle, dateDebut, dateFin));
+  };
+
+  // Exemple d'utilisation
+  // const ventesEntreDates = h(ventes, 4, "2023-09-05", "2023-09-05");
+  // console.log("Ventes entre les dates :", ventesEntreDates);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);
