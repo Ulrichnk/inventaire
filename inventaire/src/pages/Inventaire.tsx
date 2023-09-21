@@ -1,6 +1,13 @@
 import React, { FunctionComponent, useContext, useState } from "react";
 import { styled } from "styled-components";
-import { Achat, Article, Historique, Inventaire, User, Vente } from "../helpers/Types";
+import {
+  Achat,
+  Article,
+  Historique,
+  Inventaire,
+  User,
+  Vente,
+} from "../helpers/Types";
 import { Dispatch, SetStateAction } from "react";
 import Inv from "../components/Inv";
 import { AppContext } from "../App";
@@ -83,8 +90,8 @@ type Props = {
   setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
   historiques: Historique[];
   setHistoriques: Dispatch<SetStateAction<Historique[]>>;
-  ventes:Vente[];
-  achats:Achat[];
+  ventes: Vente[];
+  achats: Achat[];
 };
 
 const InventairePages: FunctionComponent<Props> = ({
@@ -99,7 +106,7 @@ const InventairePages: FunctionComponent<Props> = ({
   setHistoriques,
   id_hist,
   ventes,
-  achats
+  achats,
 }) => {
   const [state, setState] = useState<boolean>(false);
   const contextValue = useContext(AppContext);
@@ -230,12 +237,15 @@ const InventairePages: FunctionComponent<Props> = ({
                       <th>Stock de départ</th>
                       <th>Stock acheter</th>
                       <th>Stock total</th>
+                      <th>stok vendu</th>
+                      <th>Valeur stock vendu</th>
                       <th>Valeur stock acheter</th>
                       <th>Valeur stock départ</th>
                       <th>Valeur stock total</th>
                       <th>Stock restant</th>
                       <th>Valeur stock restant</th>
                       <th>Bénéfice attendu</th>
+                      <th>Bénéfice réel</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -300,12 +310,15 @@ const InventairePages: FunctionComponent<Props> = ({
                 <th>Stock de départ</th>
                 <th>Stock acheter</th>
                 <th>Stock total</th>
+                <th>stok vendu</th>
+                <th>Valeur stock vendu</th>
                 <th>Valeur stock acheter</th>
                 <th>Valeur stock départ</th>
                 <th>Valeur stock total</th>
                 <th>Stock restant</th>
                 <th>Valeur stock restant</th>
                 <th>Bénéfice attendu</th>
+                <th>Bénéfice réel</th>
               </tr>
             </thead>
             <tbody>

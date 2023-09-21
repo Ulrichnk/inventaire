@@ -65,10 +65,20 @@ const Inv: FunctionComponent<Props> = ({
   const [achat, setAchat] = useState<number>(0);
   if (duree) {
     setVente(
-      fusionVente(ventes, id, duree.date_debut.value as string, duree.date_fin.value as string)
+      fusionVente(
+        ventes,
+        id,
+        duree.date_debut.value as string,
+        duree.date_fin.value as string
+      )
     );
     setAchat(
-      fusionAchat(achats, id, duree.date_debut.value as string, duree.date_fin.value as string)
+      fusionAchat(
+        achats,
+        id,
+        duree.date_debut.value as string,
+        duree.date_fin.value as string
+      )
     );
   }
   const [Form, setForm] = useState<Form>({
@@ -198,34 +208,48 @@ const Inv: FunctionComponent<Props> = ({
     <>
       <td> {stock_depart} </td>
       <td>
-        <input
+        {/* <input
           value={Form.stock_achat.value !== 0 ? Form.stock_achat.value : ""}
           name="stock_achat"
           onChange={(e) => handleInputChange(e)}
           className="input"
           placeholder="stock acheter "
           type="text"
-        />
+        /> */}
+        {achat}
       </td>
       <td>
-        {Form.stock_achat.value
+        {/* {Form.stock_achat.value
           ? (-Form.stock_achat.value - stock_depart) * -1
-          : "stock total"}{" "}
+          : "stock total"}{" "} */}
+        {-1 * (-achat - stock_depart)}
+      </td>
+      <td>{vente}</td>
+      <td>
+        {article && article.prix_vente
+          ? vente * article.prix_vente
+          : "valeur stock vente"}
       </td>
       <td>
-        {article &&
+        {/* {article &&
         article.prix_achat !== undefined &&
         Form.stock_achat.value !== undefined
           ? article.prix_achat * Form.stock_achat.value
+          : "valeur stock acheter"} */}
+        {article && article.prix_achat
+          ? achat * article.prix_achat
           : "valeur stock acheter"}
       </td>
       <td>
         {article ? stock_depart * article.prix_achat : "valeur stock depart"}{" "}
       </td>
       <td>
-        {Form.stock_achat.value && article
+        {/* {Form.stock_achat.value && article
           ? (-stock_depart - Form.stock_achat.value) * -1 * article.prix_achat
-          : "valeur stock total"}{" "}
+          : "valeur stock total"}{" "} */}
+        {article && article.prix_achat
+          ? -1 * (-achat - stock_depart) * article.prix_achat
+          : "valeur stock total"}
       </td>
       <td>
         <input
@@ -236,23 +260,42 @@ const Inv: FunctionComponent<Props> = ({
           placeholder="stock restant "
           type="text"
         />
+        {/* {achat - vente} */}
       </td>
       <td>
-        {article &&
+        {/* {article &&
         article.prix_vente !== undefined &&
         Form.stock_restant.value !== undefined
           ? article.prix_achat * Form.stock_restant.value
+          : "valeur stock restant"} */}
+        {article && article.prix_achat
+          ? (achat - vente) * article.prix_achat
           : "valeur stock restant"}
       </td>
       <td>
-        {article &&
+        {/* {article &&
         article.prix_vente !== undefined &&
         article.prix_achat !== undefined &&
         Form.stock_achat.value !== undefined &&
         Form.stock_restant.value !== undefined
           ? (-stock_depart - Form.stock_achat.value) * -1 * article.prix_achat -
             article.prix_achat * Form.stock_restant.value
-          : "Bénéfice atttendu"}
+          : "Bénéfice atttendu"} */}
+        {article && article.prix_achat
+          ? ((-stock_depart - achat) * -1 * article.prix_achat -
+            article.prix_vente * (vente))*-1
+          : "benefice réel"}
+      </td>
+      <td>
+        {" "}
+        {article &&
+        article.prix_vente !== undefined &&
+        article.prix_achat !== undefined &&
+        Form.stock_achat.value !== undefined &&
+        Form.stock_restant.value !== undefined
+          ? ((-stock_depart - achat) * -1 * article.prix_achat -
+            article.prix_vente * Form.stock_restant.value)*-1
+          : "Bénéfice atttendu"}{" "}
       </td>
     </>
   );
