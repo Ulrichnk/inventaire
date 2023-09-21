@@ -1,17 +1,10 @@
 import React, { FunctionComponent, useContext, useState } from "react";
 import { styled } from "styled-components";
-import {
-  Achat,
-  Article,
-  Historique,
-  Inventaire,
-  User,
-  Vente,
-} from "../helpers/Types";
-import { Dispatch, SetStateAction } from "react";
-import Inv from "../components/Inv";
-import { AppContext } from "../App";
-import localServices from "../helpers/LocalService";
+import { Article } from "../../helpers/Types";
+import Inv from "../../components/Inv";
+import { AppContext } from "../../App";
+import localServices from "../../helpers/LocalService";
+import { useAppContext } from "../../helpers/AppContext";
 export const Cont = styled.div`
   display: flex;
   flex-direction: column;
@@ -80,42 +73,16 @@ type Duree = {
 
 type Props = {
   //define your props here
-  user: User | null;
-  setUser: Dispatch<SetStateAction<User>>;
-  setUserIslogged: Dispatch<SetStateAction<boolean>>;
-  articles: Article[];
-  setArticles: Dispatch<SetStateAction<Article[]>>;
-  id_hist?: number;
-  inventaires: Inventaire[];
-  setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
-  historiques: Historique[];
-  setHistoriques: Dispatch<SetStateAction<Historique[]>>;
-  ventes: Vente[];
-  achats: Achat[];
 };
 
-const InventairePages: FunctionComponent<Props> = ({
-  user,
-  setUser,
-  setUserIslogged,
-  articles,
-  setArticles,
-  setInventaires,
-  inventaires,
-  historiques,
-  setHistoriques,
-  id_hist,
-  ventes,
-  achats,
-}) => {
+const InventairePages: FunctionComponent<Props> = () => {
   const [state, setState] = useState<boolean>(false);
   const contextValue = useContext(AppContext);
   const [id_historique, setId_historique] = useState<number>(0);
   const [term, setTerm] = useState<string>("");
   const [search, setSearch] = useState<boolean>(false);
   const [a, setA] = useState<Article[]>([]);
-  // const style: CSSProperties = { textDecoration: "none" };
-
+  const { setHistoriques, articles } = useAppContext();
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);
@@ -260,14 +227,6 @@ const InventairePages: FunctionComponent<Props> = ({
                               id={item.id}
                               state={state}
                               id_historique={id_historique}
-                              historiques={historiques}
-                              setInventaires={setInventaires}
-                              inventaires={inventaires}
-                              setHistoriques={setHistoriques}
-                              articles={articles}
-                              setArticles={setArticles}
-                              ventes={ventes}
-                              achats={achats}
                             />
                           </tr>
                         ))
@@ -282,14 +241,6 @@ const InventairePages: FunctionComponent<Props> = ({
                               duree={duree}
                               state={state}
                               id_historique={id_historique}
-                              historiques={historiques}
-                              setInventaires={setInventaires}
-                              inventaires={inventaires}
-                              setHistoriques={setHistoriques}
-                              articles={articles}
-                              setArticles={setArticles}
-                              ventes={ventes}
-                              achats={achats}
                             />
                           </tr>
                         ))}
@@ -334,14 +285,6 @@ const InventairePages: FunctionComponent<Props> = ({
                         id={item.id}
                         state={state}
                         id_historique={id_historique}
-                        historiques={historiques}
-                        setInventaires={setInventaires}
-                        inventaires={inventaires}
-                        setHistoriques={setHistoriques}
-                        articles={articles}
-                        setArticles={setArticles}
-                        ventes={ventes}
-                        achats={achats}
                       />
                     </tr>
                   ))
@@ -356,14 +299,6 @@ const InventairePages: FunctionComponent<Props> = ({
                         duree={duree}
                         state={state}
                         id_historique={id_historique}
-                        historiques={historiques}
-                        setInventaires={setInventaires}
-                        inventaires={inventaires}
-                        setHistoriques={setHistoriques}
-                        articles={articles}
-                        setArticles={setArticles}
-                        ventes={ventes}
-                        achats={achats}
                       />
                     </tr>
                   ))}

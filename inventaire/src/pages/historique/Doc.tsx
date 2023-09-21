@@ -1,11 +1,7 @@
-import React, {
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-} from "react";
+import React, { FunctionComponent } from "react";
 import { styled } from "styled-components";
-import { Article, Historique, Inventaire } from "../helpers/Types";
-import Inve from "../components/Inve";
+import Inve from "../../components/Inve";
+import { useAppContext } from "../../helpers/AppContext";
 
 const Container = styled.div`
   display: flex;
@@ -68,23 +64,22 @@ type Props = {
   //define your props here
 
   id_hist: number;
-  articles: Article[];
-  setArticles: Dispatch<SetStateAction<Article[]>>;
-  inventaires: Inventaire[];
-  setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
-  historiques: Historique[];
-  setHistoriques: Dispatch<SetStateAction<Historique[]>>;
 };
 
-const Doc: FunctionComponent<Props> = ({
-  id_hist,
-  articles,
-  setArticles,
-  setInventaires,
-  inventaires,
-  historiques,
-  setHistoriques,
-}) => {
+const Doc: FunctionComponent<Props> = ({ id_hist }) => {
+  const {
+    inventaires,
+    setInventaires,
+    setHistoriques,
+    historiques,
+    articles,
+    setArticles,
+    achats,
+    setAchats,
+    ventes,
+    setVentes,
+  } = useAppContext();
+
   return (
     <Container>
       <div>

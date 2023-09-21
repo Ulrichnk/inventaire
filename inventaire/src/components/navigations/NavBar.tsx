@@ -1,6 +1,8 @@
 import React, { CSSProperties, FunctionComponent } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import "./nav.scss";
+import { HiOutlineViewGrid } from "react-icons/hi";
 
 const NavHead = styled.div`
   display: flex;
@@ -38,10 +40,10 @@ const Title = styled.div`
 
 type Props = {
   userIsLogged: Boolean;
-  state: boolean;
+  state?: boolean;
 };
 
-const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
+const NavBar: FunctionComponent<Props> = ({ userIsLogged, state = false }) => {
   let navigate = useNavigate();
   const styl: CSSProperties = { display: "none" };
   const styl1: CSSProperties = { display: "block" };
@@ -96,11 +98,15 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
     </div>
   ) : (
     <div className="nav" style={state ? styl : styl1}>
-      <NavHead>
-        <Title>Inventaire</Title>
-      </NavHead>
-      <NavBody>
-        <div>
+      <div className="">
+        <HiOutlineViewGrid className="icon"/>
+        <h2>Inventaire</h2>
+      </div>
+      <ul className="ul">
+        {/* <li>
+          <h2>Inventaire</h2>
+        </li> */}
+        <li>
           <NavLink
             to="/"
             className={(nav) =>
@@ -108,8 +114,11 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
             }
             style={style}
           >
-            <p>Accueil</p>
+            Accueil
           </NavLink>
+        </li>
+        <li>
+          {" "}
           <NavLink
             to="/inventaire"
             className={(nav) =>
@@ -117,8 +126,11 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
             }
             style={style}
           >
-            <p>Inventaire</p>
+            Inventaire
           </NavLink>
+        </li>
+        <li>
+          {" "}
           <NavLink
             to="/gestion-articles"
             className={(nav) =>
@@ -126,8 +138,11 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
             }
             style={style}
           >
-            <p>Gestion des articles</p>
+            <>Gestion des articles</>
           </NavLink>
+        </li>
+        <li>
+          {" "}
           <NavLink
             to="/historiques"
             className={(nav) =>
@@ -135,8 +150,11 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
             }
             style={style}
           >
-            <p>Historiques</p>
+            <>Historiques</>
           </NavLink>
+        </li>
+        <li>
+          {" "}
           <NavLink
             to="/essai"
             className={(nav) =>
@@ -144,8 +162,11 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
             }
             style={style}
           >
-            <p>Essai</p>
+            <>Essai</>
           </NavLink>
+        </li>
+        <li>
+          {" "}
           <NavLink
             to="/enregistrement-achats"
             className={(nav) =>
@@ -153,8 +174,11 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
             }
             style={style}
           >
-            <p>Enregistrement des achats</p>
+            <>Enregistrement des achats</>
           </NavLink>
+        </li>
+        <li>
+          {" "}
           <NavLink
             to="/enregistrement-ventes"
             className={(nav) =>
@@ -162,9 +186,11 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
             }
             style={style}
           >
-            <p>Enregistrement des ventes</p>
+            <>Enregistrement des ventes</>
           </NavLink>
-
+        </li>
+        <li>
+          {" "}
           <NavLink
             to="inconnu"
             onClick={() => {
@@ -177,10 +203,10 @@ const NavBar: FunctionComponent<Props> = ({ userIsLogged, state }) => {
             }
             style={style}
           >
-            <p>Déconnexion</p>
+            <>Déconnexion</>
           </NavLink>
-        </div>
-      </NavBody>
+        </li>
+      </ul>
     </div>
   );
 };

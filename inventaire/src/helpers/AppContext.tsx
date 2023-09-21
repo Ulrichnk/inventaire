@@ -1,12 +1,12 @@
-import React,{
+import React, {
   Dispatch,
   ReactNode,
   SetStateAction,
   createContext,
   useContext,
-  useState,
 } from "react";
-import { Achat, Article, Historique, Inventaire, User, Vente } from "./Types";
+import { Achat, Article, Historique, Inventaire, Vente } from "./Types";
+import useDonnee from "./useDonnee";
 
 type typeContext = {
   articles: Article[];
@@ -33,13 +33,21 @@ export const useAppContext = () => {
 
   return context;
 };
-export const InvProvider: React.FC<{children:ReactNode}> = ({ children }) => {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [historiques, setHistoriques] = useState<Historique[]>([]);
-  const [inventaires, setInventaires] = useState<Inventaire[]>([]);
-  const [achats, setAchats] = useState<Achat[]>([]);
-  const [ventes, setVentes] = useState<Vente[]>([]);
-
+export const InvProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const {
+    inventaires,
+    setInventaires,
+    setHistoriques,
+    historiques,
+    articles,
+    setArticles,
+    achats,
+    setAchats,
+    ventes,
+    setVentes,
+  } = useDonnee(false);
   return (
     <invContext.Provider
       value={{

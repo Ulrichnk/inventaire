@@ -1,21 +1,10 @@
-import React, {
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-  useState,
-} from "react";
+import React, { FunctionComponent, useState } from "react";
 import { styled } from "styled-components";
-import { Vente, Article, formatDate } from "../helpers/Types";
-import localServices from "../helpers/LocalService";
+import { Article, formatDate } from "../../helpers/Types";
+import localServices from "../../helpers/LocalService";
+import { useAppContext } from "../../helpers/AppContext";
 
-type Props = {
-  ventes: Vente[];
-  setVentes: Dispatch<SetStateAction<Vente[]>>;
-
-  //define your props here
-  articles: Article[];
-  setArticles: Dispatch<SetStateAction<Article[]>>;
-};
+type Props = {};
 export const Cont = styled.div`
   display: flex;
   flex-direction: column;
@@ -79,76 +68,14 @@ const Search = styled.div`
   }
 `;
 
-const Ventepages: FunctionComponent<Props> = ({
-  articles,
-  setArticles,
-  ventes,
-  setVentes,
-}) => {
+const Achatpages: FunctionComponent<Props> = () => {
+  const { articles, achats, setAchats } = useAppContext();
   const [term, setTerm] = useState<string>("");
   const [a, setA] = useState<Article[]>([]);
   const [search, setSearch] = useState<boolean>(false);
-  const [vente, setVente] = useState<number[]>(Array(articles.length).fill(0));
-  console.log("vos ventes", ventes);
-  const h = (
-    ventes: Vente[],
-    idArticle: number,
-    dateDebut: string,
-    dateFin: string
-  ): Vente[] => {
-    const debut = new Date(dateDebut);
-    const fin = new Date(dateFin);
+  const [achat, setAchat] = useState<number[]>(Array(articles.length).fill(0));
+  console.log("vos achats", achats);
 
-    return ventes.filter((vente) => {
-      const venteDate = new Date(vente.date_vente);
-      return (
-        vente.id_article === idArticle && venteDate >= debut && venteDate <= fin
-      );
-    });
-  };
-  const calculerSommeValeursVente = (ventes: Vente[]): number => {
-    return ventes.reduce((somme, vente) => somme + vente.valeur_vente, 0);
-  };
-
-  // Exemple d'utilisation
-  // const sommeValeursVente = calculerSommeValeursVente(
-  //   h(ventes, 4, "2023-09-05", "2023-09-05")
-  // );
-  const fusion = (
-    ventes: Vente[],
-    idArticle: number,
-    dateDebut: string,
-    dateFin: string
-  ): number => {
-    const h = (
-      ventes: Vente[],
-      idArticle: number,
-      dateDebut: string,
-      dateFin: string
-    ): Vente[] => {
-      const debut = new Date(dateDebut);
-      const fin = new Date(dateFin);
-
-      return ventes.filter((vente) => {
-        const venteDate = new Date(vente.date_vente);
-        return (
-          vente.id_article === idArticle &&
-          venteDate >= debut &&
-          venteDate <= fin
-        );
-      });
-    };
-    const calculerSommeValeursVente = (ventes: Vente[]): number => {
-      return ventes.reduce((somme, vente) => somme + vente.valeur_vente, 0);
-    };
-
-    // Exemple d'utilisation
-    return calculerSommeValeursVente(h(ventes, idArticle, dateDebut, dateFin));
-  };
-
-  // Exemple d'utilisation
-  // const ventesEntreDates = h(ventes, 4, "2023-09-05", "2023-09-05");
-  // console.log("Ventes entre les dates :", ventesEntreDates);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);
@@ -169,9 +96,9 @@ const Ventepages: FunctionComponent<Props> = ({
   };
 
   const handle = (id: number) => {
-    console.log("vente enregistrer");
+    console.log("achat enregistrer");
     localServices
-      .addVente(id, vente[id], formatDate(new Date()), setVentes)
+      .addAchat(id, achat[id], formatDate(new Date()), setAchats)
       .then((res) => {
         if (res) {
           console.log("vous avez reussi a enregistrer", res);
@@ -185,7 +112,7 @@ const Ventepages: FunctionComponent<Props> = ({
     <Cont>
       <Acc>
         <div>
-          <h1>Vous Pouvez enregistrer de nouvelles ventes </h1>
+          <h1>Vous Pouvez enregistrer de nouveaux achats </h1>
           <Search>
             <input
               type="text"
@@ -199,9 +126,9 @@ const Ventepages: FunctionComponent<Props> = ({
                   <tr>
                     <th>ID</th>
                     <th>Nom</th>
-                    <th>Prix d'vente</th>
+                    <th>Prix d'achat</th>
                     <th>Prix de vente</th>
-                    <th>Valeur de l'vente</th>
+                    <th>Valeur de l'achat</th>
                     <th>Valider</th>
                   </tr>
                 </thead>
@@ -210,21 +137,21 @@ const Ventepages: FunctionComponent<Props> = ({
                     <tr key={item.id}>
                       <td>{item.id}</td>
                       <td>{item.nom}</td>
-                      <td>{item.prix_vente}</td>
+                      <td>{item.prix_achat}</td>
                       <td>{item.prix_vente}</td>
                       <td>
                         <input
-                          value={vente[item.id]}
-                          name="valeur_vente"
+                          value={achat[item.id]}
+                          name="valeur_achat"
                           className="input"
-                          placeholder="valeur de l'vente "
+                          placeholder="valeur de l'achat "
                           type="text"
                           style={{ width: "100px" }}
                           onChange={(e) => {
                             const newValue = parseFloat(e.target.value);
-                            // Mettre à jour le tableau vente avec la nouvelle valeur
-                            setVente((prevVente) => ({
-                              ...prevVente,
+                            // Mettre à jour le tableau achat avec la nouvelle valeur
+                            setAchat((prevAchat) => ({
+                              ...prevAchat,
                               [item.id]: isNaN(newValue) ? 0 : newValue, // Assurez-vous que c'est un nombre ou 0 par défaut
                             }));
                           }}
@@ -249,9 +176,9 @@ const Ventepages: FunctionComponent<Props> = ({
               <tr>
                 <th>ID</th>
                 <th>Nom</th>
-                <th>Prix d'vente</th>
+                <th>Prix d'achat</th>
                 <th>Prix de vente</th>
-                <th>Valeur de l'vente</th>
+                <th>Valeur de l'achat</th>
                 <th>Valider</th>
               </tr>
             </thead>
@@ -260,20 +187,20 @@ const Ventepages: FunctionComponent<Props> = ({
                 <tr key={item.id}>
                   <td>{item.id}</td>
                   <td>{item.nom}</td>
-                  <td>{item.prix_vente}</td>
+                  <td>{item.prix_achat}</td>
                   <td>{item.prix_vente}</td>
                   <td>
                     <input
-                      value={vente[item.id]}
-                      name="valeur_vente"
+                      value={achat[item.id]}
+                      name="valeur_achat"
                       className="input"
-                      placeholder="valeur de l'vente "
+                      placeholder="valeur de l'achat "
                       type="text"
                       onChange={(e) => {
                         const newValue = parseFloat(e.target.value);
-                        // Mettre à jour le tableau vente avec la nouvelle valeur
-                        setVente((prevVente) => ({
-                          ...prevVente,
+                        // Mettre à jour le tableau achat avec la nouvelle valeur
+                        setAchat((prevAchat) => ({
+                          ...prevAchat,
                           [item.id]: isNaN(newValue) ? 0 : newValue, // Assurez-vous que c'est un nombre ou 0 par défaut
                         }));
                       }}
@@ -294,4 +221,4 @@ const Ventepages: FunctionComponent<Props> = ({
   );
 };
 
-export default Ventepages;
+export default Achatpages;

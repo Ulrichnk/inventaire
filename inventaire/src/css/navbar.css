@@ -1,24 +1,21 @@
 .LinkIsActive {
-  color:orange;
-  
+  background-color:#f7b63d;
 
 }
 
 .LinkIsNotActive {
-  color: black;
 }
 
-.LinkIsActive :hover{
+/* .LinkIsActive :hover{
   
   margin-left: 10px;
 }
 .LinkIsNotActive :hover{  
   
   margin-left: 10px;
-}
-
+} */
+/* 
 .nav{
-  /* background-color:rgb(235, 231, 231); */
   background-color: rgb(242, 242, 242);
   min-width: none;
-}
+} */

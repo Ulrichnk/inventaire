@@ -1,7 +1,7 @@
 import React from "react";
 import App from "./App";
 import ReactDOM from "react-dom/client";
-import "../src/css/index.css";
+import "../src/css/index.scss";
 
 import { BrowserRouter } from "react-router-dom";
 import { InvProvider } from "./helpers/AppContext";

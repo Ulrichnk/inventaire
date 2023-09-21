@@ -1,18 +1,13 @@
 import React, { FunctionComponent, useState } from "react";
-import { Dispatch, SetStateAction } from "react";
-import { Article, User } from "../helpers/Types";
+import { Article } from "../../helpers/Types";
 import { styled } from "styled-components";
-import Input from "../components/Input";
-import localServices from "../helpers/LocalService";
+import Input from "../../components/Input";
+import localServices from "../../helpers/LocalService";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../helpers/AppContext";
 
 type Props = {
   //define your props here
-  user: User | null;
-  setUser: Dispatch<SetStateAction<User>>;
-  setUserIslogged: Dispatch<SetStateAction<boolean>>;
-  articles: Article[];
-  setArticles: Dispatch<SetStateAction<Article[]>>;
 };
 type Field<T> = {
   value?: T;
@@ -130,7 +125,7 @@ const Acc = styled.div`
 
 const Search = styled.div`
   & input {
-   min-width: 40%;
+    min-width: 40%;
     height: 40px;
     outline: solid 2px orange;
     border-radius: 15px;
@@ -138,18 +133,12 @@ const Search = styled.div`
   }
 `;
 
-const Gestion: FunctionComponent<Props> = ({
-  user,
-  setUser,
-  setUserIslogged,
-  articles,
-  setArticles,
-}) => {
+const Gestion: FunctionComponent<Props> = () => {
   const [term, setTerm] = useState<string>("");
   const [search, setSearch] = useState<boolean>(false);
   const [a, setA] = useState<Article[]>([]);
   // const style: CSSProperties = { textDecoration: "none" };
-
+  const { articles, setArticles } = useAppContext();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);

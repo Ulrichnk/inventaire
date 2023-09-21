@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Dispatch, SetStateAction } from "react";
 import { Route, Routes } from "react-router-dom";
-import Accueil from "../../pages/Accueil";
+import Accueil from "../../pages/accueil/Accueil";
 import Log from "../../pages/Log";
 import {
   Achat,
@@ -11,15 +11,15 @@ import {
   User,
   Vente,
 } from "../../helpers/Types";
-import Achatpages from "../../pages/Achat";
-import InventairePages from "../../pages/Inventaire";
-import Gestion from "../../pages/Gestion";
+import Achatpages from "../../pages/achats/Achat";
+import InventairePages from "../../pages/inventaires/Inventaire";
+import Gestion from "../../pages/articles/Gestion";
 import Essai from "../../Essai";
 import Inconnu from "../../pages/inconnu";
-import Historiques from "../../pages/Historiques";
-import HistoriqueDetail from "../../pages/HistoriqueDetail";
-import UpdateArticle from "../../pages/UpdateArticle";
-import Ventepages from "../../pages/Ventepages";
+import Historiques from "../../pages/historique/Historiques";
+import HistoriqueDetail from "../../pages/historique/HistoriqueDetail";
+import UpdateArticle from "../../pages/articles/UpdateArticle";
+import Ventepages from "../../pages/ventes/Ventepages";
 type Props = {
   userIsLogged: Boolean;
   user: User | null;
@@ -57,90 +57,28 @@ const AllPages: FunctionComponent<Props> = ({
     <>
       <Routes>
         <Route path="/" element={<Accueil />} />
-        <Route path="/essai" element={<Essai articles={articles} />} />
-        <Route
-          path="/gestion-articles"
-          element={
-            <Gestion
-              user={user}
-              setUser={setUser}
-              setUserIslogged={setUserIsLogged}
-              articles={articles}
-              setArticles={setArticles}
-            />
-          }
-        />
-        <Route
-          path="/inventaire"
-          element={
-            <InventairePages
-              user={user}
-              setUser={setUser}
-              setUserIslogged={setUserIsLogged}
-              articles={articles}
-              setArticles={setArticles}
-              inventaires={inventaires}
-              setInventaires={setInventaires}
-              historiques={historiques}
-              setHistoriques={setHistoriques}
-              ventes={ventes}
-              achats={achats}
-            />
-          }
-        />
+        <Route path="/essai" element={<Essai />} />
+        <Route path="/gestion-articles" element={<Gestion />} />
+        <Route path="/inventaire" element={<InventairePages />} />
         <Route
           path="/enregistrement-ventes" // Remplacez le chemin pour refléter "ventes" au lieu d'"achats"
-          element={
-            <Ventepages
-              articles={articles}
-              setArticles={setArticles}
-              ventes={ventes} // Remplacez "achats" par "ventes"
-              setVentes={setVentes} // Remplacez "achats" par "ventes"
-            />
-          }
+          element={<Ventepages />}
         />
 
-        <Route
-          path="/enregistrement-achats"
-          element={
-            <Achatpages
-              articles={articles}
-              setArticles={setArticles}
-              achats={achats}
-              setAchats={setAchats}
-            />
-          }
-        />
+        <Route path="/enregistrement-achats" element={<Achatpages />} />
         <Route
           path="/historiques"
           element={<Historiques historiques={historiques} />}
         />
-        <Route
-          path="/historiques/:id"
-          element={
-            <HistoriqueDetail
-              articles={articles}
-              setArticles={setArticles}
-              inventaires={inventaires}
-              setInventaires={setInventaires}
-              historiques={historiques}
-              setHistoriques={setHistoriques}
-            />
-          }
-        />
-        <Route
-          path="/modifier/article/:id"
-          element={
-            <UpdateArticle articles={articles} setArticles={setArticles} />
-          }
-        />
+        <Route path="/historiques/:id" element={<HistoriqueDetail />} />
+        <Route path="/modifier/article/:id" element={<UpdateArticle />} />
         <Route path="*" element={<Inconnu />} />
       </Routes>
     </>
   ) : (
     <>
       <Routes>
-        <Route path="/essai" element={<Essai articles={articles} />} />
+        <Route path="/essai" element={<Essai />} />
         <Route path="/" element={<Accueil />} />
         <Route
           path="/log"
@@ -152,24 +90,7 @@ const AllPages: FunctionComponent<Props> = ({
             />
           }
         />
-        <Route
-          path="/inventaire"
-          element={
-            <InventairePages
-              user={user}
-              setUser={setUser}
-              setUserIslogged={setUserIsLogged}
-              articles={articles}
-              setArticles={setArticles}
-              inventaires={inventaires}
-              setInventaires={setInventaires}
-              historiques={historiques}
-              setHistoriques={setHistoriques}
-              ventes={ventes}
-              achats={achats}
-            />
-          }
-        />
+        <Route path="/inventaire" element={<InventairePages />} />
         <Route path="*" element={<Inconnu />} />
       </Routes>
     </>

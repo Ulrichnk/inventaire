@@ -1,13 +1,25 @@
 import React, { FunctionComponent } from "react";
 import InventaireFireService from "./helpers/InventaireFire";
 import { Article } from "./helpers/Types";
+import { useAppContext } from "./helpers/AppContext";
 
 type Props = {
   //define your props here
-  articles: Article[];
 };
 
-const Essai: FunctionComponent<Props> = ({ articles }) => {
+const Essai: FunctionComponent<Props> = () => {
+  const {
+    inventaires,
+    setInventaires,
+    setHistoriques,
+    historiques,
+    articles,
+    setArticles,
+    achats,
+    setAchats,
+    ventes,
+    setVentes,
+  } = useAppContext();
   const handles = async () => {
     const promises = articles.map(async (res) => {
       try {

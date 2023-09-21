@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Historique } from "../helpers/Types";
+import { Historique } from "../../helpers/Types";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 

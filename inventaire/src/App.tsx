@@ -8,35 +8,17 @@ import NavBar from "./components/navigations/NavBar";
 import AllPages from "./components/navigations/AllPages";
 import { styled } from "styled-components";
 import { Article, Lambda, Roger, User } from "./helpers/Types";
-import useDonnee from "./helpers/useDonnee";
+import { useAppContext } from "./helpers/AppContext";
+import Footer from "./components/navigations/footer";
 
-const Pages = styled.div`
-  background-color: rgb(255, 230, 221);
-  min-height: 100vh;
+// const Pages = styled.div`
+//   background-color: rgb(255, 230, 221);
+//   min-height: 100vh;
 
-  & table {
-    width: 100px;
-  }
-`;
-
-const M = styled.div`
-  background-color: azure;
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  cursor: pointer;
-  & div {
-    background-color: grey;
-    height: 5px;
-    border-radius: 12px;
-    width: 80%;
-    margin: 5px auto;
-  }
-`;
-
+//   & table {
+//     width: 100px;
+//   }
+// `;
 type AppContextValue = {
   user: User;
   articles: Article[];
@@ -59,7 +41,7 @@ const App: FunctionComponent = () => {
     setAchats,
     ventes,
     setVentes,
-  } = useDonnee(state);
+  } = useAppContext();
 
   const handle = () => {
     setState(!state);
@@ -67,72 +49,53 @@ const App: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    console.log('vos ventes',ventes);
-    
     if (localStorage.getItem("user_token") === "roger") {
       setUserIsLogged(true);
       setUser(Roger);
     }
-  }, []);
+  }, [ventes]);
 
   return userIsLogged && user !== null ? (
     <div>
-      {" "}
-      <div>
-        <M onClick={() => handle()}>
-          <div></div>
-          <div></div>
-          <div></div>
-        </M>
-        <Pages>
-          <NavBar userIsLogged={true} state={state} />
-          <AllPages
-            userIsLogged={true}
-            user={user}
-            setUser={setUser}
-            setUserIsLogged={setUserIsLogged}
-            articles={articles}
-            setArticles={setArticles}
-            inventaires={inventaires}
-            setInventaires={setInventaires}
-            historiques={historiques}
-            setHistoriques={setHistoriques}
-            achats={achats}
-            setAchats={setAchats}
-            ventes={ventes}
-            setVentes={setVentes}
-          />
-        </Pages>
-      </div>
+      <NavBar userIsLogged={true} />
+      <AllPages
+        userIsLogged={true}
+        user={user}
+        setUser={setUser}
+        setUserIsLogged={setUserIsLogged}
+        articles={articles}
+        setArticles={setArticles}
+        inventaires={inventaires}
+        setInventaires={setInventaires}
+        historiques={historiques}
+        setHistoriques={setHistoriques}
+        achats={achats}
+        setAchats={setAchats}
+        ventes={ventes}
+        setVentes={setVentes}
+      />
+      <Footer/>
     </div>
   ) : (
     <div>
-      <div>
-        <M onClick={() => handle()}>
-          <div></div>
-          <div></div>
-          <div></div>
-        </M>
-        <Pages>
-          <NavBar userIsLogged={false} state={state} />
-          <AllPages
-            userIsLogged={false}
-            user={null}
-            setUser={setUser}
-            setUserIsLogged={setUserIsLogged}
-            articles={articles}
-            setArticles={setArticles}
-            inventaires={inventaires}
-            setInventaires={setInventaires}
-            historiques={historiques}
-            setHistoriques={setHistoriques}
-            achats={achats}
-            setAchats={setAchats}
-            ventes={ventes}
-            setVentes={setVentes}
-          />
-        </Pages>
-      </div>
+      <NavBar userIsLogged={false} />
+      <AllPages
+        userIsLogged={false}
+        user={null}
+        setUser={setUser}
+        setUserIsLogged={setUserIsLogged}
+        articles={articles}
+        setArticles={setArticles}
+        inventaires={inventaires}
+        setInventaires={setInventaires}
+        historiques={historiques}
+        setHistoriques={setHistoriques}
+        achats={achats}
+        setAchats={setAchats}
+        ventes={ventes}
+        setVentes={setVentes}
+      />
+      <Footer/>
     </div>
   );
 };

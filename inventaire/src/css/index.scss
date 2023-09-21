@@ -1,0 +1,25 @@
+@import "sign.css";
+@import "navbar.css";
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* Ajout du dégradé linéaire de gris à orange à jaune */
+  /* background: linear-gradient(to right, #808080, #FFA500, #FFFF00); */
+
+}
+
+ul, li, a{
+  text-decoration:none;
+  list-style:none;
+  
+}
+button{
+  border:none;
+}

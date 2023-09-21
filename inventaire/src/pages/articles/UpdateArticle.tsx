@@ -1,9 +1,10 @@
 import React, { useState, FunctionComponent, useEffect } from "react";
-import { Article } from "../helpers/Types";
+import { Article } from "../../helpers/Types";
 import { useParams } from "react-router-dom";
-import Input from "../components/Input";
+import Input from "../../components/Input";
 import { styled } from "styled-components";
-import localServices from "../helpers/LocalService";
+import localServices from "../../helpers/LocalService";
+import { useAppContext } from "../../helpers/AppContext";
 
 const Container = styled.div`
   display: flex;
@@ -71,20 +72,28 @@ type Form = {
 };
 type Props = {
   //define your props here
-  article?: Article;
-  articles: Article[];
-  setArticles: React.Dispatch<React.SetStateAction<Article[]>>;
 };
 
 type Params = {
   id: string;
 };
 
-const UpdateArticle: FunctionComponent<Props> = ({ articles, setArticles }) => {
+const UpdateArticle: FunctionComponent<Props> = () => {
   const { id } = useParams<Params>();
   const id_article = parseInt(id ? id : "1", 10);
   const [article, setArticle] = useState<Article>();
-
+  const {
+    inventaires,
+    setInventaires,
+    setHistoriques,
+    historiques,
+    articles,
+    setArticles,
+    achats,
+    setAchats,
+    ventes,
+    setVentes,
+  } = useAppContext();
   useEffect(() => {
     const fetchArticle = async () => {
       const fetchedArticle: Article | undefined =

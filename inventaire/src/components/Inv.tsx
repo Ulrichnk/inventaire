@@ -1,20 +1,7 @@
-import React, {
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import {
-  Achat,
-  Article,
-  Historique,
-  Inventaire,
-  Vente,
-  fusionAchat,
-  fusionVente,
-} from "../helpers/Types";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { Article, fusionAchat, fusionVente } from "../helpers/Types";
 import localServices from "../helpers/LocalService";
+import { useAppContext } from "../helpers/AppContext";
 
 type Field<T> = {
   value?: T;
@@ -36,33 +23,14 @@ type Props = {
   duree?: Duree;
   state?: boolean;
   id_historique: number;
-  articles: Article[];
-  setArticles: Dispatch<SetStateAction<Article[]>>;
-  inventaires: Inventaire[];
-  setInventaires: Dispatch<SetStateAction<Inventaire[]>>;
-  historiques: Historique[];
-  setHistoriques: Dispatch<SetStateAction<Historique[]>>;
-  ventes: Vente[];
-  achats: Achat[];
 };
-const Inv: FunctionComponent<Props> = ({
-  id,
-  duree,
-  state,
-  id_historique,
-  articles,
-  setArticles,
-  setInventaires,
-  inventaires,
-  historiques,
-  setHistoriques,
-  ventes,
-  achats,
-}) => {
+const Inv: FunctionComponent<Props> = ({ id, duree, state, id_historique }) => {
   const [article, setArticle] = useState<Article>();
   const [stock_depart, setStockDepart] = useState<number>(0);
   const [vente, setVente] = useState<number>(0);
   const [achat, setAchat] = useState<number>(0);
+  const { inventaires, setInventaires, historiques, articles, achats, ventes } =
+    useAppContext();
   if (duree) {
     setVente(
       fusionVente(
@@ -283,7 +251,8 @@ const Inv: FunctionComponent<Props> = ({
           : "Bénéfice atttendu"} */}
         {article && article.prix_achat
           ? ((-stock_depart - achat) * -1 * article.prix_achat -
-            article.prix_vente * (vente))*-1
+              article.prix_vente * vente) *
+            -1
           : "benefice réel"}
       </td>
       <td>
@@ -294,7 +263,8 @@ const Inv: FunctionComponent<Props> = ({
         Form.stock_achat.value !== undefined &&
         Form.stock_restant.value !== undefined
           ? ((-stock_depart - achat) * -1 * article.prix_achat -
-            article.prix_vente * Form.stock_restant.value)*-1
+              article.prix_vente * Form.stock_restant.value) *
+            -1
           : "Bénéfice atttendu"}{" "}
       </td>
     </>
