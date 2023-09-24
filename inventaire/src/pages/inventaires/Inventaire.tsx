@@ -9,6 +9,15 @@ export const Cont = styled.div`
   display: flex;
   flex-direction: column;
 `;
+export type benef = {
+  benefReel: number;
+  id: number;
+};
+export type benefA = {
+  benefAttendu: number;
+  id: number;
+};
+
 const Search = styled.div`
   & input {
     min-width: 40%;
@@ -75,14 +84,31 @@ type Props = {
   //define your props here
 };
 
-const InventairePages: FunctionComponent<Props> = () => {
+const InventairePages: FunctionComponent<Props> = React.memo(() => {
   const [state, setState] = useState<boolean>(false);
   const contextValue = useContext(AppContext);
   const [id_historique, setId_historique] = useState<number>(0);
   const [term, setTerm] = useState<string>("");
   const [search, setSearch] = useState<boolean>(false);
   const [a, setA] = useState<Article[]>([]);
-  const { setHistoriques, articles } = useAppContext();
+  const { setHistoriques, articles, historiques } = useAppContext();
+  const [tabBenef, setTabBenef] = useState<benef[]>(
+    articles.map((art) => {
+      return { id: art.id, benefReel: 0 };
+    })
+  );
+  const [tabBenefAttendu, setTabBenefAttendu] = useState<benefA[]>(
+    articles.map((art) => {
+      return { benefAttendu: 0, id: art.id };
+    })
+  );
+  // React.useEffect(() => {
+  //   setTabBenef(
+  //     articles.map((art) => {
+  //       return { benef: 0, id: art.id, benefcalc: 0 };
+  //     })
+  //   );
+  // }, []);
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);
@@ -137,23 +163,28 @@ const InventairePages: FunctionComponent<Props> = () => {
   const addHist = () => {
     if (duree.date_debut.value && duree.date_fin.value) {
       setChange(false);
+      console.log("histo", historiques);
+
       localServices
         .addHistorique(
           duree.date_debut.value,
           duree.date_fin.value,
+          historiques,
           setHistoriques
         )
-        .then((res) => (res ? setId_historique(res.id) : "erreur"));
-      //   InventaireFireService.addHistorique(
-      //     duree.date_debut.value,
-      //     duree.date_fin.value
-      //   ).then((res) => (res ? setId_historique(res.id) : "erreur"));
+        .then((res) =>
+          res
+            ? (setId_historique(res.id),
+              alert("historique ajoute avec succès veuillez continuez"))
+            : alert("historique deja ajoutée")
+        );
     }
   };
+  console.log("evolution deu benef", tabBenef);
 
   return (
-    <Cont>
-      <Container>
+    <Container>
+      <div>
         <div>
           <h1>
             Faire un inventaire Monsieur{" "}
@@ -205,12 +236,8 @@ const InventairePages: FunctionComponent<Props> = () => {
                       <th>Stock acheter</th>
                       <th>Stock total</th>
                       <th>stok vendu</th>
-                      <th>Valeur stock vendu</th>
-                      <th>Valeur stock acheter</th>
-                      <th>Valeur stock départ</th>
-                      <th>Valeur stock total</th>
                       <th>Stock restant</th>
-                      <th>Valeur stock restant</th>
+                      <th>Manque</th>
                       <th>Bénéfice attendu</th>
                       <th>Bénéfice réel</th>
                     </tr>
@@ -227,6 +254,7 @@ const InventairePages: FunctionComponent<Props> = () => {
                               id={item.id}
                               state={state}
                               id_historique={id_historique}
+                              benefs={tabBenef}
                             />
                           </tr>
                         ))
@@ -241,6 +269,7 @@ const InventairePages: FunctionComponent<Props> = () => {
                               duree={duree}
                               state={state}
                               id_historique={id_historique}
+                              benefs={tabBenef}
                             />
                           </tr>
                         ))}
@@ -262,12 +291,8 @@ const InventairePages: FunctionComponent<Props> = () => {
                 <th>Stock acheter</th>
                 <th>Stock total</th>
                 <th>stok vendu</th>
-                <th>Valeur stock vendu</th>
-                <th>Valeur stock acheter</th>
-                <th>Valeur stock départ</th>
-                <th>Valeur stock total</th>
                 <th>Stock restant</th>
-                <th>Valeur stock restant</th>
+                <th>Manque</th>
                 <th>Bénéfice attendu</th>
                 <th>Bénéfice réel</th>
               </tr>
@@ -285,6 +310,10 @@ const InventairePages: FunctionComponent<Props> = () => {
                         id={item.id}
                         state={state}
                         id_historique={id_historique}
+                        benefs={tabBenef}
+                        setBenef={setTabBenef}
+                        benefAttendu={tabBenefAttendu}
+                        setBenefAttendu={setTabBenefAttendu}
                       />
                     </tr>
                   ))
@@ -299,6 +328,10 @@ const InventairePages: FunctionComponent<Props> = () => {
                         duree={duree}
                         state={state}
                         id_historique={id_historique}
+                        benefs={tabBenef}
+                        setBenef={setTabBenef}
+                        benefAttendu={tabBenefAttendu}
+                        setBenefAttendu={setTabBenefAttendu}
                       />
                     </tr>
                   ))}
@@ -306,9 +339,28 @@ const InventairePages: FunctionComponent<Props> = () => {
           </table>
           <button onClick={HandleSubmit}>Valider l'inventaire</button>
         </div>
-      </Container>
-    </Cont>
+      </div>
+      <div>
+        <button>
+          benefice total reel obtenu avec le stock restant entrée :{" "}
+          <h3>
+            {" "}
+            {tabBenef.reduce((somme, bene) => somme + bene.benefReel, 0)}
+          </h3>
+        </button>
+        <button>
+          benefice total attendu :{" "}
+          <h3>
+            {" "}
+            {tabBenefAttendu.reduce(
+              (somme, benef) => somme + benef.benefAttendu,
+              0
+            )}
+          </h3>
+        </button>
+      </div>
+    </Container>
   );
-};
+});
 
 export default InventairePages;

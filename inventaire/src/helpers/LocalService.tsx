@@ -11,6 +11,14 @@ import {
 import { db } from "./firebase-config";
 
 export default class localServices {
+  static isDev = () => {
+    if (process.env.REACT_APP_DEV === "false") {
+      return false;
+    } else {
+      return true;
+    }
+    // return (!process.env.NODE_ENV || process.env.NODE_ENV === "development");
+  };
   static async getArticles(): Promise<Article[]> {
     try {
       const querySnapshot = await getDocs(collection(db, "articles"));
@@ -42,7 +50,9 @@ export default class localServices {
         ...modifiedArticle,
         id: id,
       };
-      await addDoc(articlesRef, newArticleData);
+      if (this.isDev()) {
+        await addDoc(articlesRef, newArticleData);
+      }
       // Mettre à jour localement les articles
       if (typeof a !== "boolean") {
         setArticles((prevArticles) => [...prevArticles, modifiedArticle]); // Met à jour l'état local des articles en remplaçant l'article mis à jour
@@ -61,14 +71,16 @@ export default class localServices {
     setArticles: Dispatch<SetStateAction<Article[]>>
   ): Promise<Article[] | boolean> {
     try {
-      // Recherche l'article dans Firestore
-      const q = query(collection(db, "articles"), where("id", "==", id));
-      const querySnapshot = await getDocs(q);
+      if (this.isDev()) {
+        // Recherche l'article dans Firestore
+        const q = query(collection(db, "articles"), where("id", "==", id));
+        const querySnapshot = await getDocs(q);
 
-      // Supprime l'article s'il existe
-      querySnapshot.forEach(async (doc) => {
-        await deleteDoc(doc.ref);
-      });
+        // Supprime l'article s'il existe
+        querySnapshot.forEach(async (doc) => {
+          await deleteDoc(doc.ref);
+        });
+      }
 
       // Met à jour l'état local en supprimant l'article
       const updatedArticles = articles.filter((art) => art.id !== id);
@@ -97,8 +109,9 @@ export default class localServices {
         ...modifiedArticle,
         id: newSize,
       };
-
-      await addDoc(articlesRef, newArticleData);
+      if (this.isDev()) {
+        await addDoc(articlesRef, newArticleData);
+      }
 
       // Mettre à jour localement les articles
       setArticles((prevArticles) => [...prevArticles, modifiedArticle]);
@@ -155,6 +168,8 @@ export default class localServices {
     id_article: number,
     inventaires: Inventaire[]
   ): Promise<Inventaire | null> {
+    console.log("l inventaire fourni", inventaires);
+
     return (
       inventaires.find(
         (art) => id_article === art.id_article && id_hist === art.id_historique
@@ -165,9 +180,34 @@ export default class localServices {
   static async addHistorique(
     date_debut: string,
     date_fin: string,
+    historiques: Historique[],
     setHistoriques: Dispatch<SetStateAction<Historique[]>>
   ): Promise<Historique | null> {
     try {
+      // Convertir les dates en objets Date
+
+      // Vérifier si les dates correspondent à celles déjà présentes dans les historiques
+      const isDuplicate = historiques.some((historique) => {
+        const parsedDateDebut = new Date(date_debut).getTime();
+        const parsedDateFin = new Date(date_fin).getTime();
+
+        const historiqueDateDebut = new Date(historique.date_debut).getTime();
+        const historiqueDateFin = new Date(historique.date_fin).getTime();
+
+        return (
+          parsedDateDebut === historiqueDateDebut &&
+          parsedDateFin === historiqueDateFin
+        );
+      });
+
+      console.log("valeur is duplicate", isDuplicate);
+
+      if (isDuplicate) {
+        console.error(
+          "Les dates correspondent à des dates déjà présentes dans les historiques."
+        );
+        return null; // Dates correspondent à des dates existantes, retourne null
+      }
       const historiquesRef = collection(db, "historiques");
 
       // Obtenir la taille actuelle de la collection historique
@@ -192,7 +232,9 @@ export default class localServices {
       ]);
 
       // Ajouter le nouvel historique à la collection avec l'ID calculé dans Firestore
-      await addDoc(historiquesRef, newHistorique);
+      if (this.isDev()) {
+        await addDoc(historiquesRef, newHistorique);
+      }
 
       // Renvoyer l'objet Historique avec l'ID calculé
       return {
@@ -239,7 +281,9 @@ export default class localServices {
       setInventaires((prevInventaires) => [...prevInventaires, newInventaire]);
 
       // Ajouter le nouvel inventaire à la collection avec le nouvel ID dans Firestore
-      await addDoc(inventairesRef, newInventaire);
+      if (this.isDev()) {
+        await addDoc(inventairesRef, newInventaire);
+      }
 
       return newInventaire;
     } catch (error) {
@@ -271,7 +315,10 @@ export default class localServices {
       // Mettre à jour localement les achats
       setAchats((prevAchats) => [...prevAchats, newAchat]);
       // Ajouter le nouvel achat à la collection avec le nouvel ID dans Firestore
-      await addDoc(achatsRef, newAchat);
+      if (this.isDev()) {
+        await addDoc(achatsRef, newAchat);
+      }
+
       return newAchat;
     } catch (error) {
       console.error(error);
@@ -345,7 +392,10 @@ export default class localServices {
       // Mettre à jour localement les ventes
       setVentes((prevVentes) => [...prevVentes, newVente]);
       // Ajouter la nouvelle vente à la collection avec le nouvel ID dans Firestore
-      await addDoc(ventesRef, newVente);
+      if (this.isDev()) {
+        await addDoc(ventesRef, newVente);
+      }
+
       return newVente;
     } catch (error) {
       console.error(error);

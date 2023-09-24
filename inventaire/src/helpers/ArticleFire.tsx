@@ -10,6 +10,7 @@ import {
   getDocs,
 } from "firebase/firestore"; // Import des fonctions Firestore nécessaires
 import { db } from "./firebase-config";
+import { Dispatch, SetStateAction } from "react";
 
 export let useArticle: Article[] = [
   {
@@ -27,8 +28,10 @@ export let useArticle: Article[] = [
     created_at: new Date(),
   },
 ];
-export let ventes:Vente[]=[];
-export let achats:Achat[]=[];
+export let ventes: Vente[] = [];
+export let achats: Achat[] = [
+  { id: 1, id_article: 0, valeur_achat: 100, date_ajout: "2022-09-22" },
+];
 
 export function add(a: Article): Article {
   const id: number = useArticle.length;
@@ -40,8 +43,8 @@ export function add(a: Article): Article {
 
 export default class ArticleFireService {
   static articles: Article[] = useArticle;
-  static ventes:Vente[]=[];
-  static achats:Achat[]=[];
+  static ventes: Vente[] = ventes;
+  static achats: Achat[] = achats;
 
   static isDev = () => {
     if (process.env.REACT_APP_DEV === "false") {
@@ -70,24 +73,23 @@ export default class ArticleFireService {
   }
   static async getArticle(id: number): Promise<Article | null | undefined> {
     if (this.isDev()) {
-        try {
-            const querySnapshot = await getDocs(collection(db, "articles"));
-            const article = querySnapshot.docs.find(doc => doc.data().id === id);
+      try {
+        const querySnapshot = await getDocs(collection(db, "articles"));
+        const article = querySnapshot.docs.find((doc) => doc.data().id === id);
 
-            if (article) {
-                return article.data() as Article;
-            } else {
-                return null;
-            }
-        } catch (error) {
-            this.handleError(error);
-            return null;
+        if (article) {
+          return article.data() as Article;
+        } else {
+          return null;
         }
+      } catch (error) {
+        this.handleError(error);
+        return null;
+      }
     } else {
-        return this.articles.find(art => art.id === id);
+      return this.articles.find((art) => art.id === id);
     }
-}
-
+  }
 
   static async updateArticle(article: Article): Promise<Article> {
     if (this.isDev()) {
@@ -202,6 +204,36 @@ export default class ArticleFireService {
     }
   }
 
+  static async addAchat(
+    id_article: number,
+    valeur_achat: number,
+    date_ajout: string,
+    setAchats: Dispatch<SetStateAction<Achat[]>>
+  ): Promise<Achat | null> {
+    try {
+      const achatsRef = collection(db, "achats");
+      // Obtenir la taille actuelle de la collection achats
+      const achatsQuerySnapshot = await getDocs(achatsRef);
+      const achatSize = achatsQuerySnapshot.size;
+      // Générer un nouvel ID pour l'achat
+      const newAchatId = achatSize + 1;
+      // Créer un nouvel achat
+      const newAchat: Achat = {
+        id_article: id_article,
+        id: newAchatId,
+        valeur_achat: valeur_achat,
+        date_ajout: date_ajout,
+      };
+      // Mettre à jour localement les achats
+      setAchats((prevAchats) => [...prevAchats, newAchat]);
+      // Ajouter le nouvel achat à la collection avec le nouvel ID dans Firestore
+      await addDoc(achatsRef, newAchat);
+      return newAchat;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 
   static isEmpty(data: Object): boolean {
     return Object.keys(data).length === 0;

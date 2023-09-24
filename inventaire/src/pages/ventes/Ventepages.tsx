@@ -1,8 +1,9 @@
 import React, { FunctionComponent, useState } from "react";
 import { styled } from "styled-components";
-import { Article, formatDate } from "../../helpers/Types";
+import { Article } from "../../helpers/Types";
 import localServices from "../../helpers/LocalService";
 import { useAppContext } from "../../helpers/AppContext";
+import VenteTab from "./venteTab";
 
 type Props = {};
 export const Cont = styled.div`
@@ -73,8 +74,7 @@ const Ventepages: FunctionComponent<Props> = () => {
   const [a, setA] = useState<Article[]>([]);
   const [search, setSearch] = useState<boolean>(false);
 
-  const { articles, setVentes } = useAppContext();
-  const [vente, setVente] = useState<number[]>(Array(articles.length).fill(0));
+  const { articles } = useAppContext();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
@@ -95,24 +95,13 @@ const Ventepages: FunctionComponent<Props> = () => {
     console.log(localServices.searchArticle(term, articles));
   };
 
-  const handle = (id: number) => {
-    console.log("vente enregistrer");
-    localServices
-      .addVente(id, vente[id], formatDate(new Date()), setVentes)
-      .then((res) => {
-        if (res) {
-          console.log("vous avez reussi a enregistrer", res);
-        } else {
-          console.log("echec");
-        }
-      });
-  };
+ 
 
   return (
     <Cont>
       <Acc>
         <div>
-          <h1>Vous Pouvez enregistrer de nouvelles ventes </h1>
+          <h1>Vous Pouvez enregistrer de nouvelles ventes sous forme d'unité </h1>
           <Search>
             <input
               type="text"
@@ -128,41 +117,13 @@ const Ventepages: FunctionComponent<Props> = () => {
                     <th>Nom</th>
                     <th>Prix d'vente</th>
                     <th>Prix de vente</th>
-                    <th>Valeur de l'vente</th>
+                    <th>nombre vendu</th>
                     <th>Valider</th>
                   </tr>
                 </thead>
                 <tbody>
                   {a.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nom}</td>
-                      <td>{item.prix_vente}</td>
-                      <td>{item.prix_vente}</td>
-                      <td>
-                        <input
-                          value={vente[item.id]}
-                          name="valeur_vente"
-                          className="input"
-                          placeholder="valeur de l'vente "
-                          type="text"
-                          style={{ width: "100px" }}
-                          onChange={(e) => {
-                            const newValue = parseFloat(e.target.value);
-                            // Mettre à jour le tableau vente avec la nouvelle valeur
-                            setVente((prevVente) => ({
-                              ...prevVente,
-                              [item.id]: isNaN(newValue) ? 0 : newValue, // Assurez-vous que c'est un nombre ou 0 par défaut
-                            }));
-                          }}
-                        />
-                      </td>
-                      <td>
-                        <button onClick={() => handle(item.id)}>
-                          Valider les ventes
-                        </button>
-                      </td>
-                    </tr>
+                    <VenteTab item={item} key={item.id} />
                   ))}
                 </tbody>
               </table>
@@ -178,40 +139,13 @@ const Ventepages: FunctionComponent<Props> = () => {
                 <th>Nom</th>
                 <th>Prix d'vente</th>
                 <th>Prix de vente</th>
-                <th>Valeur de l'vente</th>
+                <th>nombre vendu</th>
                 <th>Valider</th>
               </tr>
             </thead>
             <tbody>
               {articles.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.nom}</td>
-                  <td>{item.prix_vente}</td>
-                  <td>{item.prix_vente}</td>
-                  <td>
-                    <input
-                      value={vente[item.id]}
-                      name="valeur_vente"
-                      className="input"
-                      placeholder="valeur de l'vente "
-                      type="text"
-                      onChange={(e) => {
-                        const newValue = parseFloat(e.target.value);
-                        // Mettre à jour le tableau vente avec la nouvelle valeur
-                        setVente((prevVente) => ({
-                          ...prevVente,
-                          [item.id]: isNaN(newValue) ? 0 : newValue, // Assurez-vous que c'est un nombre ou 0 par défaut
-                        }));
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <button onClick={() => handle(item.id)}>
-                      Valider les ventes
-                    </button>
-                  </td>
-                </tr>
+                <VenteTab item={item} key={item.id} />
               ))}
             </tbody>
           </table>
