@@ -214,11 +214,13 @@ const Gestion: FunctionComponent<Props> = () => {
       };
       localServices.addArticle(a, setArticles).then((res) => {
         if (res) {
-          localServices.getArticles().then((articles) => {
-            const up = [...articles];
-            up.sort((a, b) => a.nom.localeCompare(b.nom));
-            setArticles(up);
-          });
+          if (process.env.REACT_APP_DEV === "true") {
+            localServices.getArticles().then((articles) => {
+              const up = [...articles];
+              up.sort((a, b) => a.nom.localeCompare(b.nom));
+              setArticles(up);
+            });
+          }
         }
       });
       setForm({

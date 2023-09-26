@@ -6,7 +6,6 @@ import React, {
 } from "react";
 import NavBar from "./components/navigations/NavBar";
 import AllPages from "./components/navigations/AllPages";
-import { styled } from "styled-components";
 import { Article, Lambda, Roger, User } from "./helpers/Types";
 import { useAppContext } from "./helpers/AppContext";
 import Footer from "./components/navigations/footer";
@@ -29,7 +28,6 @@ export const AppContext = createContext<AppContextValue | null>(null);
 const App: FunctionComponent = () => {
   const [user, setUser] = useState<User>(Lambda);
   const [userIsLogged, setUserIsLogged] = useState<boolean>(false);
-  const [state, setState] = useState<boolean>(false);
   const {
     inventaires,
     setInventaires,
@@ -43,10 +41,7 @@ const App: FunctionComponent = () => {
     setVentes,
   } = useAppContext();
 
-  const handle = () => {
-    setState(!state);
-    console.log(state);
-  };
+
 
   useEffect(() => {
     if (localStorage.getItem("user_token") === "roger") {

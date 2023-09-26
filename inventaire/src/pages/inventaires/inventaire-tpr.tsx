@@ -1,23 +1,20 @@
-import React, { FunctionComponent, useContext, useState } from "react";
+import React, { FunctionComponent, useState} from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { Article } from "../../helpers/Types";
-import Inv from "../../components/Inv";
-import { AppContext } from "../../App";
-import localServices from "../../helpers/LocalService";
+import { benef, benefA } from "./Inventaire";
 import { useAppContext } from "../../helpers/AppContext";
-export const Cont = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-export type benef = {
-  benefReel: number;
-  id: number;
-};
-export type benefA = {
-  benefAttendu: number;
-  id: number;
+import localServices from "../../helpers/LocalService";
+import InvTmp from "./invtmp";
+type Field<T> = {
+  value?: T;
+  isValid?: boolean;
 };
 
+type Duree = {
+  date_debut: Field<string>;
+  date_fin: Field<string>;
+};
 const Search = styled.div`
   & input {
     min-width: 40%;
@@ -70,28 +67,25 @@ export const Container = styled.div`
     margin: 20px;
   }
 `;
-type Field<T> = {
-  value?: T;
-  isValid?: boolean;
-};
-
-type Duree = {
-  date_debut: Field<string>;
-  date_fin: Field<string>;
-};
-
 type Props = {
   //define your props here
 };
-
-const InventairePages: FunctionComponent<Props> = React.memo(() => {
+type Params = {
+  //define your props herec
+  id: string;
+  date_fin: string;
+};
+const InventaireTemporaire: FunctionComponent<Props> = () => {
+  const { id, date_fin } = useParams<Params>();
+  let navigate = useNavigate();
+  const id_hist = parseInt(id ? id : "1");
   const [state, setState] = useState<boolean>(false);
-  const contextValue = useContext(AppContext);
-  const [id_historique, setId_historique] = useState<number>(0);
   const [term, setTerm] = useState<string>("");
   const [search, setSearch] = useState<boolean>(false);
   const [a, setA] = useState<Article[]>([]);
   const { setHistoriques, articles, historiques } = useAppContext();
+  const [change, setChange] = useState<boolean>(true);
+  const hist = localServices.getHistoriqueById(id_hist - 1, historiques);
   const [tabBenef, setTabBenef] = useState<benef[]>(
     articles.map((art) => {
       return { id: art.id, benefReel: 0 };
@@ -102,13 +96,7 @@ const InventairePages: FunctionComponent<Props> = React.memo(() => {
       return { benefAttendu: 0, id: art.id };
     })
   );
-  // React.useEffect(() => {
-  //   setTabBenef(
-  //     articles.map((art) => {
-  //       return { benef: 0, id: art.id, benefcalc: 0 };
-  //     })
-  //   );
-  // }, []);
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const term = e.target.value;
     setTerm(term);
@@ -125,42 +113,18 @@ const InventairePages: FunctionComponent<Props> = React.memo(() => {
     console.log(a);
   };
 
-  const [duree, setDuree] = useState<Duree>({
+  const [duree] = useState<Duree>({
     date_debut: {
       isValid: true,
-      value: "",
+      value: hist?.date_fin,
     },
     date_fin: {
       isValid: true,
-      value: "",
+      value: date_fin,
     },
   });
-  const [change, setChange] = useState<boolean>(true);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChange(true);
-    const fieldName: string = e.target.name;
-    const fieldValue: string = e.target.value;
-    const newField: Field<string> = {
-      [fieldName]: { value: fieldValue, isValid: true },
-    };
-    console.log(
-      "vous avez selectionner",
-      fieldName,
-      " de valeur : ",
-      fieldValue,
-      "et de type",
-      typeof fieldValue
-    );
-
-    setDuree({ ...duree, ...newField });
-  };
 
   const HandleSubmit = () => {
-    setState(true);
-  };
-
-  const addHist = () => {
     if (duree.date_debut.value && duree.date_fin.value) {
       setChange(false);
       console.log("histo", historiques);
@@ -174,49 +138,23 @@ const InventairePages: FunctionComponent<Props> = React.memo(() => {
         )
         .then((res) =>
           res
-            ? (setId_historique(res.id),
-              alert("historique ajoute avec succès veuillez continuez"))
-            : alert("historique deja ajoutée")
+            ? (
+              console.log("historique ajoute avec succès veuillez continuez"))
+            :console.log("historique deja ajoutée")
         );
     }
+    setState(true);
+    setTimeout(() => {
+      navigate("/historiques");
+    }, 1000);
   };
-  console.log("evolution deu benef", tabBenef);
-
-  return (
+  return hist && date_fin && id ? (
     <Container>
       <div>
         <div>
-          <h1>
-            Faire un inventaire Monsieur{" "}
-            {contextValue ? contextValue.user.name : ""}
-          </h1>
+          <h1>Faire un inventaire Monsieur </h1>
+
           <div className="date">
-            <p>Selectionner la date de vos comptes</p>
-            <label htmlFor="date_debut">date de début:</label>
-            <input
-              value={duree.date_debut.value}
-              name="date_debut"
-              onChange={(e) => handleInputChange(e)}
-              className="date-input "
-              placeholder="date de debut "
-              type="date"
-            />
-            <label htmlFor="date_fin">date de fin:</label>
-            <input
-              value={duree.date_fin.value}
-              name="date_fin"
-              onChange={(e) => handleInputChange(e)}
-              className="date-input"
-              placeholder="date de debut "
-              type="date"
-            />
-            <button
-              onClick={() => {
-                addHist();
-              }}
-            >
-              Valider
-            </button>
             <Search>
               <input
                 type="text"
@@ -250,10 +188,10 @@ const InventairePages: FunctionComponent<Props> = React.memo(() => {
                             <td>{item.nom}</td>
                             <td>{item.prix_achat}</td>
                             <td>{item.prix_vente}</td>
-                            <Inv
+                            <InvTmp
                               id={item.id}
                               state={state}
-                              id_historique={id_historique}
+                              id_historique={id_hist}
                               benefs={tabBenef}
                               setBenef={setTabBenef}
                               benefAttendu={tabBenefAttendu}
@@ -267,11 +205,11 @@ const InventairePages: FunctionComponent<Props> = React.memo(() => {
                             <td>{item.nom}</td>
                             <td>{item.prix_achat}</td>
                             <td>{item.prix_vente}</td>
-                            <Inv
+                            <InvTmp
                               id={item.id}
                               duree={duree}
                               state={state}
-                              id_historique={id_historique}
+                              id_historique={id_hist}
                               benefs={tabBenef}
                               setBenef={setTabBenef}
                               benefAttendu={tabBenefAttendu}
@@ -286,6 +224,7 @@ const InventairePages: FunctionComponent<Props> = React.memo(() => {
               )}
             </Search>
           </div>
+
           <table>
             <thead>
               <tr>
@@ -304,43 +243,24 @@ const InventairePages: FunctionComponent<Props> = React.memo(() => {
               </tr>
             </thead>
             <tbody>
-              {/* <Input Form={Form} setForm={setForm} /> */}
-              {change
-                ? articles.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nom}</td>
-                      <td>{item.prix_achat}</td>
-                      <td>{item.prix_vente}</td>
-                      <Inv
-                        id={item.id}
-                        state={state}
-                        id_historique={id_historique}
-                        benefs={tabBenef}
-                        setBenef={setTabBenef}
-                        benefAttendu={tabBenefAttendu}
-                        setBenefAttendu={setTabBenefAttendu}
-                      />
-                    </tr>
-                  ))
-                : articles.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nom}</td>
-                      <td>{item.prix_achat}</td>
-                      <td>{item.prix_vente}</td>
-                      <Inv
-                        id={item.id}
-                        duree={duree}
-                        state={state}
-                        id_historique={id_historique}
-                        benefs={tabBenef}
-                        setBenef={setTabBenef}
-                        benefAttendu={tabBenefAttendu}
-                        setBenefAttendu={setTabBenefAttendu}
-                      />
-                    </tr>
-                  ))}
+              {articles.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.id}</td>
+                  <td>{item.nom}</td>
+                  <td>{item.prix_achat}</td>
+                  <td>{item.prix_vente}</td>
+                  <InvTmp
+                    id={item.id}
+                    duree={duree}
+                    state={state}
+                    id_historique={id_hist}
+                    benefs={tabBenef}
+                    setBenef={setTabBenef}
+                    benefAttendu={tabBenefAttendu}
+                    setBenefAttendu={setTabBenefAttendu}
+                  />
+                </tr>
+              ))}
             </tbody>
           </table>
           <button onClick={HandleSubmit}>Valider l'inventaire</button>
@@ -366,7 +286,9 @@ const InventairePages: FunctionComponent<Props> = React.memo(() => {
         </button>
       </div>
     </Container>
+  ) : (
+    <>loading...</>
   );
-});
+};
 
-export default InventairePages;
+export default InventaireTemporaire;

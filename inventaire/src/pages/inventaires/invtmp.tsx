@@ -1,9 +1,20 @@
-import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
-import { Article, fusionAchat, fusionVente } from "../helpers/Types";
-import localServices from "../helpers/LocalService";
-import { useAppContext } from "../helpers/AppContext";
-import { benef, benefA } from "../pages/inventaires/Inventaire";
-
+import React, {
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { Article, fusionAchat, fusionVente } from "../../helpers/Types";
+import { useAppContext } from "../../helpers/AppContext";
+import localServices from "../../helpers/LocalService";
+export type benef = {
+  benefReel: number;
+  id: number;
+};
+export type benefA = {
+  benefAttendu: number;
+  id: number;
+};
 type Field<T> = {
   value?: T;
   isValid?: boolean;
@@ -25,7 +36,7 @@ type Props = {
   setBenefAttendu?: React.Dispatch<React.SetStateAction<benefA[]>>;
   benefAttendu?: benefA[];
 };
-const Inv: FunctionComponent<Props> = ({
+const InvTmp: FunctionComponent<Props> = ({
   benefs = [],
   setBenef,
   id,
@@ -68,7 +79,7 @@ const Inv: FunctionComponent<Props> = ({
   const [vente, setVente] = useState<number>(0);
   const [achat, setAchat] = useState<number>(0);
   const stock_total = useMemo(
-    () => achat + stock_depart,
+    () => (-achat - stock_depart)*-1,
     [achat, stock_depart]
   );
   const stock_calc_restant = useMemo(
@@ -102,7 +113,7 @@ const Inv: FunctionComponent<Props> = ({
       if (a && a !== null) {
         localServices.getInventaire(a.id, id, inventaires).then((a) => {
           if (a && a !== null) {
-            setStockDepart(a.stock_restant);
+            setStockDepart(a.stock_restant as number);
           } else {
             console.log("recuperation de l'inventaire dont id", id, a);
             console.log(
@@ -146,7 +157,7 @@ const Inv: FunctionComponent<Props> = ({
       console.log("votre state ", state);
       const fetch = () => {
         if (state && duree?.date_debut.value && duree?.date_fin.value) {
-          if (stock_restant !== "") {
+          if (stock_restant === "") {
             localServices
               .addInventaire(
                 id_historique,
@@ -215,7 +226,7 @@ const Inv: FunctionComponent<Props> = ({
             setBenef
           );
         } else {
-          updateBenefReel(
+          updateBenefReel(           
             (stock_total - parseFloat(e.target.value)) *
               (article.prix_vente - article.prix_achat),
             setBenef
@@ -240,7 +251,11 @@ const Inv: FunctionComponent<Props> = ({
   };
   useEffect(() => {
     const h = () => {
-      if (article && setBenef) {
+      if (article && setBenef && setBenefAttendu) {
+        updateBenefAttendu(
+          (article.prix_vente - article.prix_achat) * vente,
+          setBenefAttendu
+        );
         if (stock_restant === "") {
           updateBenefReel(
             stock_total * (article.prix_vente - article.prix_achat),
@@ -295,4 +310,4 @@ const Inv: FunctionComponent<Props> = ({
     </>
   );
 };
-export default Inv;
+export default InvTmp;

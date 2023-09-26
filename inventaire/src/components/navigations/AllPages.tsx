@@ -20,6 +20,8 @@ import Historiques from "../../pages/historique/Historiques";
 import HistoriqueDetail from "../../pages/historique/HistoriqueDetail";
 import UpdateArticle from "../../pages/articles/UpdateArticle";
 import Ventepages from "../../pages/ventes/Ventepages";
+import InventaireTemporaire from "../../pages/inventaires/inventaire-tpr";
+import Intervalle from "../../pages/inventaires/Intervalle";
 type Props = {
   userIsLogged: Boolean;
   user: User | null;
@@ -59,7 +61,10 @@ const AllPages: FunctionComponent<Props> = ({
         <Route path="/" element={<Accueil />} />
         <Route path="/essai" element={<Essai />} />
         <Route path="/gestion-articles" element={<Gestion />} />
-        <Route path="/inventaire" element={<InventairePages />} />
+        <Route path="/inventaires" element={<InventairePages />} />
+        <Route path="/inventaire/" element={<Intervalle />} />
+        <Route path="/inventaires/:id/:date_fin" element={<InventaireTemporaire />} />
+
         <Route
           path="/enregistrement-ventes" // Remplacez le chemin pour refléter "ventes" au lieu d'"achats"
           element={<Ventepages />}

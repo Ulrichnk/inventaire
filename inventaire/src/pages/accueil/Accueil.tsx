@@ -21,9 +21,9 @@ export const Acc = styled.div`
 
 const Accueil: FunctionComponent = () => {
   return (
-    <h1>
-      Bienveunue sur ce site dédié a effectuer un inventaire, il est encore en
-      developpement
+    <h1 className="txt-center">
+      Bienvenue sur ce site dédié a effectuer un inventaire, il est encore en
+      développement
     </h1>
   );
 };

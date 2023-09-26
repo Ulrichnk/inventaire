@@ -33,7 +33,7 @@ const AchatTab: FunctionComponent<Props> = ({ item }) => {
       });
   };
   const handleInput = (e: any) => {
-    if (isNaN(parseFloat(e.target.value)) && e.target.value !== "") {
+    if (isNaN(parseFloat(e.target.value)) && e.target.value !== "" && e.target.value!=='-') {
       console.log("echec");
       sets(true);
       return;

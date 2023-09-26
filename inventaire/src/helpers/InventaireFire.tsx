@@ -5,7 +5,7 @@ import { db } from "./firebase-config";
 export let useInventaire: Inventaire[] = [
   {
     id: 0,
-    id_historique: 0,
+    id_historique: 1,
     id_article: 0,
     stock_depart: 0,
     stock_achat: 0,
@@ -13,7 +13,7 @@ export let useInventaire: Inventaire[] = [
   },
   {
     id: 1,
-    id_historique: 0,
+    id_historique: 1,
     id_article: 2,
     stock_depart: 0,
     stock_achat: 0,
@@ -31,7 +31,7 @@ export let useInventaire: Inventaire[] = [
 export let useHistorique: Historique[] = [
   // This array will hold the data for the Historique component
   {
-    id: 0,
+    id: 1,
     // This will hold the date of the first entry
     date_debut: "2023-09-21",
     // This will hold the date of the last entry

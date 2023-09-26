@@ -9,8 +9,11 @@ import {
   where,
 } from "firebase/firestore"; // Import des fonctions Firestore nécessaires
 import { db } from "./firebase-config";
+import { useArticle } from "./ArticleFire";
 
 export default class localServices {
+  static articles: Article[] = useArticle;
+
   static isDev = () => {
     if (process.env.REACT_APP_DEV === "false") {
       return false;
@@ -23,7 +26,7 @@ export default class localServices {
     try {
       const querySnapshot = await getDocs(collection(db, "articles"));
       const articles = querySnapshot.docs.map((doc) => doc.data() as Article);
-      return articles;
+      return this.isDev()? articles:this.articles;
     } catch (error) {
       this.handleError(error as Error);
       return [];
@@ -114,7 +117,10 @@ export default class localServices {
       }
 
       // Mettre à jour localement les articles
-      setArticles((prevArticles) => [...prevArticles, modifiedArticle]);
+      setArticles((prevArticles) => [...prevArticles, {
+        ...modifiedArticle,
+        id: prevArticles.length+1,
+      }]);
 
       return true;
     } catch (error) {
@@ -159,6 +165,15 @@ export default class localServices {
     const historiqueTrouve = historiques.find(
       (art) => art.date_fin.toLowerCase() === lowerCaseDateDebut
     );
+
+    return historiqueTrouve || null;
+  }
+
+  static getHistoriqueById(
+    id_hist: number,
+    historiques: Historique[]
+  ): Historique | null {
+    const historiqueTrouve = historiques.find((art) => art.id === id_hist);
 
     return historiqueTrouve || null;
   }
@@ -209,10 +224,14 @@ export default class localServices {
         return null; // Dates correspondent à des dates existantes, retourne null
       }
       const historiquesRef = collection(db, "historiques");
-
+      let historiqueSize = 0;
       // Obtenir la taille actuelle de la collection historique
       const querySnapshot = await getDocs(historiquesRef);
-      const historiqueSize = querySnapshot.size;
+      if (this.isDev()) {
+        historiqueSize = querySnapshot.size;
+      } else {
+        historiqueSize = historiques.length;
+      }
 
       // Créer un nouvel objet historique avec les dates au format Timestamp
       const newHistorique = {

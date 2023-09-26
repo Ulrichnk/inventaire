@@ -1,7 +1,8 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { styled } from "styled-components";
 import Inve from "../../components/Inve";
 import { useAppContext } from "../../helpers/AppContext";
+import { benef, benefA } from "../inventaires/Inventaire";
 
 const Container = styled.div`
   display: flex;
@@ -67,19 +68,24 @@ type Props = {
 };
 
 const Doc: FunctionComponent<Props> = ({ id_hist }) => {
-  const {
-    inventaires,
-    setInventaires,
-    setHistoriques,
-    historiques,
-    articles,
-    setArticles,
-    achats,
-    setAchats,
-    ventes,
-    setVentes,
-  } = useAppContext();
+  const { articles } = useAppContext();
+  const [s, sets] = useState<boolean>(true);
+  const [tabBenef, setTabBenef] = useState<benef[]>(
+    articles.map((art) => {
+      return { id: art.id, benefReel: 0 };
+    })
+  );
+  const [tabBenefAttendu, setTabBenefAttendu] = useState<benefA[]>(
+    articles.map((art) => {
+      return { benefAttendu: 0, id: art.id };
+    })
+  );
 
+  const handle = () => {
+    setTimeout(() => {
+      sets(!s);
+    }, 1);
+  };
   return (
     <Container>
       <div>
@@ -94,36 +100,53 @@ const Doc: FunctionComponent<Props> = ({ id_hist }) => {
               <th>Stock de départ</th>
               <th>Stock acheter</th>
               <th>Stock total</th>
-              <th>Valeur stock acheter</th>
-              <th>Valeur stock départ</th>
-              <th>Valeur stock total</th>
+              <th>stok vendu</th>
               <th>Stock restant</th>
-              <th>Valeur stock restant</th>
+              <th>Manque</th>
               <th>Bénéfice attendu</th>
+              <th>Bénéfice réel</th>
             </tr>
           </thead>
           <tbody>
-            {articles.map((item) => (
+            {articles.map((item, index) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.nom}</td>
                 <td>{item.prix_achat}</td>
                 <td>{item.prix_vente}</td>
                 <Inve
-                  id={item.id}
                   id_hist={id_hist}
-                  articles={articles}
-                  setArticles={setArticles}
-                  inventaires={inventaires}
-                  setInventaires={setInventaires}
-                  historiques={historiques}
-                  setHistoriques={setHistoriques}
+                  benefs={tabBenef}
+                  setBenef={setTabBenef}
+                  benefAttendu={tabBenefAttendu}
+                  setBenefAttendu={setTabBenefAttendu}
+                  article={item}
+                  s={s}
                 />
               </tr>
             ))}
           </tbody>
         </table>
-        <button>Votre inventaire</button>
+        <button onClick={()=>handle()}>Votre inventaire</button>
+      </div>
+      <div>
+        <button>
+          benefice total reel obtenu avec le stock restant entrée :{" "}
+          <h3>
+            {" "}
+            {tabBenef.reduce((somme, bene) => somme + bene.benefReel, 0)}
+          </h3>
+        </button>
+        <button>
+          benefice total attendu :{" "}
+          <h3>
+            {" "}
+            {tabBenefAttendu.reduce(
+              (somme, benef) => somme + benef.benefAttendu,
+              0
+            )}
+          </h3>
+        </button>
       </div>
     </Container>
   );
